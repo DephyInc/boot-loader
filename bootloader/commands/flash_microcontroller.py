@@ -163,7 +163,7 @@ class FlashMicrocontrollerCommand(InitCommand):
             sys.exit(1)
 
         self.overwrite(
-            f"Setting tunnel mode for {self._target}... <success>✓</success>\n"
+            f"Setting tunnel mode for {self._target}... <success>SUCCESS</success>\n"
         )
 
     # -----
@@ -219,7 +219,7 @@ class FlashMicrocontrollerCommand(InitCommand):
 
         if not self.confirm("Please power cycle device.", False):
             sys.exit(1)
-        self.overwrite(f"Flashing {self._target}... <success>✓</success>\n")
+        self.overwrite(f"Flashing {self._target}... <success>SUCCESS</success>\n")
 
     # -----
     # _flashCmd
