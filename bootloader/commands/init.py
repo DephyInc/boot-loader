@@ -117,7 +117,7 @@ class InitCommand(Command):
         except AssertionError as err:
             raise exceptions.UnsupportedOSError(currentOS, cfg.supportedOS) from err
 
-        self.overwrite("Checking OS... <success>✓</success>\n")
+        self.overwrite("Checking OS... <success>SUCCESS</success>\n")
 
     # -----
     # _setup_cache
@@ -132,7 +132,7 @@ class InitCommand(Command):
         cfg.firmwareDir.mkdir(parents=True, exist_ok=True)
         cfg.toolsDir.mkdir(parents=True, exist_ok=True)
 
-        self.overwrite("Setting up cache... <success>✓</success>\n")
+        self.overwrite("Setting up cache... <success>SUCCESS</success>\n")
 
     # -----
     # _check_keys
@@ -184,7 +184,7 @@ class InitCommand(Command):
             finally:
                 fd.close()
 
-        self.overwrite("Checking for access keys... <success>✓</success>\n")
+        self.overwrite("Checking for access keys... <success>SUCCESS</success>\n")
 
     # -----
     # _check_tools
@@ -236,8 +236,8 @@ class InitCommand(Command):
                         extractedDest = Path(os.path.dirname(dest)).joinpath(base)
                         archive.extractall(extractedDest)
 
-                self.overwrite("\tDownloading... <success>✓</success>\n")
+                self.overwrite("\tDownloading... <success>SUCCESS</success>\n")
 
             else:
-                msg = f"Searching for: <info>{tool}</info>...<success>✓</success>\n"
+                msg = f"Searching for: <info>{tool}</info>...<success>SUCCESS</success>\n"
                 self.overwrite(f"{msg}")
