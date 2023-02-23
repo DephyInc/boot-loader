@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bootloader"
-version = "1.0.0"
+version = "1.0.1"
 description = "A tool for loading firmware onto Dephy devices."
 authors = ["Jared <jcoughlin@dephy.com>"]
 license = "MIT"
@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11.0rc1"
-flexsea = {path = "/home/latitude/Code/work/FlexSEA/Actuator-Package", develop = true}
+flexsea = "^10.0.0" 
 cleo = "^2.0.1"
 pyserial = "^3.5"
 boto3 = "^1.26.44"
