@@ -10,7 +10,6 @@ from cleo.helpers import argument
 from cleo.helpers import option
 from flexsea.device import Device
 from flexsea.utilities import download
-from flexsea.utilities import find_port
 import semantic_version as sem
 
 from bootloader.utilities.aws import get_remote_file
@@ -72,6 +71,7 @@ class FlashMicrocontrollerCommand(InitCommand):
     _flashCmd: List[str] = []
     _nRetries: int = 5
     _port: str = ""
+    _target: str = ""
 
     # -----
     # handle
@@ -96,7 +96,7 @@ class FlashMicrocontrollerCommand(InitCommand):
             self.option("port"),
             int(self.option("baudRate")),
             self.argument("from"),
-            libFile=self.option("lib")
+            libFile=self.option("lib"),
         )
         self._port = self._device.port
         self._device.open()
@@ -111,7 +111,7 @@ class FlashMicrocontrollerCommand(InitCommand):
         if not sem.validate(fw):
             if not Path(fw).exists():
                 get_remote_file(fw, cfg.firmwareBucket)
-            self._fwFile = fw 
+            self._fwFile = fw
             return
 
         ext = cfg.firmwareExtensions[self._target]
@@ -163,9 +163,7 @@ class FlashMicrocontrollerCommand(InitCommand):
             self.line(msg)
             sys.exit(1)
 
-        self.overwrite(
-            f"Setting tunnel mode for {self._target}... {self._SUCCESS}\n"
-        )
+        self.overwrite(f"Setting tunnel mode for {self._target}... {self._SUCCESS}\n")
 
     # -----
     # _call_flash_tool

@@ -43,10 +43,7 @@ class FlashFailedError(Exception):
     # __str__
     # -----
     def __str__(self) -> str:
-        msg = "<error>Error: flashing failed:</error>"
-        for cmdPiece in self._cmd:
-            msg += f"\n\t{cmdPiece}"
-        return msg
+        return f"<error>Error: flashing failed:</error> {self._cmd}"
 
 
 # ============================================

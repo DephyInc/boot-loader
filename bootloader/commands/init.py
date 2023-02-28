@@ -82,7 +82,7 @@ class InitCommand(Command):
         The checkmarks used to indicate successful completion on stdout
         only work if the terminal supports unicode.
         """
-        if sys.stdout.encoding.lower().startswith("utf"):
+        if sys.stdout.encoding.lower().startswith("utf"):  # pylint: disable=no-member
             self._SUCCESS = "<success>✓</success>"
         else:
             self._SUCCESS = "SUCCESS"
