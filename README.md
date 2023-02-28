@@ -4,10 +4,23 @@ This is a tool for loading firmware onto Dephy's devices.
 
 ## AWS Keys
 
-Contact the software team lead (Carlos Asmat: casmat@dephy.com) and request access to AWS. This is
-where the device version python libraries are stored and can only be accessed via the secure keys.
-Once you receive your keys, create a folder in the home directory (~) called .aws and create a file
-within this directory called credentials. Edit the credentials file to contain the following:
+`flexsea` requires a pre-compiled C library in order to communicate with your device.
+These libraries are hosted in a public AWS S3 bucket called `dephy-public-binaries`. You
+can use the `list` command to view the available versions (see below).
+
+Additionally, you will need a firmware file (or files) to put on your device. These
+files are hosted in a private AWS S3 bucket. You should have received access keys as
+a part of your purchase. If you did not, please contact `support@dephy.com`.
+
+Once you receive your keys, you'll need to store them in a credentials file to be read
+by `boto3` (the Python module for interacting with S3).
+
+```bash
+mkdir ~/.aws
+touch ~/.aws/credentials # Note that there is no extension!
+```
+
+Edit the credentials file to contain the following:
 
 ```bash
 [default]
@@ -18,6 +31,12 @@ aws_secret_access_key=<YOUR SECRET ACCESS KEY HERE>
 aws_access_key_id=<YOUR ACCES KEY ID HERE>
 aws_secret_access_key=<YOUR SECRET ACCESS KEY HERE>
 ```
+
+**NOTE**: If you already have an S3 account, you'll want to put those keys under `default`
+and the Dephy keys under `dephy`. If your Dephy access keys are the only ones you have,
+you'll want to put the same keys in both sections. `boto3` will fail if it does not
+find a `default` section, but the bootloader explicitly looks for a `dephy` section in
+case you have other keys.
 
 ## Installation
 
