@@ -137,9 +137,10 @@ class FlashMicrocontrollerCommand(InitCommand):
                 side = self.option("side")
             else:
                 # Getting this information requires that the device be streaming
-                self._device.start_streaming(100)
-                side = self._device.deviceSide
-                self._device.stop_streaming()
+                # self._device.start_streaming(100)
+                # side = self._device.deviceSide
+                # self._device.stop_streaming()
+                raise RuntimeError("Getting side not functioning. Pass it as an argument.")
             fwFile = (
                 f"{_name}_rigid-{hw}_{self._target}_firmware-{fw}_side-{side}.{ext}"
             )
