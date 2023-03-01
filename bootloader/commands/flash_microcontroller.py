@@ -119,18 +119,27 @@ class FlashMicrocontrollerCommand(InitCommand):
         if self.option("device"):
             _name = self.option("device")
         else:
+            # Getting this information requires that the device be streaming
+            self._device.start_streaming(100)
             _name = self._device.deviceName
+            self._device.stop_streaming()
 
         if self.option("hardware"):
             hw = self.option("hardware")
         else:
+            # Getting this information requires that the device be streaming
+            self._device._start_streaming(100)
             hw = self._device.rigidVersion
+            self._device.stop_streaming()
 
         if self._target == "mn" and self._device.isChiral:
             if self.option("side"):
                 side = self.option("side")
             else:
+                # Getting this information requires that the device be streaming
+                self._device.start_streaming(100)
                 side = self._device.deviceSide
+                self._device.stop_streaming()
             fwFile = (
                 f"{_name}_rigid-{hw}_{self._target}_firmware-{fw}_side-{side}.{ext}"
             )
