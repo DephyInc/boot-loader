@@ -1,71 +1,86 @@
-import glob
-import os
-from pathlib import Path
-import shutil
-import subprocess as sub
+import platform
+
+import botocore.exceptions as bce
+import flexsea.utilities as fxu
 
 from bootloader.exceptions import exceptions
-from bootloader.utilities import config as cfg
+import bootloader.utilities.config as cfg
 
 
 # ============================================
-#              build_bt_image_file
+#                  check_os
 # ============================================
-def build_bt_image_file(level: int, address: str) -> Path:
+def check_os() -> None:
     """
-    Uses the bluetooth tools repo (downloaded as a part of `init`)
-    to create a bluetooth image file with the correct address.
+    Makes sure we're running on a supported OS.
 
     Raises
     ------
-    NoBluetoothImageError
-        If the required gatt file isn't found.
-
-    FlashFailedError
-        If a subprocess returns a code of 1.
+    RuntimeError
+        If the detected operating system is not supported.
     """
-    # Everything within the bt121 directory is self-contained and
-    # self-referencing, so it's easiest to switch to that directory
-    # first
-    cwd = Path.cwd()
-    # When unzipping, the zipped folder gets put into a folder with the same name as
-    # the archive, creating a "nesting" effect
-    os.chdir(Path.joinpath(cfg.toolsDir, "bt121_image_tools", "bt121_image_tools"))
+    currentOS = platform.system().lower()
+    try:
+        assert currentOS in cfg.supportedOS
+    except AssertionError as err:
+        msg = f"Detected: `{currentOS}`, which is an unsupported OS. Supported OS:\n"
+        for _os in cfg.supportedOS:
+            msg += f"\t* {_os}\n"
+        raise RuntimeError(msg) from err
 
-    gattTemplate = Path("gatt_files").joinpath(f"{level}.xml")
-    gattFile = Path("dephy_gatt_broadcast_bt121").joinpath("gatt.xml")
 
-    if not Path.exists(gattTemplate):
-        raise exceptions.NoBluetoothImageError(gattTemplate)
+# ============================================
+#                 setup_cache
+# ============================================
+def setup_cache() -> None:
+    """
+    Creates the directories where the firmware files, bootloader tools,
+    and pre-compiled C libraries are downloaded and installed to.
+    """
+    cfg.firmwareDir.mkdir(parents=True, exist_ok=True)
+    cfg.toolsDir.mkdir(parents=True, exist_ok=True)
 
-    shutil.copyfile(gattTemplate, gattFile)
 
-    cmd = ["python3", "bt121_gatt_broadcast_img.py", f"{address}"]
-    with sub.Popen(cmd) as proc:
-        pass
+# ============================================
+#                 check_tools
+# ============================================
+def check_tools(target: str) -> None:
+    """
+    The bootloader requires tools from PSoC and STM in order to
+    flash the microcontrollers. Here we make sure that those tools
+    are installed. If they aren't, then we download and install
+    them.
 
-    if proc.returncode == 1:
-        raise exceptions.FlashFailedError("bt121_gatt_broadcast_img.py")
+    Tool directories are zip archives.
 
-    bgExe = Path.joinpath("smart-ready-1.7.0-217", "bin", "bgbuild.exe")
-    xmlFile = Path.joinpath("dephy_gatt_broadcast_bt121", "project.xml")
-    with sub.Popen([bgExe, xmlFile]) as proc:
-        pass
+    Raises
+    ------
+    botocore.exceptions.EndpointConnectionError
+        If we cannot connect to AWS.
 
-    if proc.returncode == 1:
-        raise exceptions.FlashFailedError("bgbuild.exe")
+    S3DownloadError
+        If a tool fails to download.
+    """
+    _os = platform.system().lower()
+    _bootloaderTools = cfg.bootloaderTools[_os][target]
 
-    if Path("output").exists():
-        files = glob.glob(os.path.join("output", "*.bin"))
-        for file in files:
-            os.remove(file)
-    else:
-        os.mkdir("output")
+    for tool in _bootloaderTools:
+        dest = cfg.toolsDir.joinpath(tool)
 
-    btImageFileBase = f"dephy_gatt_broadcast_bt121_Exo-{address}.bin"
-    shutil.move(Path.joinpath("dephy_gatt_broadcast_bt121", btImageFileBase), "output")
-    btImageFile = Path.cwd().joinpath("bt121_image_tools", "output", btImageFileBase)
+        if not dest.exists():
+            try:
+                # boto3 requires dest be either IOBase or str
+                toolObj = str(Path(_os).joinpath(tool).as_posix())
+                fxu.download(toolObj, cfg.toolsBucket, str(dest), cfg.dephyProfile)
+            except bce.EndpointConnectionError as err:
+                raise err
+            except AssertionError as err:
+                raise exceptions.S3DownloadError(
+                    cfg.toolsBucket, toolObj, str(dest)
+                ) from err
 
-    os.chdir(cwd)
-
-    return btImageFile
+            if zipfile.is_zipfile(dest):
+                with zipfile.ZipFile(dest, "r") as archive:
+                    base = dest.name.split(".")[0]
+                    extractedDest = Path(os.path.dirname(dest)).joinpath(base)
+                    archive.extractall(extractedDest)

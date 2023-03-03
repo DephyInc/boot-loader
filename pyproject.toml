@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11.0rc1"
-flexsea = "^10.0.0" 
+flexsea = "^10.1.2" 
 cleo = "^2.0.1"
 pyserial = "^3.5"
 boto3 = "^1.26.44"

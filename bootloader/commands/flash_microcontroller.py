@@ -1,27 +1,22 @@
 from pathlib import Path
-import re
 import subprocess as sub
 import sys
-from time import sleep
-from typing import List
-from typing import Self
 
 from cleo.helpers import argument
 from cleo.helpers import option
 from flexsea.device import Device
-from flexsea.utilities import download
 import semantic_version as sem
 
-from bootloader.utilities.aws import get_remote_file
 import bootloader.utilities.config as cfg
+from bootloader.utilities.system_utils import check_os
 
-from .init import InitCommand
+from .base_command import BaseCommand
 
 
 # ============================================
 #        FlashMicrocontrollerCommand
 # ============================================
-class FlashMicrocontrollerCommand(InitCommand):
+class FlashMicrocontrollerCommand(BaseCommand):
     name = "microcontroller"
 
     description = "Flashes new firmware onto manage, execute, regulate, or habsolute."
@@ -46,7 +41,7 @@ class FlashMicrocontrollerCommand(InitCommand):
 
     `target` must be one of: `mn`, `ex`, `re`, or `habs`.
 
-    `from` specifies the firmware version currently on the device. This is needed in
+    `from` specifies the firmware version currently on Manage. This is needed in
     order to load the API for communicating with the device. Use the `list` command
     to see the available versions.
 
@@ -66,9 +61,8 @@ class FlashMicrocontrollerCommand(InitCommand):
     bootload microcontroller re 7.2.0 ~/my/path/10.1.0 -r 4.1B
     """
 
-    _device: None | Device = None
+    _device: Device | None = None
     _fwFile: str = ""
-    _flashCmd: List[str] = []
     _nRetries: int = 5
     _port: str = ""
     _target: str = ""
@@ -77,12 +71,15 @@ class FlashMicrocontrollerCommand(InitCommand):
     # handle
     # -----
     def handle(self: Self) -> int:
-        self._stylize()
-        self._configure_interaction()
-        self._configure_unicode()
-        self._setup_environment()
+        self._target = self.argument("target")
+
+        self._welcome()
+        check_os()
+        check_flash_tools(self._target)
+
         self._get_device()
-        self._get_new_firmware_file()
+        self._get_firmware_file()
+
         self._set_tunnel_mode()
         self._flash()
 
@@ -91,7 +88,7 @@ class FlashMicrocontrollerCommand(InitCommand):
     # -----
     # _get_device
     # -----
-    def _get_device(self: Self) -> None:
+    def _get_device(self) -> None:
         self._device = Device(
             self.option("port"),
             int(self.option("baudRate")),
@@ -102,11 +99,12 @@ class FlashMicrocontrollerCommand(InitCommand):
         self._device.open()
 
     # -----
-    # _get_new_firmware_file
+    # _get_firmware_file
     # -----
-    def _get_new_firmware_file(self: Self) -> None:
+    def _get_firmware_file(self) -> None:
         fw = self.argument("to")
-        self._target = self.argument("target")
+        nameOpt = self.option("device")
+        hwOpt = self.option("hardware")
 
         if not sem.validate(fw):
             if not Path(fw).exists():
@@ -115,16 +113,8 @@ class FlashMicrocontrollerCommand(InitCommand):
             return
 
         ext = cfg.firmwareExtensions[self._target]
-
-        if self.option("device"):
-            _name = self.option("device")
-        else:
-            _name = self._device.deviceName
-
-        if self.option("hardware"):
-            hw = self.option("hardware")
-        else:
-            hw = self._device.rigidVersion
+        name = nameOpt if nameOpt else self._device.deviceName
+        hw = hwOpt if hwOpt else self._device.rigidVersion
 
         if self._target == "mn" and self._device.isChiral:
             if self.option("side"):
@@ -134,7 +124,6 @@ class FlashMicrocontrollerCommand(InitCommand):
             fwFile = (
                 f"{_name}_rigid-{hw}_{self._target}_firmware-{fw}_side-{side}.{ext}"
             )
-
         else:
             fwFile = f"{_name}_rigid-{hw}_{self._target}_firmware-{fw}.{ext}"
 
@@ -150,10 +139,12 @@ class FlashMicrocontrollerCommand(InitCommand):
     # -----
     # _set_tunnel_mode
     # -----
-    def _set_tunnel_mode(self: Self) -> None:
+    def _set_tunnel_mode(self) -> None:
         msg = "<warning>Please make sure the battery is removed "
         msg += "and/or the power supply is disconnected!</warning>"
         if not self.confirm(msg, False):
+            msg = "<warning>Must confirm battery/power supply is removed!</warning>"
+            self.line(msg)
             sys.exit(1)
         self.write(f"Setting tunnel mode for {self._target}...")
 
@@ -166,29 +157,9 @@ class FlashMicrocontrollerCommand(InitCommand):
         self.overwrite(f"Setting tunnel mode for {self._target}... {self._SUCCESS}\n")
 
     # -----
-    # _call_flash_tool
-    # -----
-    def _call_flash_tool(self: Self) -> None:
-        for _ in range(self._nRetries):
-            try:
-                proc = sub.run(
-                    self._flashCmd, capture_output=False, check=True, timeout=360
-                )
-            except sub.CalledProcessError:
-                continue
-            except sub.TimeoutExpired:
-                self.line("Timeout.")
-                sys.exit(1)
-            if proc.returncode == 0:
-                break
-        if proc.returncode != 0:
-            self.line("Error.")
-            sys.exit(1)
-
-    # -----
     # _flash
     # -----
-    def _flash(self: Self) -> None:
+    def _flash(self) -> None:
         self.write(f"Flashing {self._target}...")
 
         if self._target == "mn":
@@ -217,14 +188,36 @@ class FlashMicrocontrollerCommand(InitCommand):
             sleep(20)
 
         if not self.confirm("Please power cycle device.", False):
+            msg = "<warning>Must power cycle device for changes to work!</warning>"
+            self.line(msg)
             sys.exit(1)
         self.overwrite(f"Flashing {self._target}... {self._SUCCESS}\n")
+
+    # -----
+    # _call_flash_tool
+    # -----
+    def _call_flash_tool(self) -> None:
+        for _ in range(self._nRetries):
+            try:
+                proc = sub.run(
+                    self._flashCmd, capture_output=False, check=True, timeout=360
+                )
+            except sub.CalledProcessError:
+                continue
+            except sub.TimeoutExpired:
+                self.line("Timeout.")
+                sys.exit(1)
+            if proc.returncode == 0:
+                break
+        if proc.returncode != 0:
+            self.line("Error.")
+            sys.exit(1)
 
     # -----
     # _flashCmd
     # -----
     @property
-    def _flashCmd(self: Self) -> List[str]:
+    def _flashCmd(self) -> List[str]:
         if self._target == "mn":
             flashCmd = [
                 f"{Path(cfg.toolsDir).joinpath('DfuSeCommand.exe')}",
