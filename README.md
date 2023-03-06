@@ -81,6 +81,16 @@ python3 -m pip install .
 python3 -m pip install dephy-bootloader
 ```
 
+## Drivers
+
+Bootloading one of Dephy's devices requires communicating with the microcontroller
+called Manage. Manage is a stm32 chip, which means that the stm32 drivers are needed
+in order for the bootloader to function correctly. The easiest way to install these
+drivers is to run the installer for the STM32 ST-Link Utility, which can be found
+[here](https://www.st.com/en/development-tools/stsw-link004.html#tools-software).
+Once the installation of the STM32 ST-Link Utility finishes, it should prompt you to
+install the device drivers. 
+
 
 ## Usage
 
