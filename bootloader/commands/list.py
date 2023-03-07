@@ -14,16 +14,19 @@ from .init import InitCommand
 #                 ListCommand
 # ============================================
 class ListCommand(InitCommand):
+    """
+    Shows firmware, devices, and hardware available for bootloading.
+    """
 
-    name = "list"
+    name = "show"
 
-    description = "Lists firmware, devices, and hardware available for bootloading."
+    description = "Shows firmware, devices, and hardware available for bootloading."
 
     options = [
-        option("devices", "-d", "List devices that can be bootloaded.", flag=True),
-        option("hardware", "-r", "List available hardware versions.", flag=True),
-        option("firmware", None, "List firmware versions.", flag=True),
-        option("c-libraries", None, "List available C libraries.", flag=True),
+        option("devices", "-d", "Show devices that can be bootloaded.", flag=True),
+        option("hardware", "-r", "Show available hardware versions.", flag=True),
+        option("firmware", None, "Show firmware versions.", flag=True),
+        option("c-libraries", None, "Show available C libraries.", flag=True),
     ]
 
     help = """
@@ -33,10 +36,10 @@ class ListCommand(InitCommand):
     Examples
     --------
     # Show all
-    > bootload list
+    > bootload show
 
     # Show only devices
-    > bootload list --devices
+    > bootload show --devices
     """
 
     # -----
