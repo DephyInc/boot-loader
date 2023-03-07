@@ -60,6 +60,7 @@ bootloaderTools = {
 baudRate = 230400
 firmwareExtensions = {"habs": "hex", "ex": "cyacd", "re": "cyacd", "mn": "dfu"}
 microcontrollers = ["habs", "ex", "mn", "re"]
+radio = ["bt121", "xbee"]
 supportedOS = [
     "windows",
 ]

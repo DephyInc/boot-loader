@@ -22,7 +22,10 @@ from .init import InitCommand
 #        FlashMicrocontrollerCommand
 # ============================================
 class FlashMicrocontrollerCommand(InitCommand):
-    name = "microcontroller"
+    """
+    Flashes new firmware onto manage, execute, regulate, or habsolute.
+    """
+    name = "micro"
 
     description = "Flashes new firmware onto manage, execute, regulate, or habsolute."
 
@@ -47,7 +50,7 @@ class FlashMicrocontrollerCommand(InitCommand):
     `target` must be one of: `mn`, `ex`, `re`, or `habs`.
 
     `from` specifies the firmware version currently on the device. This is needed in
-    order to load the API for communicating with the device. Use the `list` command
+    order to load the API for communicating with the device. Use the `show` command
     to see the available versions.
 
     `to` specifies the firmware version you would like to flash. If this is not a
@@ -61,9 +64,9 @@ class FlashMicrocontrollerCommand(InitCommand):
 
     Examples
     --------
-    bootload microcontroller mn 7.2.0 9.1.0
-    bootload microcontroller ex 10.1.0 7.2.0 --lib ~/my/path/10.1.0.so
-    bootload microcontroller re 7.2.0 ~/my/path/10.1.0 -r 4.1B
+    bootload micro mn 7.2.0 9.1.0
+    bootload micro ex 10.1.0 7.2.0 --lib ~/my/path/10.1.0.so
+    bootload micro re 7.2.0 ~/my/path/10.1.0 -r 4.1B
     """
 
     _device: None | Device = None
