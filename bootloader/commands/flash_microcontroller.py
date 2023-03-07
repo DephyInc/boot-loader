@@ -25,6 +25,7 @@ class FlashMicrocontrollerCommand(InitCommand):
     """
     Flashes new firmware onto manage, execute, regulate, or habsolute.
     """
+
     name = "micro"
 
     description = "Flashes new firmware onto manage, execute, regulate, or habsolute."

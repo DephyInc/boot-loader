@@ -1,9 +1,12 @@
+import glob
 import os
 import platform
 import shutil
 import subprocess as sub
 import sys
 from time import sleep
+from typing import List
+from typing import Self
 
 from cleo.helpers import argument
 from cleo.helpers import option
@@ -21,6 +24,7 @@ class FlashBt121Command(InitCommand):
     """
     Flashes the bluetooth 121 radio.
     """
+
     name = "bt121"
 
     description = "Flashes the bluetooth radio."
