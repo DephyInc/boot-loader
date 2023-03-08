@@ -36,7 +36,7 @@ class FlashBt121Command(InitCommand):
     options = [
         option("address", "-a", "BT address. Default is the device id.", flag=False),
         option("baudRate", "-b", "Device baud rate.", flag=False, default=230400),
-        option("level", "-l", "GATT level.", flag=False, default=2),
+        option("level", "-L", "GATT level.", flag=False, default=2),
         option("lib", "-l", "C lib for interacting with current firmware.", flag=False),
         option("port", "-p", "Port the device is on, e.g., `COM3`.", flag=False),
     ]
@@ -113,9 +113,10 @@ class FlashBt121Command(InitCommand):
         # self-referencing, so it's easiest to switch to that directory
         # first
         cwd = os.getcwd()
-        os.chdir(os.path.join(cfg.toolsDir, "bt121_image_tools"))
+        # The way the zip is decompressed creates this nested structure
+        os.chdir(os.path.join(cfg.toolsDir, "bt121_image_tools", "bt121_image_tools"))
 
-        gattTemplate = os.path.join("gatt_files", f"{self._level}.xml")
+        gattTemplate = os.path.join("gatt_files", f"LVL{self._level}.xml")
         gattFile = os.path.join("dephy_gatt_broadcast_bt121", "gatt.xml")
 
         if not os.path.exists(gattTemplate):
@@ -152,9 +153,7 @@ class FlashBt121Command(InitCommand):
 
         btImageFile = f"dephy_gatt_broadcast_bt121_Exo-{self._address}.bin"
         shutil.move(os.path.join("dephy_gatt_broadcast_bt121", btImageFile), "output")
-        btImageFile = os.path.join(
-            os.getcwd(), "bt121_image_tools", "output", btImageFile
-        )
+        btImageFile = os.path.join(os.getcwd(), "output", btImageFile)
 
         os.chdir(cwd)
 
