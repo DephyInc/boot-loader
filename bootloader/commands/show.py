@@ -1,5 +1,4 @@
 from typing import List
-from typing import Self
 
 from cleo.helpers import option
 
@@ -7,13 +6,13 @@ import bootloader.utilities.config as cfg
 
 from bootloader.utilities.aws import get_s3_object_info
 
-from .init import InitCommand
+from .base_command import BaseCommand
 
 
 # ============================================
-#                 ListCommand
+#                 ShowCommand
 # ============================================
-class ListCommand(InitCommand):
+class ShowCommand(BaseCommand):
     """
     Shows firmware, devices, and hardware available for bootloading.
     """
@@ -42,15 +41,16 @@ class ListCommand(InitCommand):
     > bootload show --devices
     """
 
+    _pad: str = "    "
+
     # -----
     # handle
     # -----
-    def handle(self: Self) -> int:
+    def handle(self) -> int:
         """
         Entry point for the command.
         """
-        self._stylize()
-        self._check_keys()
+        self._setup()
 
         showDevices = self.option("devices")
         showHardware = self.option("hardware")
@@ -79,7 +79,7 @@ class ListCommand(InitCommand):
     # -----
     # _list_devices
     # -----
-    def _list_devices(self: Self, info: dict) -> None:
+    def _list_devices(self, info: dict) -> None:
         devices = set()
 
         for versionDict in info.values():
@@ -93,7 +93,7 @@ class ListCommand(InitCommand):
     # -----
     # _list_hardware
     # -----
-    def _list_hardware(self: Self, info: dict) -> None:
+    def _list_hardware(self, info: dict) -> None:
         hardware = set()
 
         for versionDict in info.values():
@@ -107,7 +107,7 @@ class ListCommand(InitCommand):
     # -----
     # _list_firmware
     # -----
-    def _list_firmware(self: Self, info: dict) -> None:
+    def _list_firmware(self, info: dict) -> None:
         self.line("Available versions:")
         for version in info:
             self.line(f"\t- <info>{version}</info>")
@@ -115,7 +115,7 @@ class ListCommand(InitCommand):
     # -----
     # _list_libraries
     # -----
-    def _list_libraries(self: Self, libs: List[str]) -> None:
+    def _list_libraries(self, libs: List[str]) -> None:
         self.line("Available pre-compiled C libraries:")
         for lib in libs:
             self.line(f"\t- <info>{lib}</info>")
@@ -123,7 +123,7 @@ class ListCommand(InitCommand):
     # -----
     # _list_all
     # -----
-    def _list_all(self: Self, info: dict) -> None:
+    def _list_all(self, info: dict) -> None:
         for version in info:
             self.line(f"<info>Version</info>: {version}")
             for hw, devices in info[version].items():

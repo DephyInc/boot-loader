@@ -1,10 +1,14 @@
+import os
 from pathlib import Path
 from typing import List
+import zipfile
 
 import boto3
 from botocore.client import BaseClient
+import botocore.exceptions as bce
 from flexsea.utilities import download
 
+from bootloader.exceptions import exceptions
 from bootloader.utilities import config as cfg
 
 
@@ -120,11 +124,12 @@ def _parse_lib_objects(objects: List[str]) -> List[str]:
 
 
 # ============================================
-#              get_remote_file
+#               get_remote_file
 # ============================================
-def get_remote_file(fName: str, bucket: str) -> None:
+def get_remote_file(fName: str, bucket: str, dest: str) -> None:
     """
-    Searches the given aws bucket for the given file.
+    Searches the given aws bucket for the given file and downloads it to
+    `dest`.
     """
     fPath = Path(fName)
     # https://tinyurl.com/4scnuk6c
@@ -133,8 +138,40 @@ def get_remote_file(fName: str, bucket: str) -> None:
     paginator = client.get_paginator("list_objects_v2")
     pageIterator = paginator.paginate(Bucket=bucket)
     objects = pageIterator.search(f"Contents[?contains(Key, `{fPath.name}`)][]")
-    # There should only be one match. If the match isn't the right file,
-    # the hash check in download should catch it
-    for item in objects:
-        fileObj = item["Key"]
-    download(fileObj, bucket, fName, cfg.dephyProfile)
+    items = [item["Key"] for item in objects]
+    # There should only be one match. If not, we don't know which one to go with
+    try:
+        assert len(items) == 1
+    except AssertionError as err:
+        raise FileNotFoundError from err
+    download(items[0], bucket, dest, cfg.dephyProfile)
+
+
+# ============================================
+#               get_flash_tools
+# ============================================
+def get_flash_tools(target: str, _os: str) -> None:
+    """
+    Checks to see if the tools required for flashing `target` are already
+    downloaded. If they aren't, then we download them.
+    """
+    for tool in cfg.bootloaderTools[_os][target]:
+        dest = cfg.toolsDir.joinpath(tool)
+
+        if not dest.exists():
+            try:
+                # boto3 requires dest be either IOBase or str
+                toolObj = str(Path(_os).joinpath(tool).as_posix())
+                download(toolObj, cfg.toolsBucket, str(dest), cfg.dephyProfile)
+            except bce.EndpointConnectionError as err:
+                raise err
+            except AssertionError as err:
+                raise exceptions.S3DownloadError(
+                    cfg.toolsBucket, toolObj, str(dest)
+                ) from err
+
+            if zipfile.is_zipfile(dest):
+                with zipfile.ZipFile(dest, "r") as archive:
+                    base = dest.name.split(".")[0]
+                    extractedDest = Path(os.path.dirname(dest)).joinpath(base)
+                    archive.extractall(extractedDest)
