@@ -45,14 +45,6 @@ class FlashManageCommand(FlashMcuCommand):
     _target: str = "mn"
 
     # -----
-    # __new__
-    # -----
-    def __new__(cls):
-        obj = super().__new__(cls)
-        obj.options.append(option("side", "-s", "Left or right.", flag=False))
-        return obj
-
-    # -----
     # _flash_target
     # -----
     def _flash_target(self) -> None:

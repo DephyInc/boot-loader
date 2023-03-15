@@ -5,6 +5,7 @@ from cleo.commands.command import Command
 
 from bootloader import __version__
 
+from bootloader.commands.all import FlashAllCommand
 from bootloader.commands.flash_bt121 import FlashBt121Command
 from bootloader.commands.flash_ex import FlashExecuteCommand
 from bootloader.commands.flash_habs import FlashHabsoluteCommand
@@ -45,6 +46,7 @@ class BootloaderApplication(Application):
             A list of commands available to the CLI.
         """
         commandList = [
+            FlashAllCommand,
             FlashBt121Command,
             FlashExecuteCommand,
             FlashHabsoluteCommand,

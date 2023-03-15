@@ -32,6 +32,7 @@ class FlashMcuCommand(BaseCommand):
         option("hardware", "-r", "Board hardware version, e.g., `4.1B`.", flag=False),
         option("lib", "-l", "C lib for interacting with current firmware.", flag=False),
         option("port", "-p", "Port the device is on, e.g., `COM3`.", flag=False),
+        option("side", "-s", "Left or right.", flag=False),
     ]
 
     _device: None | Device = None
