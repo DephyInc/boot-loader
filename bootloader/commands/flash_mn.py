@@ -2,8 +2,6 @@ from pathlib import Path
 from time import sleep
 from typing import List
 
-from cleo.helpers import option
-
 import bootloader.utilities.config as cfg
 
 from .flash_mcu import FlashMcuCommand

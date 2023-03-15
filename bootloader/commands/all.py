@@ -1,3 +1,10 @@
+from typing import List
+
+from cleo.helpers import argument
+
+from .flash_mcu import FlashMcuCommand
+
+
 # ============================================
 #               FlashAllCommand
 # ============================================
@@ -69,7 +76,9 @@ class FlashAllCommand(FlashMcuCommand):
     # _build_arg_list
     # -----
     def _build_arg_list(self, target):
-        args = [self.argument("mnFirmware"),]
+        args = [
+            self.argument("mnFirmware"),
+        ]
         if target == "xbee":
             args.append(self.argument("buddyAddress"))
         elif target in ("habs", "ex", "re", "mn"):
@@ -85,5 +94,18 @@ class FlashAllCommand(FlashMcuCommand):
             if opt.is_flag() and self.option(f"{opt.name}"):
                 options.append(f"--{opt.name}")
             if opt.requires_value() and self.option(f"{opt.name}") is not None:
-                options.append(f"--{opt.name} {self.option(f'{opt.name'})}")
+                options.append(f"--{opt.name} {self.option(opt.name)}")
         return options
+
+    # -----
+    # _flashCmd
+    # -----
+    @property
+    def _flashCmd(self) -> List[str]:
+        raise NotImplementedError
+
+    # -----
+    # _flash_target
+    # -----
+    def _flash_target(self) -> None:
+        raise NotImplementedError
