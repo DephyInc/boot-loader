@@ -25,19 +25,38 @@ class FlashMcuCommand(BaseCommand):
         argument("to", "Desired firmware version, e.g., `9.1.0`, or firmware file."),
     ]
 
-    options = [
-        option("baudRate", "-b", "Device baud rate.", flag=False, default=230400),
-        # Used for flashing one device's firmware onto another, e.g., exo onto actpack
-        option("deviceName", "-d", "Device to flash, e.g., `actpack`.", flag=False),
-        option("hardware", "-r", "Board hardware version, e.g., `4.1B`.", flag=False),
-        option("lib", "-l", "C lib for interacting with current firmware.", flag=False),
-        option("port", "-p", "Port the device is on, e.g., `COM3`.", flag=False),
-        option("side", "-s", "Left or right.", flag=False),
-    ]
-
     _device: None | Device = None
     _fwFile: str = ""
     _target: str = ""
+
+    # -----
+    # __new__
+    # -----
+    def __new__(cls):
+        obj = super().__new__(cls)
+
+        obj.options.append(
+            option("baudRate", "-b", "Device baud rate.", flag=False, default=230400)
+        )
+        obj.options.append(
+            option("deviceName", "-d", "Device to flash, e.g., `actpack`.", flag=False)
+        )
+        obj.options.append(
+            option(
+                "hardware", "-r", "Board hardware version, e.g., `4.1B`.", flag=False
+            )
+        )
+        obj.options.append(
+            option(
+                "lib", "-l", "C lib for interacting with current firmware.", flag=False
+            )
+        )
+        obj.options.append(
+            option("port", "-p", "Port the device is on, e.g., `COM3`.", flag=False)
+        )
+        obj.options.append(option("side", "-s", "Left or right.", flag=False))
+
+        return obj
 
     # -----
     # handle

@@ -2,6 +2,7 @@ import platform
 import sys
 
 from cleo.commands.command import Command
+from cleo.helpers import option
 
 from bootloader.exceptions.exceptions import UnsupportedOSError
 import bootloader.utilities.config as cfg
@@ -12,6 +13,10 @@ from bootloader.utilities.system_utils import setup_cache
 #                BaseCommand
 # ============================================
 class BaseCommand(Command):
+    options = [
+        option("theme", "t", "Colors to use.", flag=False, default="classic"),
+    ]
+
     _os: str = ""
     _SUCCESS: str = ""
 
@@ -29,10 +34,13 @@ class BaseCommand(Command):
     # _stylize
     # -----
     def _stylize(self) -> None:
-        self.add_style("info", fg="blue")
-        self.add_style("warning", fg="yellow")
-        self.add_style("error", fg="red")
-        self.add_style("success", fg="green")
+        try:
+            theme = cfg.themes[self.option("theme")]
+        except KeyError:
+            theme = cfg.themes["classic"]
+
+        for styleName, styleOpts in theme.items():
+            self.add_style(styleName, **styleOpts)
 
     # -----
     # _configure_interaction

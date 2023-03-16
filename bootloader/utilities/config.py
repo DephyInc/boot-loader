@@ -63,3 +63,76 @@ targets = ["habs", "ex", "re", "bt121", "xbee", "mn"]
 supportedOS = [
     "windows",
 ]
+
+
+# ============================================
+#                   Themes
+# ============================================
+themes = {
+    "classic": {
+        "info": {"fg": "blue", "options": []},
+        "warning": {"fg": "yellow", "options": []},
+        "error": {
+            "fg": "red",
+            "options": [
+                "bold",
+            ],
+        },
+        "success": {
+            "fg": "green",
+            "options": [
+                "bold",
+            ],
+        },
+    },
+    "light": {
+        "info": {"fg": "light_blue", "options": []},
+        "warning": {"fg": "light_yellow", "options": []},
+        "error": {
+            "fg": "light_red",
+            "options": [
+                "bold",
+            ],
+        },
+        "success": {
+            "fg": "light_green",
+            "options": [
+                "bold",
+            ],
+        },
+    },
+    "dark": {
+        "info": {
+            "fg": "blue",
+            "options": [
+                "dark",
+            ],
+        },
+        "warning": {
+            "fg": "yellow",
+            "options": [
+                "dark",
+            ],
+        },
+        "error": {
+            "fg": "red",
+            "options": [
+                "dark",
+                "bold",
+            ],
+        },
+        "success": {
+            "fg": "green",
+            "options": [
+                "dark",
+                "bold",
+            ],
+        },
+    },
+    "none": {
+        "info": {"fg": "default", "options": []},
+        "warning": {"fg": "default", "options": []},
+        "error": {"fg": "default", "options": []},
+        "success": {"fg": "default", "options": []},
+    },
+}
