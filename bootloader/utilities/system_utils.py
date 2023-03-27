@@ -1,13 +1,60 @@
-from bootloader.utilities import config as cfg
+from pathlib import Path
+import subprocess as sub
+import zipfile
+
+import botocore.exceptions as bce
+from flexsea.utilities import download
+
+import bootloader.utilities.config as cfg
 
 
 # ============================================
-#                setup_cache
+#               get_flash_tools
 # ============================================
-def setup_cache() -> None:
+def get_flash_tools(target: str, operatingSystem: str) -> None:
     """
-    Creates the directories where the firmware files and bootloader
-    tools are downloaded and installed to.
+    Checks to make sure that the tools required to flash the desired
+    target on the current OS are present. If they aren't, then we
+    try to download them from S3.
     """
-    cfg.firmwareDir.mkdir(parents=True, exist_ok=True)
-    cfg.toolsDir.mkdir(parents=True, exist_ok=True)
+    _bootloaderTools = cfg.bootloaderTools[operatingSystem][target]
+
+    for tool in _bootloaderTools:
+        dest = cfg.toolsDir.joinpath(tool)
+
+        if not dest.exists():
+            try:
+                # boto3 requires dest be either IOBase or str
+                toolObj = str(Path(_os).joinpath(tool).as_posix())
+                download(toolObj, cfg.toolsBucket, str(dest), None)
+            except bce.EndpointConnectionError as err:
+                raise err
+            except AssertionError as err:
+                raise RuntimeError(f"Error: checksums don't equal: `{tool}`") from err
+
+            if zipfile.is_zipfile(dest):
+                with zipfile.ZipFile(dest, "r") as archive:
+                    base = dest.name.split(".")[0]
+                    extractedDest = Path(os.path.dirname(dest)).joinpath(base)
+                    archive.extractall(extractedDest)
+
+
+# ============================================
+#             call_flash_tool
+# ============================================
+def call_flash_tool(cmd: List[str]) -> None:
+    """
+    Attempts to call the flash command `cmd`. If the call fails, we
+    try again until the max attempts have been reached.
+    """
+    for _ in range(5):
+        try:
+            proc = sub.run(cmd, capture_output=False, check=True, timeout=360)
+        except sub.CalledProcessError:
+            continue
+        except sub.TimeoutExpired as err:
+            raise sub.TimeoutExpired("Error: timeout.") from err
+        if proc.returncode == 0:
+            break
+    if proc.returncode != 0:
+        raise RuntimeError("Error: flash command failed.")

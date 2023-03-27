@@ -2,20 +2,23 @@ import glob
 import os
 import shutil
 import subprocess as sub
+import sys
 from time import sleep
 from typing import List
 
+from cleo.helpers import argument
 from cleo.helpers import option
+from flexsea.device import Device
 
 import bootloader.utilities.config as cfg
 
-from .flash_mcu import FlashMcuCommand
+from .base_flash_command import BaseFlashCommand
 
 
 # ============================================
 #             FlashBt121Command
 # ============================================
-class FlashBt121Command(FlashMcuCommand):
+class FlashBt121Command(BaseFlashCommand):
     """
     Flashes the bluetooth 121 radio.
     """
@@ -23,6 +26,18 @@ class FlashBt121Command(FlashMcuCommand):
     name = "bt121"
 
     description = "Flashes the bluetooth radio."
+
+    arguments = [
+        argument("currentMnFw", "Current firmware version on Manage, e.g., `7.2.0`."),
+    ]
+
+    options = [
+        option("address", "-a", "BT address. Default is the device id.", flag=False),
+        option("baudRate", "-b", "Device baud rate.", flag=False, default=230400),
+        option("level", "-L", "GATT level.", flag=False, default=2),
+        option("libFile", "-l", "C lib for interacting with Manage.", flag=False),
+        option("port", "-p", "Port the device is on, e.g., `COM3`.", flag=False),
+    ]
 
     help = """
     Creates a new bluetooth file with the desired GATT level and flashes it
@@ -39,34 +54,35 @@ class FlashBt121Command(FlashMcuCommand):
     bootload bt121 9.1.0 --level 2 --address 0001
     """
 
-    _address: str = ""
-    _level: int = -1
-    _target: str = "bt"
+    # -----
+    # _parse_options
+    # -----
+    def _parse_options(self) -> None:
+        self._currentMnFw = self.argument("currentMnFw")
+
+        self._address = self.option("address")
+        self._baudRate = self.option("baudRate")
+        self._level = self.option("level")
+        self._libFile = self.option("lib")
+        self._port = self.option("port")
 
     # -----
-    # __new__
+    # _get_target
     # -----
-    def __new__(cls):
-        obj = super().__new__(cls)
-        _ = obj.arguments.pop()
-        obj.options.append(option("address", "-a", "Bt121 address.", flag=False))
-        obj.options.append(option("level", None, "GATT level.", flag=False, default=2))
-
-        return obj
+    def _get_target(self) -> None:
+        self._target = "bt121"
 
     # -----
     # _get_firmware_file
     # -----
     def _get_firmware_file(self) -> None:
         """
-        Uses the bluetooth tools repo (downloaded as a part of `init`)
-        to create a bluetooth image file with the correct address.
+        Uses the bluetooth tools repo to create a bluetooth image file
+        with the correct address.
         """
-        self._level = self.option("level")
-        if self.option("address"):
-            self._address = self.option("address")
-        else:
-            self._address = self._device.deviceId
+        self.line(f"Building bluetooth image...")
+
+        address = self._address if self._address else self._device.deviceId
 
         # Everything within the bt121 directory is self-contained and
         # self-referencing, so it's easiest to switch to that directory
@@ -83,12 +99,14 @@ class FlashBt121Command(FlashMcuCommand):
 
         shutil.copyfile(gattTemplate, gattFile)
 
-        if self._os == "windows":
+        if "linux" in self._os:
+            pythonCommand = "python3"
+        elif "windows" in self._os:
             pythonCommand = "python"
         else:
-            pythonCommand = "python3"
+            raise OSError("Unsupported OS!")
 
-        cmd = [pythonCommand, "bt121_gatt_broadcast_img.py", f"{self._address}"]
+        cmd = [pythonCommand, "bt121_gatt_broadcast_img.py", f"{address}"]
         proc = sub.run(cmd, capture_output=False, check=True, timeout=360)
 
         if proc.returncode != 0:
@@ -115,22 +133,13 @@ class FlashBt121Command(FlashMcuCommand):
         os.chdir(cwd)
 
         self._fwFile = btImageFile
+        self.line(f"Building bluetooth image... {self._SUCCESS}")
 
     # -----
-    # _flash_target
+    # _get_flash_command
     # -----
-    def _flash_target(self) -> None:
-        self._device.close()
-        sleep(3)
-        self._call_flash_tool()
-        sleep(20)
-
-    # -----
-    # _flashCmd
-    # -----
-    @property
-    def _flashCmd(self) -> List[str]:
-        cmd = [
+    def _get_flash_command(self) -> None:
+        self._flashCmd = [
             os.path.join(cfg.toolsDir, "stm32flash"),
             "-w",
             f"{self._fwFile}",
@@ -139,4 +148,11 @@ class FlashBt121Command(FlashMcuCommand):
             self._device.port,
         ]
 
-        return cmd
+    # -----
+    # _flash_target
+    # -----
+    def _flash_target(self) -> None:
+        self._device.close()
+        sleep(3)
+        call_flash_tool(self._flashCmd)
+        sleep(20)

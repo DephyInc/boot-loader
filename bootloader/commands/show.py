@@ -17,7 +17,7 @@ class ShowCommand(BaseCommand):
     Shows firmware, devices, and hardware available for bootloading.
     """
 
-    name = "show"
+    name = "show-available"
 
     description = "Shows firmware, devices, and hardware available for bootloading."
 
@@ -35,13 +35,11 @@ class ShowCommand(BaseCommand):
     Examples
     --------
     # Show all
-    > bootload show
+    > bootload show-available
 
     # Show only devices
-    > bootload show --devices
+    > bootload show-available --devices
     """
-
-    _pad: str = "    "
 
     # -----
     # handle
@@ -50,7 +48,8 @@ class ShowCommand(BaseCommand):
         """
         Entry point for the command.
         """
-        self._setup()
+        self._stylize()
+        self._configure_interaction()
 
         showDevices = self.option("devices")
         showHardware = self.option("hardware")
@@ -59,7 +58,7 @@ class ShowCommand(BaseCommand):
 
         _all = not (showDevices or showHardware or showFirmware or showLibraries)
 
-        fwInfo = get_s3_object_info(cfg.firmwareBucket)
+        fwInfo = get_s3_object_info(cfg.firmwareBucket, cfg.dephyProfile)
         libsInfo = get_s3_object_info(cfg.libsBucket)
 
         if showDevices:
@@ -124,9 +123,11 @@ class ShowCommand(BaseCommand):
     # _list_all
     # -----
     def _list_all(self, info: dict) -> None:
+        pad = "    "
+
         for version in info:
             self.line(f"<info>Version</info>: {version}")
             for hw, devices in info[version].items():
-                self.line(f"{self._pad}<info>Hardware</info> {hw}")
+                self.line(f"{pad}<info>Hardware</info> {hw}")
                 for device in devices:
-                    self.line(f"{self._pad}{self._pad}- <warning>{device}</warning>")
+                    self.line(f"{pad}{pad}- <warning>{device}</warning>")

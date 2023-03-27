@@ -2,40 +2,49 @@ import platform
 import sys
 
 from cleo.commands.command import Command
-from cleo.helpers import option
 
-from bootloader.exceptions.exceptions import UnsupportedOSError
 import bootloader.utilities.config as cfg
-from bootloader.utilities.system_utils import setup_cache
 
 
 # ============================================
 #                BaseCommand
 # ============================================
 class BaseCommand(Command):
-    options = [
-        option("theme", "t", "Colors to use.", flag=False, default="classic"),
-    ]
+    """
+    Handles configuration of each command.
+    """
 
     _os: str = ""
     _SUCCESS: str = ""
 
     # -----
+    # constructor
+    # -----
+    def __init__(self) -> None:
+        super().__init__()
+
+        self._theme: str = ""
+
+        self._configure_unicode()
+        setup_cache()
+
+    # -----
     # _setup
     # -----
     def _setup(self) -> None:
+        # Not in the constructor because we need access to the run-time options
         self._stylize()
         self._configure_interaction()
-        self._configure_unicode()
+
+        # Not in constructor because we need the `available` command to run anywhere
         self._check_os()
-        setup_cache()
 
     # -----
     # _stylize
     # -----
     def _stylize(self) -> None:
         try:
-            theme = cfg.themes[self.option("theme")]
+            theme = cfg.themes[self._theme]
         except KeyError:
             theme = cfg.themes["classic"]
 
@@ -81,13 +90,5 @@ class BaseCommand(Command):
         """
         self._os = platform.system().lower()
 
-        try:
-            assert self._os in cfg.supportedOS
-        except AssertionError as err:
-            raise UnsupportedOSError(self._os, cfg.supportedOS) from err
-
-    # -----
-    # handle
-    # -----
-    def handle(self) -> int:
-        raise NotImplementedError
+        if self._os not in cfg.supportedOS:
+            raise RuntimeError("Unsupported OS. Run: `bootload available --os`")
