@@ -1,5 +1,7 @@
+import os
 from pathlib import Path
 import subprocess as sub
+from typing import List
 import zipfile
 
 import botocore.exceptions as bce
@@ -25,7 +27,7 @@ def get_flash_tools(target: str, operatingSystem: str) -> None:
         if not dest.exists():
             try:
                 # boto3 requires dest be either IOBase or str
-                toolObj = str(Path(_os).joinpath(tool).as_posix())
+                toolObj = str(Path(operatingSystem).joinpath(tool).as_posix())
                 download(toolObj, cfg.toolsBucket, str(dest), None)
             except bce.EndpointConnectionError as err:
                 raise err
@@ -53,8 +55,16 @@ def call_flash_tool(cmd: List[str]) -> None:
         except sub.CalledProcessError:
             continue
         except sub.TimeoutExpired as err:
-            raise sub.TimeoutExpired("Error: timeout.") from err
+            raise sub.TimeoutExpired(cmd, 360) from err
         if proc.returncode == 0:
             break
     if proc.returncode != 0:
         raise RuntimeError("Error: flash command failed.")
+
+
+# ============================================
+#                setup_cache
+# ============================================
+def setup_cache() -> None:
+    cfg.firmwareDir.mkdir(parents=True, exist_ok=True)
+    cfg.toolsDir.mkdir(parents=True, exist_ok=True)

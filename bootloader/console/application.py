@@ -36,7 +36,6 @@ class BootloaderApplication(Application):
         commandList : List[Command]
             A list of commands available to the CLI.
         """
-        commandList = [
-        ]
+        commandList = []
 
         return commandList

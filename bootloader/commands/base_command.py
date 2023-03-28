@@ -4,6 +4,7 @@ import sys
 from cleo.commands.command import Command
 
 import bootloader.utilities.config as cfg
+from bootloader.utilities.system_utils import setup_cache
 
 
 # ============================================
@@ -92,3 +93,9 @@ class BaseCommand(Command):
 
         if self._os not in cfg.supportedOS:
             raise RuntimeError("Unsupported OS. Run: `bootload available --os`")
+
+    # -----
+    # handle
+    # -----
+    def handle(self) -> int:
+        raise NotImplementedError

@@ -122,7 +122,9 @@ def _parse_lib_objects(objects: List[str]) -> List[str]:
 # ============================================
 #               get_remote_file
 # ============================================
-def get_remote_file(fName: str, bucket: str, dest: str, profile: str|None=None) -> None:
+def get_remote_file(
+    fName: str, bucket: str, dest: str, profile: str | None = None
+) -> None:
     """
     Searches the given aws bucket for the given file and downloads it to
     `dest`.
@@ -138,6 +140,6 @@ def get_remote_file(fName: str, bucket: str, dest: str, profile: str|None=None) 
     # There should only be one match. If not, we don't know which one to go with
     if len(items) == 0:
         raise FileNotFoundError(f"Error: couldn't find: `{fName}`")
-    elif len(items) > 1:
+    if len(items) > 1:
         raise RuntimeError(f"Error: multiple matches found for: `{fName}`")
     download(items[0], bucket, dest, profile)

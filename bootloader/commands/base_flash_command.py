@@ -30,8 +30,9 @@ class BaseFlashCommand(BaseCommand):
         self._deviceName: str = ""
         self._flashCmd: List[str] = []
         self._fwFile: str = ""
-        self._libFile:str = ""
-        self._port:str = ""
+        self._level: int = -1
+        self._libFile: str = ""
+        self._port: str = ""
         self._rigidVersion: str = ""
         self._side: str = ""
         self._target: str = ""
@@ -66,7 +67,7 @@ class BaseFlashCommand(BaseCommand):
         self._device = Device(
             port=self._port,
             baudRate=self._baudRate,
-            cLibVersion=self._from,
+            cLibVersion=self._currentMnFw,
             libFile=self._libFile,
         )
 
@@ -134,18 +135,6 @@ class BaseFlashCommand(BaseCommand):
     def _get_target(self) -> None:
         """
         Gets the desired target to flash.
-
-        Should be implemented by the Child class.
-        """
-        raise NotImplementedError
-
-    # -----
-    # _get_flash_tools
-    # -----
-    def _get_flash_tools(self) -> None:
-        """
-        Checks if the required tools are installed. If not, we download
-        them from S3.
 
         Should be implemented by the Child class.
         """

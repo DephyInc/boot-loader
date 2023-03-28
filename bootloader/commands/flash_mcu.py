@@ -66,12 +66,14 @@ class FlashMcuCommand(BaseFlashCommand):
     # -----
     def _build_fw_file(self) -> str:
         fw = self._to
-        devName = self._deviceName if self._deviceName else self._device.deviceName 
+        devName = self._deviceName if self._deviceName else self._device.deviceName
         hw = self._rigidVersion if self._rigidVersion else self._device.rigidVersion
         ext = cfg.firmwareExtensions[self._target]
 
         if self._target == "mn":
-            side = f"_side-{self.option('side')}" if self._side else ""
+            side = f"_side-{self._side}" if self._side else ""
+        else:
+            side = ""
 
         return f"{devName}_rigid-{hw}_{self._target}_firmware-{fw}{side}.{ext}"
 
@@ -90,3 +92,21 @@ class FlashMcuCommand(BaseFlashCommand):
         get_remote_file(fwFile, cfg.firmwareBucket, str(fwPath), cfg.dephyProfile)
 
         return fwPath
+
+    # -----
+    # _flash_target
+    # -----
+    def _flash_target(self) -> None:
+        raise NotImplementedError
+
+    # -----
+    # _get_flash_command
+    # -----
+    def _get_flash_command(self) -> None:
+        raise NotImplementedError
+
+    # -----
+    # _get_target
+    # -----
+    def _get_target(self) -> None:
+        raise NotImplementedError

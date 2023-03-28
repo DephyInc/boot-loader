@@ -2,15 +2,13 @@ import glob
 import os
 import shutil
 import subprocess as sub
-import sys
 from time import sleep
-from typing import List
 
 from cleo.helpers import argument
 from cleo.helpers import option
-from flexsea.device import Device
 
 import bootloader.utilities.config as cfg
+from bootloader.utilities.system_utils import call_flash_tool
 
 from .base_flash_command import BaseFlashCommand
 
@@ -80,7 +78,7 @@ class FlashBt121Command(BaseFlashCommand):
         Uses the bluetooth tools repo to create a bluetooth image file
         with the correct address.
         """
-        self.line(f"Building bluetooth image...")
+        self.line("Building bluetooth image...")
 
         address = self._address if self._address else self._device.deviceId
 

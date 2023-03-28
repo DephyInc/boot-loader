@@ -1,10 +1,11 @@
 import os
-import sys
 from time import sleep
 
 from cleo.helpers import argument
 from cleo.helpers import option
-from flexsea.device import Device
+
+import bootloader.utilities.config as cfg
+from bootloader.utilities.system_utils import call_flash_tool
 
 from .base_flash_command import BaseFlashCommand
 
@@ -18,7 +19,7 @@ class FlashXbeeCommand(BaseFlashCommand):
     """
 
     name = "xbee"
-    
+
     description = "Sets up the xbee radio for inter-device communication."
 
     arguments = [

@@ -44,12 +44,25 @@ credentialsFile = Path.joinpath(Path.home(), ".aws", "credentials")
 # ============================================
 bootloaderTools = {
     "windows": {
-        "bt121" : ["bt121_image_tools.zip", "stm32flash.exe",],
-        "ex" : ["psocbootloaderhost.exe",],
-        "habs" : ["stm32_flash_loader.zip",],
-        "mn" : ["DfuSeCommand.exe",],
-        "re" : ["psocbootloaderhost.exe",],
-        "xbee" : ["XB24C.zip",],
+        "bt121": [
+            "bt121_image_tools.zip",
+            "stm32flash.exe",
+        ],
+        "ex": [
+            "psocbootloaderhost.exe",
+        ],
+        "habs": [
+            "stm32_flash_loader.zip",
+        ],
+        "mn": [
+            "DfuSeCommand.exe",
+        ],
+        "re": [
+            "psocbootloaderhost.exe",
+        ],
+        "xbee": [
+            "XB24C.zip",
+        ],
     },
 }
 
