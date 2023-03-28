@@ -32,6 +32,7 @@ class FlashXbeeCommand(BaseFlashCommand):
         option("baudRate", "-b", "Device baud rate.", flag=False, default=230400),
         option("libFile", "-l", "C lib for interacting with Manage.", flag=False),
         option("port", "-p", "Port the device is on, e.g., `COM3`.", flag=False),
+        option("theme", None, "classic, light, dark, or none", flag=False),
     ]
 
     help = ""
@@ -47,6 +48,7 @@ class FlashXbeeCommand(BaseFlashCommand):
         self._baudRate = self.option("baudRate")
         self._libFile = self.option("libFile")
         self._port = self.option("port")
+        self._theme = self.option("theme")
 
     # -----
     # _get_target

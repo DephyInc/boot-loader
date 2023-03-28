@@ -45,8 +45,8 @@ class BaseFlashCommand(BaseCommand):
         """
         Entry point for the command.
         """
-        self._setup()
         self._parse_options()
+        self._setup()
         self._get_target()
         get_flash_tools(self._target, self._os)
         self._get_device()

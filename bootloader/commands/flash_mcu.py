@@ -31,6 +31,7 @@ class FlashMcuCommand(BaseFlashCommand):
         option("port", "-p", "Port the device is on, e.g., `COM3`.", flag=False),
         option("rigidVersion", "-r", "PCB hardware version, e.g., `4.1B`.", flag=False),
         option("side", "-s", "Either left or right.", flag=False),
+        option("theme", None, "classic, light, dark, or none", flag=False),
     ]
 
     # -----
@@ -49,6 +50,7 @@ class FlashMcuCommand(BaseFlashCommand):
         self._port = self.option("port")
         self._rigidVersion = self.option("rigidVersion")
         self._side = self.option("side")
+        self._theme = self.option("theme")
 
     # -----
     # _get_firmware_file

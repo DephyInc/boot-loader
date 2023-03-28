@@ -35,6 +35,7 @@ class FlashBt121Command(BaseFlashCommand):
         option("level", "-L", "GATT level.", flag=False, default=2),
         option("libFile", "-l", "C lib for interacting with Manage.", flag=False),
         option("port", "-p", "Port the device is on, e.g., `COM3`.", flag=False),
+        option("theme", None, "classic, light, dark, or none", flag=False),
     ]
 
     help = """
@@ -63,6 +64,7 @@ class FlashBt121Command(BaseFlashCommand):
         self._level = self.option("level")
         self._libFile = self.option("lib")
         self._port = self.option("port")
+        self._theme = self.option("theme")
 
     # -----
     # _get_target
