@@ -250,7 +250,7 @@ class InitCommand(Command):
                 try:
                     # boto3 requires dest be either IOBase or str
                     toolObj = str(Path(_os).joinpath(tool).as_posix())
-                    fxu.download(toolObj, cfg.toolsBucket, str(dest), cfg.dephyProfile)
+                    fxu.download(toolObj, cfg.toolsBucket, str(dest))
                 except bce.EndpointConnectionError as err:
                     raise err
                 except AssertionError as err:
