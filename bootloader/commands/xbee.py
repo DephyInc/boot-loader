@@ -45,7 +45,7 @@ class FlashXbeeCommand(BaseFlashCommand):
         self._buddyAddress = self.argument("buddyAddress")
 
         self._address = self.option("address")
-        self._baudRate = self.option("baudRate")
+        self._baudRate = int(self.option("baudRate"))
         self._libFile = self.option("libFile")
         self._port = self.option("port")
         self._theme = self.option("theme")

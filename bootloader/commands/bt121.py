@@ -60,7 +60,7 @@ class FlashBt121Command(BaseFlashCommand):
         self._currentMnFw = self.argument("currentMnFw")
 
         self._address = self.option("address")
-        self._baudRate = self.option("baudRate")
+        self._baudRate = int(self.option("baudRate"))
         self._level = self.option("level")
         self._libFile = self.option("libFile")
         self._port = self.option("port")

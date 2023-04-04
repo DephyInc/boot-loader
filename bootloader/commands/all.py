@@ -94,7 +94,7 @@ class FlashAllCommand(BaseCommand):
         self._to = self.argument("to")
 
         self._address = self.option("address")
-        self._baudRate = self.option("baudRate")
+        self._baudRate = int(self.option("baudRate"))
         self._buddyAddress = self.option("buddyAddress")
         self._deviceName = self.option("deviceName")
         self._libFile = self.option("libFile")
