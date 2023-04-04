@@ -62,7 +62,7 @@ class FlashBt121Command(BaseFlashCommand):
         self._address = self.option("address")
         self._baudRate = self.option("baudRate")
         self._level = self.option("level")
-        self._libFile = self.option("lib")
+        self._libFile = self.option("libFile")
         self._port = self.option("port")
         self._theme = self.option("theme")
 

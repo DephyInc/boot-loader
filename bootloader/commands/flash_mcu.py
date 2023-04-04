@@ -46,7 +46,7 @@ class FlashMcuCommand(BaseFlashCommand):
 
         self._baudRate = self.option("baudRate")
         self._deviceName = self.option("deviceName")
-        self._libFile = self.option("lib")
+        self._libFile = self.option("libFile")
         self._port = self.option("port")
         self._rigidVersion = self.option("rigidVersion")
         self._side = self.option("side")
