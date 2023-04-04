@@ -59,7 +59,7 @@ class FlashAllCommand(BaseCommand):
         self._currentMnFw: str = ""
         self._to: str = ""
         self._address: str = ""
-        self._baudRate: int = -1
+        self._baudRate: int | None = None
         self._buddyAddress: str = ""
         self._deviceName: str = ""
         self._level: int | None = None
