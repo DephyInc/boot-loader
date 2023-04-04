@@ -62,7 +62,7 @@ class FlashAllCommand(BaseCommand):
         self._baudRate: int = -1
         self._buddyAddress: str = ""
         self._deviceName: str = ""
-        self._level: int = -1
+        self._level: int | None = None
         self._libFile: str = ""
         self._port: str = ""
         self._rigidVersion: str = ""
