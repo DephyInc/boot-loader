@@ -4,7 +4,7 @@ This is a tool for loading firmware onto Dephy's devices.
 
 ## AWS Access
 
-A pre-compiled C library in order to communicate with your device.
+A pre-compiled C library is needed in order to communicate with your device.
 These libraries are hosted in a public AWS S3 bucket called `dephy-public-binaries`.
 Use the `show` command to view the available versions (see below).
 
@@ -65,13 +65,16 @@ Additionally, replace `python3` with `python`.
 
 ### From PyPI
 
-This is the simplest installation method. 
+This is the simplest installation method and should be the preferred method of installing.
 
 ```bash
 python3 -m pip install dephy-bootloader
 ```
 
 ### From Source
+
+**NOTE**: You only need to install from source if you're planning on developing and/or 
+tweaking the code. If you just want to use it you should install from PyPI via `pip`.
 
 To install from source:
 
