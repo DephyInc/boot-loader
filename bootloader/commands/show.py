@@ -26,11 +26,13 @@ class ShowCommand(BaseCommand):
         option("hardware", "-r", "Show available hardware versions.", flag=True),
         option("firmware", None, "Show firmware versions.", flag=True),
         option("c-libraries", None, "Show available C libraries.", flag=True),
+        option("os", None, "Show compatible operating systems.", flag=True),
     ]
 
     help = """
-    Displays the devices, hardware versions, firmware versions, and versions
-    of the pre-compiled C libraries that are available for bootloading.
+    Displays the devices, operating systems, hardware versions,
+    firmware versions, and versions of the pre-compiled C libraries 
+    that are available for bootloading.
 
     Examples
     --------
@@ -55,8 +57,9 @@ class ShowCommand(BaseCommand):
         showHardware = self.option("hardware")
         showFirmware = self.option("firmware")
         showLibraries = self.option("c-libraries")
+        showOperatingSystems = self.option("os")
 
-        _all = not (showDevices or showHardware or showFirmware or showLibraries)
+        _all = not (showDevices or showHardware or showFirmware or showLibraries or showOperatingSystems)
 
         fwInfo = get_s3_object_info(cfg.firmwareBucket, cfg.dephyProfile)
         libsInfo = get_s3_object_info(cfg.libsBucket)
@@ -69,9 +72,12 @@ class ShowCommand(BaseCommand):
             self._list_firmware(fwInfo)
         if showLibraries:
             self._list_libraries(libsInfo)
+        if showOperatingSystems:
+            self._list_operating_systems()
         if _all:
             self._list_all(fwInfo)
             self._list_libraries(libsInfo)
+            self._list_operating_systems()
 
         return 0
 
@@ -118,6 +124,14 @@ class ShowCommand(BaseCommand):
         self.line("Available pre-compiled C libraries:")
         for lib in libs:
             self.line(f"\t- <info>{lib}</info>")
+
+    # -----
+    # _list_operating_systems
+    # -----
+    def _list_operating_systems(self) -> None:
+        self.line("Supported operating systems:")
+        for operatingSystem in cfg.supportedOS:
+            self.line(f"\t- {operatingSystem}")
 
     # -----
     # _list_all

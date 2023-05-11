@@ -92,7 +92,7 @@ class BaseCommand(Command):
         self._os = platform.system().lower()
 
         if self._os not in cfg.supportedOS:
-            raise RuntimeError("Unsupported OS. Run: `bootload available --os`")
+            raise RuntimeError("Unsupported OS. Run: `bootload show-available --os`")
 
     # -----
     # handle
