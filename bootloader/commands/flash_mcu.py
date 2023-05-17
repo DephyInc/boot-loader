@@ -2,9 +2,10 @@ from pathlib import Path
 
 from cleo.helpers import argument
 from cleo.helpers import option
+from flexsea.utilities.aws import s3_download
+from flexsea.utilities.firmware import get_closest_version
 import semantic_version as sem
 
-from bootloader.utilities.aws import get_remote_file
 import bootloader.utilities.config as cfg
 
 from .base_flash_command import BaseFlashCommand
@@ -56,18 +57,36 @@ class FlashMcuCommand(BaseFlashCommand):
     # _get_firmware_file
     # -----
     def _get_firmware_file(self) -> None:
-        if sem.validate(self._to):
-            fwFile = self._build_fw_file()
-        else:
+        # Newer versions of flexsea allow passing "imcomplete" version strings,
+        # e.g., '10' or '10.5', both of which are invalid semantic version strings,
+        # so we have to try and coerce instead of validating
+        try:
+            closestFw = get_closest_version(sem.Version.coerce(self._to))
+        # This ValueError is raised if the coersion fails, in which case we assume
+        # that the value of self._to is the name of the firmware file to flash
+        except ValueError:
             fwFile = self._to
-
+        else:
+            try:
+                # If the given version (self._to) doesn't match what we found on S3
+                # then we should make sure closestFw is the version the user wants
+                # to flash
+                assert closestFw == sem.Version.coerce(self._to)
+            except AssertionError:
+                if not self.io.is_interactive() and not self.option("no-interaction"):
+                    confirmed = input(f"Bootload to: {closestFw} [y/N]?") 
+                    if confirmed.lower() != "y":
+                        sys.exit(1)
+                else:
+                    self.line(f"<warning>Flashing to: {closestFw} instead of: {self._to}</warning>")
+            self._to = closestFw
+            fwFile = self._build_fw_file()
         self._fwFile = self._handle_file(fwFile)
 
     # -----
     # _build_fw_file
     # -----
     def _build_fw_file(self) -> str:
-        fw = self._to
         devName = self._deviceName if self._deviceName else self._device.deviceName
         hw = self._rigidVersion if self._rigidVersion else self._device.rigidVersion
         ext = cfg.firmwareExtensions[self._target]
@@ -77,7 +96,7 @@ class FlashMcuCommand(BaseFlashCommand):
         else:
             side = ""
 
-        return f"{devName}_rigid-{hw}_{self._target}_firmware-{fw}{side}.{ext}"
+        return f"{devName}_rigid-{hw}_{self._target}_firmware-{self._to}{side}.{ext}"
 
     # -----
     # _handle_file
@@ -87,11 +106,11 @@ class FlashMcuCommand(BaseFlashCommand):
         if fwPath.exists():
             return fwPath
 
-        fwPath = cfg.firmwareDir.joinpath(fwFile).expanduser().absolute()
+        fwPath = cfg.firmwarePath.joinpath(fwFile).expanduser().absolute()
         if fwPath.exists():
             return fwPath
 
-        get_remote_file(fwFile, cfg.firmwareBucket, str(fwPath), cfg.dephyProfile)
+        s3_download(fwFile, cfg.firmwareBucket, str(fwPath), cfg.dephyProfile)
 
         return fwPath
 

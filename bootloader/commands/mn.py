@@ -47,7 +47,7 @@ class FlashManageCommand(FlashMcuCommand):
     # -----
     def _get_flash_command(self) -> None:
         self._flashCmd = [
-            f"{Path(cfg.toolsDir).joinpath('DfuSeCommand.exe')}",
+            f"{Path(cfg.toolsPath).joinpath('DfuSeCommand.exe')}",
             "-c",
             "-d",
             "--fn",

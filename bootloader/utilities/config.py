@@ -1,49 +1,39 @@
 from pathlib import Path
 
+from flexsea.utilities.constants import dephyPath
+
 
 # ============================================
 #              Path Configuration
 # ============================================
 
-# Root directory of where to save bootloading tools and downloaded
-# firmware
-cacheDir = Path.joinpath(Path.home(), ".dephy", "bootloader")
+# toolsDir is the name of the directory (mirrored on S3), whereas
+# toolsPath is the full path to that directory on the local file system
+toolsDir = "bootloader_tools"
+toolsPath = dephyPath.joinpath(toolsDir)
 
-# Directory to save bootloading tools
-toolsDir = cacheDir.joinpath("tools")
-
-# Directory to save firmware
-firmwareDir = cacheDir.joinpath("firmware")
+# firmwareDir is the name of the directory (mirrored on S3), whereas
+# firmwarePath is the full path to that directory on the local file system
+firmwareDir = "firmware"
+firmwarePath = dephyPath.joinpath(firmwareDir)
 
 
 # ============================================
 #              S3 Configuration
 # ============================================
 
-# Public bucket where bootloading tools are stored
-toolsBucket = "dephy-bootloader-tools"
-
 # Private bucket where the firmware is stored
-firmwareBucket = "dephy-firmware"
-
-# Public bucket where the pre-compiled C libraries are stored
-libsBucket = "dephy-public-binaries"
+firmwareBucket = "dephy-firmware-files"
 
 # Credentials profile name
 dephyProfile = "dephy"
-
-# Dummy file to check AWS key authenticity
-connectionFile = "connection_file.txt"
-
-# AWS credentials file
-credentialsFile = Path.joinpath(Path.home(), ".aws", "credentials")
 
 
 # ============================================
 #                Dependencies
 # ============================================
 bootloaderTools = {
-    "windows": {
+    "windows_64bit": {
         "bt121": [
             "bt121_image_tools.zip",
             "stm32flash.exe",
@@ -70,11 +60,10 @@ bootloaderTools = {
 # ============================================
 #                 Constants
 # ============================================
-baudRate = 230400
 firmwareExtensions = {"habs": "hex", "ex": "cyacd", "re": "cyacd", "mn": "dfu"}
 targets = ["habs", "ex", "re", "bt121", "xbee", "mn"]
 supportedOS = [
-    "windows",
+    "windows_64bit",
 ]
 
 

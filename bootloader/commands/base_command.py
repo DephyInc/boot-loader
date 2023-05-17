@@ -1,7 +1,7 @@
-import platform
 import sys
 
 from cleo.commands.command import Command
+from flexsea.utilities.system import get_os
 
 import bootloader.utilities.config as cfg
 from bootloader.utilities.system_utils import setup_cache
@@ -89,7 +89,7 @@ class BaseCommand(Command):
         UnsupportedOSError
             If the detected operating system is not supported.
         """
-        self._os = platform.system().lower()
+        self._os = get_os()
 
         if self._os not in cfg.supportedOS:
             raise RuntimeError("Unsupported OS. Run: `bootload show-available --os`")

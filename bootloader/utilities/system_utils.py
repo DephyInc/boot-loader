@@ -5,7 +5,8 @@ from typing import List
 import zipfile
 
 import botocore.exceptions as bce
-from flexsea.utilities import download
+from flexsea.utilities.aws import s3_download
+from flexsea.utilities.constants import dephyPublicFilesBucket
 
 import bootloader.utilities.config as cfg
 
@@ -22,13 +23,13 @@ def get_flash_tools(target: str, operatingSystem: str) -> None:
     _bootloaderTools = cfg.bootloaderTools[operatingSystem][target]
 
     for tool in _bootloaderTools:
-        dest = cfg.toolsDir.joinpath(tool)
+        dest = cfg.toolsPath.joinpath(tool)
 
         if not dest.exists():
             try:
                 # boto3 requires dest be either IOBase or str
-                toolObj = str(Path(operatingSystem).joinpath(tool).as_posix())
-                download(toolObj, cfg.toolsBucket, str(dest), None)
+                obj = str(Path(cfg.toolsDir).joinpath(operatingSystem, tool).as_posix())
+                s3_download(obj, dephyPublicFilesBucket, str(dest), None)
             except bce.EndpointConnectionError as err:
                 raise err
             except AssertionError as err:
@@ -66,5 +67,5 @@ def call_flash_tool(cmd: List[str]) -> None:
 #                setup_cache
 # ============================================
 def setup_cache() -> None:
-    cfg.firmwareDir.mkdir(parents=True, exist_ok=True)
-    cfg.toolsDir.mkdir(parents=True, exist_ok=True)
+    cfg.firmwarePath.mkdir(parents=True, exist_ok=True)
+    cfg.toolsPath.mkdir(parents=True, exist_ok=True)

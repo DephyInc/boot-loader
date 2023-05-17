@@ -55,7 +55,7 @@ class FlashHabsoluteCommand(FlashMcuCommand):
     # -----
     def _get_flash_command(self) -> None:
         cmd = Path.joinpath(
-            cfg.toolsDir,
+            cfg.toolsPath,
             "stm32_flash_loader",
             "stm32_flash_loader",
             "STMFlashLoader.exe",

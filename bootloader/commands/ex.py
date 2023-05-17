@@ -47,7 +47,7 @@ class FlashExecuteCommand(FlashMcuCommand):
     # -----
     def _get_flash_command(self) -> None:
         self._flashCmd = [
-            f"{Path.joinpath(cfg.toolsDir, 'psocbootloaderhost.exe')}",
+            f"{Path.joinpath(cfg.toolsPath, 'psocbootloaderhost.exe')}",
             f"{self._port}",
             f"{self._fwFile}",
         ]
