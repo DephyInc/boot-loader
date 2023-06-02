@@ -9,7 +9,6 @@ from bootloader.commands.bt121 import FlashBt121Command
 from bootloader.commands.config import CreateConfigurationCommand
 from bootloader.commands.ex import FlashExecuteCommand
 from bootloader.commands.habs import FlashHabsCommand
-from bootloader.commands.hex import DownloadHexCommand
 from bootloader.commands.mn import FlashManageCommand
 from bootloader.commands.re import FlashRegulateCommand
 from bootloader.commands.show import ShowAvailableCommand
@@ -48,7 +47,6 @@ class BootloaderApplication(Application):
         """
         commandList = [
             CreateConfigurationCommand,
-            DownloadHexCommand,
             FlashAllCommand,
             FlashBt121Command,
             FlashExecuteCommand,
