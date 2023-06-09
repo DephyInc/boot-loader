@@ -1,13 +1,17 @@
 from importlib import import_module
+import sys
 
 from cleo.application import Application as BaseApplication
 from cleo.formatters.style import Style
 from cleo.helpers import option
 from cleo.io.io import IO
+from flexsea.utilities.system import get_os
 
 from bootloader import __version__
+import bootloader.exceptions.exceptions as bex
 from bootloader.command_list import COMMANDS
 import bootloader.utilities.constants as bc
+from bootloader.utilities.system_utils import setup_cache
 
 
 # ============================================
@@ -19,9 +23,21 @@ class Application(BaseApplication):
     # constructor
     # -----
     def __init__(self) -> None:
-        super().__init__("bootload", __version__)
+        super().__init__("bootloader", __version__)
+
+        self._os = get_os()
+
+        if self._os not in cfg.supportedOS:
+            raise bex.UnsupportedOSError(self._os)
+
+        if sys.stdout.encoding.lower().startswith("utf"):  # pylint: disable=no-member
+            self._SUCCESS = "<success>✓</success>"
+        else:
+            self._SUCCESS = "SUCCESS"
 
         self._load_commands()
+
+        setup_cache()
 
     # -----
     # _load_commands
@@ -86,5 +102,8 @@ class Application(BaseApplication):
 
         io.output.set_formatter(formatter)
         io.error_output.set_formatter(formatter)
+
+        if not io.is_interactive() and not io.input.option("no-interaction"):
+            io.interactive(True)
 
         super()._configure_io(io)

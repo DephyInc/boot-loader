@@ -1,8 +1,6 @@
 COMMANDS = [
     "config create",
-    "download firmware",
     "download hex",
-    "download library",
     "download tools",
     "flash all",
     "flash bt121",
