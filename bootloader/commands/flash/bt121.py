@@ -12,7 +12,7 @@ class FlashBt121Command(BaseFlashCommand):
     def __init__(self) -> None:
         super().__init__()
 
-        self.name = "bt121"
+        self.name = "flash bt121"
         self.description = "Flashes new firmware onto bt121."
         self.help = self._help()
 

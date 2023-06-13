@@ -16,7 +16,7 @@ class FlashReCommand(FlashMcuCommand):
     def __init__(self) -> None:
         super().__init__()
 
-        self.name = "re"
+        self.name = "flash re"
         self.description = "Flashes new firmware onto Regulate."
         self.help = self._help()
         self.hidden = False

@@ -16,7 +16,7 @@ class FlashExCommand(FlashMcuCommand):
     def __init__(self) -> None:
         super().__init__()
 
-        self.name = "ex"
+        self.name = "flash ex"
         self.description = "Flashes new firmware onto Execute."
         self.help = self._help()
         self.hidden = False

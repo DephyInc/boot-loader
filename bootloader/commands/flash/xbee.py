@@ -12,7 +12,7 @@ class FlashXbeeCommand(BaseFlashCommand):
     def __init__(self) -> None:
         super().__init__()
 
-        self.name = "xbee"
+        self.name = "flash xbee"
         self.description = "Flashes new firmware onto xbee."
         self.help = self._help()
 

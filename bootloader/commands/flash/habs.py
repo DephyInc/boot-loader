@@ -12,7 +12,7 @@ class FlashHabsCommand(BaseFlashCommand):
     def __init__(self) -> None:
         super().__init__()
 
-        self.name = "habs"
+        self.name = "flash habs"
         self.description = "Flashes new firmware onto Habsolute."
         self.help = self._help()
 
