@@ -45,7 +45,7 @@ def call_flash_tool(cmd: List[str]) -> None:
 # ============================================
 #               get_fw_file
 # ============================================
-def get_fw_file(fName: Path) -> Path:
+def get_fw_file(fName: str) -> Path:
     fwFile = fxc.dephyPath.joinpath(bc.firmwareDir, fName)
 
     if not fwFile.is_file():

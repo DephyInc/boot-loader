@@ -64,7 +64,7 @@ class FlashXbeeCommand(FlashRadioCommand):
             pythonCmd,
             os.path.join(bc.toolsPath, "xb24c.py"),
             self._port,
-            address,
+            str(address),
             self._buddyAddress,
             "upgrade",
         ]
