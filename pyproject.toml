@@ -28,6 +28,7 @@ disable = [
   "too-few-public-methods",
   "invalid-name",
   "too-many-instance-attributes",
+  "protected-access",
 ]
 
 

@@ -2,12 +2,11 @@ from pathlib import Path
 from time import sleep
 
 from cleo.helpers import argument
-import flexsea.utilities.constants as fxc
-from flexsea.utilities.aws import s3_download
 from semantic_version import Version
 
 import bootloader.utilities.constants as bc
 from bootloader.utilities.system_utils import call_flash_tool
+from bootloader.utilities.system_utils import get_fw_file
 
 from .mcu import FlashMcuCommand
 
@@ -50,10 +49,7 @@ class FlashMnCommand(FlashMcuCommand):
         fName += f"device-{self._deviceName}_rigid-{self._rigidVersion}_"
         fName += f"side-{self._side}.dfu"
 
-        self._fwFile = fxc.dephyPath.joinpath(bc.firmwareDir, fName)
-
-        if not self._fwFile.is_file():
-            s3_download(fName, bc.dephyFirmwareBucket, self._fwFile, bc.dephyAwsProfile)
+        self._fwFile = get_fw_file(fName)
 
     # -----
     # _get_flash_command

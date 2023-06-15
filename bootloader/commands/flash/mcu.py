@@ -1,8 +1,8 @@
 from pathlib import Path
-import sys
 
 from cleo.helpers import argument
 from flexsea.utilities.firmware import validate_given_firmware_version
+from semantic_version import Version
 
 from bootloader.commands.flash.base_flash import BaseFlashCommand
 
@@ -75,10 +75,7 @@ class FlashMcuCommand(BaseFlashCommand):
         self.line(msg)
         self.line(f"\t* Device's rigid version: {self._rigidVersion}")
 
-        if not self.option("no-interaction"):
-            if not self.confirm("Proceed?"):
-                self.line("<error>Aborting.</>")
-                sys.exit(1)
+        super()._confirm()
 
     # -----
     # _flash_target
@@ -95,5 +92,5 @@ class FlashMcuCommand(BaseFlashCommand):
     # -----
     # _handle_firmware_version
     # -----
-    def _handle_firmware_version(self, version: Version) -> None:
+    def _handle_firmware_version(self, desiredFirmwareVersion: Version) -> None:
         raise NotImplementedError

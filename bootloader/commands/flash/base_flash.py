@@ -154,7 +154,10 @@ class BaseFlashCommand(BaseCommand):
     # _confirm
     # -----
     def _confirm(self) -> None:
-        raise NotImplementedError
+        if not self.option("no-interaction"):
+            if not self.confirm("Proceed?"):
+                self.line("<error>Aborting.</>")
+                sys.exit(1)
 
     # -----
     # _flash_target

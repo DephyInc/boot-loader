@@ -1,5 +1,9 @@
+from pathlib import Path
 import subprocess as sub
 from typing import List
+
+from flexsea.utilities.aws import s3_download
+import flexsea.utilities.constants as fxc
 
 import bootloader.utilities.constants as bc
 
@@ -36,3 +40,28 @@ def call_flash_tool(cmd: List[str]) -> None:
             break
     if proc is None or proc.returncode != 0:
         raise RuntimeError("Error: flash command failed.")
+
+
+# ============================================
+#               get_fw_file
+# ============================================
+def get_fw_file(fName: Path) -> Path:
+    fwFile = fxc.dephyPath.joinpath(bc.firmwareDir, fName)
+
+    if not fwFile.is_file():
+        s3_download(str(fName), bc.dephyFirmwareBucket, str(fwFile), bc.dephyAwsProfile)
+
+    return fwFile
+
+
+# ============================================
+#             psoc_flash_command
+# ============================================
+def psoc_flash_command(port: str, fwFile: str) -> List[str]:
+    flashCmd = [
+        f"{Path.joinpath(bc.toolsPath, 'psocbootloaderhost.exe')}",
+        f"{port}",
+        f"{fwFile}",
+    ]
+
+    return flashCmd

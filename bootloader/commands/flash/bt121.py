@@ -2,21 +2,19 @@ import glob
 import os
 import shutil
 import subprocess as sub
-import sys
-from time import sleep
 
 from cleo.helpers import option
+from bootloader.commands.flash.radio import FlashRadioCommand
 
 import bootloader.utilities.constants as bc
-from bootloader.utilities.system_utils import call_flash_tool
 
-from .base_flash import BaseFlashCommand
+from .radio import FlashRadioCommand
 
 
 # ============================================
 #              FlashBt121Command
 # ============================================
-class FlashBt121Command(BaseFlashCommand):
+class FlashBt121Command(FlashRadioCommand):
     # -----
     # constructor
     # -----
@@ -28,15 +26,9 @@ class FlashBt121Command(BaseFlashCommand):
         self.help = self._help()
 
         self.options.append(
-            option(
-                "address", None, "Bluetooth address. Default is device id.", flag=False
-            )
-        )
-        self.options.append(
             option("level", None, "Gatt level to use, e.g., 2.", flag=False, default=2)
         )
 
-        self._address: str = ""
         self._level: int = 0
 
         self.hidden = False
@@ -47,7 +39,6 @@ class FlashBt121Command(BaseFlashCommand):
     def _parse_options(self) -> None:
         super()._parse_options()
 
-        self._address = self.argument("address")
         self._level = int(self.argument("level"))
         self._target = "bt121"
 
@@ -128,30 +119,12 @@ class FlashBt121Command(BaseFlashCommand):
         ]
 
     # -----
-    # _flash_target
-    # -----
-    def _flash_target(self) -> None:
-        self._device.close()
-        sleep(3)
-        call_flash_tool(self._flashCmd)
-        sleep(20)
-
-    # -----
     # _confirm
     # -----
     def _confirm(self) -> None:
         self.line("<info>Summary</>:")
-        self.line(f"\t* Flashing target: {self._target}")
-        self.line(f"\t* Setting bluetooth address as: {self._address}")
         self.line(f"\t* Using gatt level: {self._level}")
-        msg = "\t* Using Mn firmware version for communication with target: "
-        msg += f"{self._currentMnFw}"
-        self.line(msg)
-
-        if not self.option("no-interaction"):
-            if not self.confirm("Proceed?"):
-                self.line("<error>Aborting.</>")
-                sys.exit(1)
+        super()._confirm()
 
     # -----
     # _help
