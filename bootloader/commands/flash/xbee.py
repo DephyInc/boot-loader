@@ -1,5 +1,12 @@
+import os
+import sys
+from time import sleep
+
 from cleo.helpers import argument
 from cleo.helpers import option
+
+import bootloader.utilities.constants as bc
+from bootloader.utilities.system_utils import call_flash_tool
 
 from .base_flash import BaseFlashCommand
 
@@ -52,22 +59,21 @@ class FlashXbeeCommand(BaseFlashCommand):
         with the correct address.
         """
         # A firmware file isn't required for xbee
-        pass
 
     # -----
     # _get_flash_command
     # -----
     def _get_flash_command(self) -> None:
-        if "windows" in self._os:
+        if "windows" in self.application._os:
             pythonCmd = "python"
         else:
             pythonCmd = "python3"
 
-        address = self._address if self._address else self._device.deviceId
+        address = self._address if self._address else self._device.id
 
         self._flashCmd = [
             pythonCmd,
-            os.path.join(cfg.toolsPath, "xb24c.py"),
+            os.path.join(bc.toolsPath, "xb24c.py"),
             self._port,
             address,
             self._buddyAddress,
@@ -91,9 +97,9 @@ class FlashXbeeCommand(BaseFlashCommand):
         self.line(f"\t* Flashing target: {self._target}")
         self.line(f"\t* Setting bluetooth address as: {self._address}")
         self.line(f"\t* Setting buddy bluetooth address as: {self._buddyAddress}")
-        self.line(
-            f"\t* Using Mn firmware version for communication with target: {self._currentMnFw}"
-        )
+        msg = "\t* Using Mn firmware version for communication with target: "
+        msg += f"{self._currentMnFw}"
+        self.line(msg)
 
         if not self.option("no-interaction"):
             if not self.confirm("Proceed?"):

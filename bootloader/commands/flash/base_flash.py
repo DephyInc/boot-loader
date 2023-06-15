@@ -1,4 +1,6 @@
+from pathlib import Path
 import sys
+from typing import List
 
 from cleo.commands.command import Command as BaseCommand
 from cleo.helpers import argument
@@ -37,6 +39,8 @@ class BaseFlashCommand(BaseCommand):
         self._libFile: str = ""
         self._target: str = ""
         self._device: Device | None = None
+        self._fwFile: Path | str | None = None
+        self._flashCmd: List[str] | None = None
 
         self.hidden = True
 
@@ -48,7 +52,7 @@ class BaseFlashCommand(BaseCommand):
         Entry point for the command.
         """
         self._parse_options()
-        self.call("download tools", self._target, self.application._os)
+        self.call("download tools", f"{self._target} {self.application._os}")
         self._get_device()
         self._get_firmware_file()
         self._get_flash_command()

@@ -1,6 +1,14 @@
+import glob
 import os
+import shutil
+import subprocess as sub
+import sys
+from time import sleep
 
 from cleo.helpers import option
+
+import bootloader.utilities.constants as bc
+from bootloader.utilities.system_utils import call_flash_tool
 
 from .base_flash import BaseFlashCommand
 
@@ -53,14 +61,14 @@ class FlashBt121Command(BaseFlashCommand):
         """
         self.line("Building bluetooth image...")
 
-        address = self._address if self._address else self._device.deviceId
+        address = self._address if self._address else self._device.id
 
         # Everything within the bt121 directory is self-contained and
         # self-referencing, so it's easiest to switch to that directory
         # first
         cwd = os.getcwd()
         # The way the zip is decompressed creates this nested structure
-        os.chdir(os.path.join(cfg.toolsPath, "bt121_image_tools", "bt121_image_tools"))
+        os.chdir(os.path.join(bc.toolsPath, "bt121_image_tools", "bt121_image_tools"))
 
         gattTemplate = os.path.join("gatt_files", f"LVL{self._level}.xml")
         gattFile = os.path.join("dephy_gatt_broadcast_bt121", "gatt.xml")
@@ -70,9 +78,9 @@ class FlashBt121Command(BaseFlashCommand):
 
         shutil.copyfile(gattTemplate, gattFile)
 
-        if "linux" in self._os:
+        if "linux" in self.application._os:
             pythonCommand = "python3"
-        elif "windows" in self._os:
+        elif "windows" in self.application._os:
             pythonCommand = "python"
         else:
             raise OSError("Unsupported OS!")
@@ -104,14 +112,14 @@ class FlashBt121Command(BaseFlashCommand):
         os.chdir(cwd)
 
         self._fwFile = btImageFile
-        self.line(f"Building bluetooth image... {self._SUCCESS}")
+        self.line(f"Building bluetooth image... {self.application._SUCCESS}")
 
     # -----
     # _get_flash_command
     # -----
     def _get_flash_command(self) -> None:
         self._flashCmd = [
-            os.path.join(cfg.toolsPath, "stm32flash"),
+            os.path.join(bc.toolsPath, "stm32flash"),
             "-w",
             f"{self._fwFile}",
             "-b",
@@ -136,9 +144,9 @@ class FlashBt121Command(BaseFlashCommand):
         self.line(f"\t* Flashing target: {self._target}")
         self.line(f"\t* Setting bluetooth address as: {self._address}")
         self.line(f"\t* Using gatt level: {self._level}")
-        self.line(
-            f"\t* Using Mn firmware version for communication with target: {self._currentMnFw}"
-        )
+        msg = "\t* Using Mn firmware version for communication with target: "
+        msg += f"{self._currentMnFw}"
+        self.line(msg)
 
         if not self.option("no-interaction"):
             if not self.confirm("Proceed?"):

@@ -1,15 +1,21 @@
+from pathlib import Path
+from time import sleep
+
 from cleo.helpers import argument
-from flexsea.utilities.firmware import validate_given_firmware_version
+from flexsea.utilities.aws import s3_download
+import flexsea.utilities.constants as fxc
+from semantic_version import Version
 
+import bootloader.utilities.constants as bc
+from bootloader.utilities.system_utils import call_flash_tool
 
-from bootloader.commands.flash.mcu import FlashMcuCommand
+from .mcu import FlashMcuCommand
 
 
 # ============================================
 #              FlashExCommand
 # ============================================
 class FlashExCommand(FlashMcuCommand):
-
     # -----
     # constructor
     # -----
@@ -56,15 +62,17 @@ class FlashExCommand(FlashMcuCommand):
 
         self._fwFile = fxc.dephyPath.joinpath(bc.firmwareDir, fName)
 
-        if not fwFile.is_file():
-            s3_download(fName, bc.dephyFirmwareBucket, self._fwFile, bc.dephyAwsProfile)
+        if not self._fwFile.is_file():
+            s3_download(
+                fName, bc.dephyFirmwareBucket, str(self._fwFile), bc.dephyAwsProfile
+            )
 
     # -----
     # _get_flash_command
     # -----
     def _get_flash_command(self) -> None:
         self._flashCmd = [
-            f"{Path.joinpath(cfg.toolsPath, 'psocbootloaderhost.exe')}",
+            f"{Path.joinpath(bc.toolsPath, 'psocbootloaderhost.exe')}",
             f"{self._port}",
             f"{self._fwFile}",
         ]

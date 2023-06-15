@@ -1,10 +1,12 @@
 from pathlib import Path
+import re
 import sys
 from time import sleep
 
 from cleo.helpers import argument
 from flexsea.utilities.aws import s3_download
 import flexsea.utilities.constants as fxc
+from flexsea.utilities.firmware import validate_given_firmware_version
 from semantic_version import Version
 
 import bootloader.utilities.constants as bc
@@ -75,7 +77,7 @@ class FlashHabsCommand(BaseFlashCommand):
 
         self._fwFile = fxc.dephyPath.joinpath(bc.firmwareDir, fName)
 
-        if not fwFile.is_file():
+        if not self._fwFile.is_file():
             s3_download(fName, bc.dephyFirmwareBucket, self._fwFile, bc.dephyAwsProfile)
 
     # -----

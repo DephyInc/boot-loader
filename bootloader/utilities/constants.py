@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from flexsea.utilities.constants import dephyPath
 
 
@@ -23,10 +21,10 @@ firmwarePath = dephyPath.joinpath(firmwareDir)
 # ============================================
 
 # Private bucket where the firmware is stored
-firmwareBucket = "dephy-firmware-files"
+dephyFirmwareBucket = "dephy-firmware-files"
 
 # Credentials profile name
-dephyProfile = "dephy"
+dephyAwsProfile = "dephy"
 
 
 # ============================================
