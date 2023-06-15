@@ -18,7 +18,6 @@ from bootloader.utilities.system_utils import setup_cache
 #                 Application
 # ============================================
 class Application(BaseApplication):
-
     # -----
     # constructor
     # -----
@@ -27,7 +26,7 @@ class Application(BaseApplication):
 
         self._os = get_os()
 
-        if self._os not in cfg.supportedOS:
+        if self._os not in bc.supportedOS:
             raise bex.UnsupportedOSError(self._os)
 
         if sys.stdout.encoding.lower().startswith("utf"):  # pylint: disable=no-member
@@ -48,7 +47,7 @@ class Application(BaseApplication):
         of the commands match the names of the files, and by nesting
         directories in the `commands` directory we can have multi-word
         commands. E.g., `commands/env/create.py` would be the command
-        `bootload env create`. The name in `COMMANDS` would be 
+        `bootload env create`. The name in `COMMANDS` would be
         'env create'.
         """
         for name in COMMANDS:
@@ -64,10 +63,10 @@ class Application(BaseApplication):
     @property
     def _default_definition(self):
         """
-        This is an override of cleo's method. It's where 
+        This is an override of cleo's method. It's where
         application-level options such as `--quiet` and `--verbose`
         are set. Here we override it in order to add the `--theme`
-        option so each command does not need to be configured 
+        option so each command does not need to be configured
         individually.
         """
         definition = super()._default_definition
@@ -80,12 +79,12 @@ class Application(BaseApplication):
     # -----
     def _configure_io(self, io: IO) -> None:
         """
-        Whenever a command's `run` method is called, cleo calls 
-        `_create_io` and `_configure_io`. Here we override 
-        `configure_io` to be able to configure the theme of each 
+        Whenever a command's `run` method is called, cleo calls
+        `_create_io` and `_configure_io`. Here we override
+        `configure_io` to be able to configure the theme of each
         command.
         """
-        # This actually parses the command-line to give each option a 
+        # This actually parses the command-line to give each option a
         # value
         io.input.bind(self.definition)
 

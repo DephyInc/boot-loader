@@ -1,3 +1,6 @@
+from cleo.helpers import argument
+from cleo.helpers import option
+
 from .base_flash import BaseFlashCommand
 
 
@@ -5,7 +8,6 @@ from .base_flash import BaseFlashCommand
 #              FlashXbeeCommand
 # ============================================
 class FlashXbeeCommand(BaseFlashCommand):
-
     # -----
     # constructor
     # -----
@@ -17,10 +19,13 @@ class FlashXbeeCommand(BaseFlashCommand):
         self.help = self._help()
 
         self.arguments.append(
-            argument("address", "Vluetooth address. Default is device id.")
-        )
-        self.arguments.append(
             argument("buddyAddress", "Bluetooth address of device's pair.")
+        )
+
+        self.options.append(
+            option(
+                "address", None, "Bluetooth address. Default is device id.", flag=False
+            )
         )
 
         self._address: str = ""
@@ -34,7 +39,7 @@ class FlashXbeeCommand(BaseFlashCommand):
     def _parse_options(self) -> None:
         super()._parse_options()
 
-        self._address = self.argument("address")
+        self._address = self.option("address")
         self._buddyAddress = self.argument("buddyAddress")
         self._target = "xbee"
 
@@ -86,7 +91,9 @@ class FlashXbeeCommand(BaseFlashCommand):
         self.line(f"\t* Flashing target: {self._target}")
         self.line(f"\t* Setting bluetooth address as: {self._address}")
         self.line(f"\t* Setting buddy bluetooth address as: {self._buddyAddress}")
-        self.line(f"\t* Using Mn firmware version for communication with target: {self._currentMnFw}")
+        self.line(
+            f"\t* Using Mn firmware version for communication with target: {self._currentMnFw}"
+        )
 
         if not self.option("no-interaction"):
             if not self.confirm("Proceed?"):

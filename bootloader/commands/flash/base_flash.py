@@ -81,7 +81,7 @@ class BaseFlashCommand(BaseCommand):
             self._port,
             baudRate=self._baudRate,
             libFile=self._libFile,
-            interactive=not self.option("no-interaction")
+            interactive=not self.option("no-interaction"),
         )
 
         self._device.open()
@@ -111,7 +111,9 @@ class BaseFlashCommand(BaseCommand):
             self.line(msg)
             sys.exit(1)
 
-        self.overwrite(f"<info>Setting</> tunnel mode for {self._target}... {self._SUCCESS}\n")
+        msg = f"<info>Setting</> tunnel mode for {self._target}... "
+        msg += f"{self.application._SUCCESS}\n"
+        self.overwrite(msg)
 
     # -----
     # _flash
@@ -128,4 +130,30 @@ class BaseFlashCommand(BaseCommand):
             if not self.confirm("Please power cycle device.", False):
                 sys.exit(1)
 
-        self.overwrite(f"<info>Flashing</> {self._target}... {self._SUCCESS}\n")
+        self.overwrite(
+            f"<info>Flashing</> {self._target}... {self.application._SUCCESS}\n"
+        )
+
+    # -----
+    # _get_firmware_file
+    # -----
+    def _get_firmware_file(self) -> None:
+        raise NotImplementedError
+
+    # -----
+    # _get_flash_command
+    # -----
+    def _get_flash_command(self) -> None:
+        raise NotImplementedError
+
+    # -----
+    # _confirm
+    # -----
+    def _confirm(self) -> None:
+        raise NotImplementedError
+
+    # -----
+    # _flash_target
+    # -----
+    def _flash_target(self) -> None:
+        raise NotImplementedError

@@ -1,3 +1,7 @@
+import os
+
+from cleo.helpers import option
+
 from .base_flash import BaseFlashCommand
 
 
@@ -5,7 +9,6 @@ from .base_flash import BaseFlashCommand
 #              FlashBt121Command
 # ============================================
 class FlashBt121Command(BaseFlashCommand):
-
     # -----
     # constructor
     # -----
@@ -16,11 +19,13 @@ class FlashBt121Command(BaseFlashCommand):
         self.description = "Flashes new firmware onto bt121."
         self.help = self._help()
 
-        self.arguments.append(
-            argument("address", "Vluetooth address. Default is device id.")
+        self.options.append(
+            option(
+                "address", None, "Bluetooth address. Default is device id.", flag=False
+            )
         )
-        self.arguments.append(
-            argument("level", "Gatt level to use, e.g., 2.")
+        self.options.append(
+            option("level", None, "Gatt level to use, e.g., 2.", flag=False, default=2)
         )
 
         self._address: str = ""
@@ -131,7 +136,9 @@ class FlashBt121Command(BaseFlashCommand):
         self.line(f"\t* Flashing target: {self._target}")
         self.line(f"\t* Setting bluetooth address as: {self._address}")
         self.line(f"\t* Using gatt level: {self._level}")
-        self.line(f"\t* Using Mn firmware version for communication with target: {self._currentMnFw}")
+        self.line(
+            f"\t* Using Mn firmware version for communication with target: {self._currentMnFw}"
+        )
 
         if not self.option("no-interaction"):
             if not self.confirm("Proceed?"):

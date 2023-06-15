@@ -21,9 +21,7 @@ class FlashReCommand(FlashMcuCommand):
         self.help = self._help()
         self.hidden = False
 
-        self.arguments.append(
-            argument("led", "Either 'mono', 'multi', or 'stealth'")
-        )
+        self.arguments.append(argument("led", "Either 'mono', 'multi', or 'stealth'"))
 
         self._led: str = ""
 

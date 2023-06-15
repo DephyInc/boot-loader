@@ -1,7 +1,8 @@
+from pathlib import Path
 import sys
 
 from cleo.helpers import argument
-from flexsea.device import Device
+from flexsea.utilities.firmware import validate_given_firmware_version
 
 from bootloader.commands.flash.base_flash import BaseFlashCommand
 
@@ -44,7 +45,7 @@ class FlashMcuCommand(BaseFlashCommand):
     # _get_firmware_file
     # -----
     def _get_firmware_file(self) -> None:
-        # If self._to is a file instead of a version string, 
+        # If self._to is a file instead of a version string,
         # validate_given_firmware_version raises a ValueError
         try:
             desiredFirmwareVersion = validate_given_firmware_version(
@@ -69,7 +70,9 @@ class FlashMcuCommand(BaseFlashCommand):
     def _confirm(self) -> None:
         self.line(f"\t* Flashing target: {self._target}")
         self.line(f"\t* To: {self._to}")
-        self.line(f"\t* Using Mn firmware version for communication with target: {self._currentMnFw}")
+        self.line(
+            f"\t* Using Mn firmware version for communication with target: {self._currentMnFw}"
+        )
         self.line(f"\t* Device's rigid version: {self._rigidVersion}")
 
         if not self.option("no-interaction"):

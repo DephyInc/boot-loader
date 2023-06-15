@@ -21,13 +21,8 @@ class FlashMnCommand(FlashMcuCommand):
         self.help = self._help()
         self.hidden = False
 
-        self.arguments.append(
-            argument("device", "Name of the device, e.g., actpack.")
-        )
-        self.arguments.append(
-            argument("side", "left, right, or none.")
-        )
-
+        self.arguments.append(argument("device", "Name of the device, e.g., actpack."))
+        self.arguments.append(argument("side", "left, right, or none."))
 
         self._deviceName: str = ""
         self._side: str = ""
