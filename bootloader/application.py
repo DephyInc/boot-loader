@@ -118,7 +118,7 @@ class Application(BaseApplication):
     # _run
     # -----
     def _run(self, io: IO) -> int:
-        # if self._os not in bc.supportedOS:
-        #     raise bex.UnsupportedOSError(self._os)
+        if self._os not in bc.supportedOS:
+            raise bex.UnsupportedOSError(self._os)
 
         return super()._run(io)

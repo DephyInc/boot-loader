@@ -40,8 +40,8 @@ class FlashExCommand(BaseFlashCommand):
     # -----
     # _handle_firmware_version
     # -----
-    def _handle_firmware_version(self, desiredFirmwareVersion: Version) -> None:
-        fName = f"{self._target}_version-{desiredFirmwareVersion}_"
+    def _handle_firmware_version(self, version: Version) -> None:
+        fName = f"{self._target}_version-{version}_"
         fName += f"rigid-{self._rigidVersion}_motor-{self._motorType}_"
         fName += f"i2t-{self._i2t}.cyacd"
 

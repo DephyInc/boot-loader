@@ -1,6 +1,8 @@
+import os
 from time import sleep
 
 from cleo.helpers import argument
+from semantic_version import Version
 
 import bootloader.utilities.constants as bc
 from bootloader.utilities.help import xbee_help
@@ -69,3 +71,9 @@ class FlashXbeeCommand(BaseFlashCommand):
         sleep(3)
         call_flash_tool(self._flashCmd)
         sleep(20)
+
+    # -----
+    # _handle_firmware_version
+    # -----
+    def _handle_firmware_version(self, version: Version) -> None:
+        raise NotImplementedError

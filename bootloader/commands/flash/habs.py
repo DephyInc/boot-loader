@@ -39,8 +39,8 @@ class FlashHabsCommand(BaseFlashCommand):
     # -----
     # _handle_firmware_version
     # -----
-    def _handle_firmware_version(self, desiredFirmwareVersion: Version) -> None:
-        fName = f"{self._target}_version-{desiredFirmwareVersion}.hex"
+    def _handle_firmware_version(self, version: Version) -> None:
+        fName = f"{self._target}_version-{version}.hex"
         self._fwFile = get_fw_file(fName)
 
     # -----

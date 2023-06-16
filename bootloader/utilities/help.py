@@ -38,3 +38,10 @@ def bt121_help() -> str:
 # ============================================
 def xbee_help() -> str:
     return "Flashes new firmware onto Bt121."
+
+
+# ============================================
+#                  all_help
+# ============================================
+def all_help() -> str:
+    return "Flashes new firmware onto xbee, bt121, habs, ex, re, and mn."
