@@ -70,32 +70,32 @@ supportedOS = [
 # ============================================
 themes = {
     "classic": {
-        "info": {"fg": "blue", "options": []},
-        "warning": {"fg": "yellow", "options": []},
+        "info": {"foreground": "blue", "options": []},
+        "warning": {"foreground": "yellow", "options": []},
         "error": {
-            "fg": "red",
+            "foreground": "red",
             "options": [
                 "bold",
             ],
         },
         "success": {
-            "fg": "green",
+            "foreground": "green",
             "options": [
                 "bold",
             ],
         },
     },
     "light": {
-        "info": {"fg": "light_blue", "options": []},
-        "warning": {"fg": "light_yellow", "options": []},
+        "info": {"foreground": "light_blue", "options": []},
+        "warning": {"foreground": "light_yellow", "options": []},
         "error": {
-            "fg": "light_red",
+            "foreground": "light_red",
             "options": [
                 "bold",
             ],
         },
         "success": {
-            "fg": "light_green",
+            "foreground": "light_green",
             "options": [
                 "bold",
             ],
@@ -103,26 +103,26 @@ themes = {
     },
     "dark": {
         "info": {
-            "fg": "blue",
+            "foreground": "blue",
             "options": [
                 "dark",
             ],
         },
         "warning": {
-            "fg": "yellow",
+            "foreground": "yellow",
             "options": [
                 "dark",
             ],
         },
         "error": {
-            "fg": "red",
+            "foreground": "red",
             "options": [
                 "dark",
                 "bold",
             ],
         },
         "success": {
-            "fg": "green",
+            "foreground": "green",
             "options": [
                 "dark",
                 "bold",
@@ -130,9 +130,9 @@ themes = {
         },
     },
     "default": {
-        "info": {"fg": "default", "options": []},
-        "warning": {"fg": "default", "options": []},
-        "error": {"fg": "default", "options": []},
-        "success": {"fg": "default", "options": []},
+        "info": {"foreground": "default", "options": []},
+        "warning": {"foreground": "default", "options": []},
+        "error": {"foreground": "default", "options": []},
+        "success": {"foreground": "default", "options": []},
     },
 }
