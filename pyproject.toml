@@ -8,6 +8,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+flexsea = "^11.0.3"
+semantic-version = "^2.10.0"
+cleo = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"
