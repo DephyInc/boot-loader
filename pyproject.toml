@@ -21,7 +21,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-bootload = 'bootloader.main:main'
+bootloader = 'bootloader.main:main'
 
 
 [tool.pylint.messages_control]
