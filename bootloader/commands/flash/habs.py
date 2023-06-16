@@ -2,36 +2,37 @@ from pathlib import Path
 import re
 from time import sleep
 
+from cleo.helpers import argument
 from semantic_version import Version
 
 import bootloader.utilities.constants as bc
+from bootloader.utilities.help import habs_help
 from bootloader.utilities.system_utils import call_flash_tool
 from bootloader.utilities.system_utils import get_fw_file
 
-from .mcu import FlashMcuCommand
+from .base_flash import BaseFlashCommand
 
 
 # ============================================
 #              FlashHabsCommand
 # ============================================
-class FlashHabsCommand(FlashMcuCommand):
+class FlashHabsCommand(BaseFlashCommand):
+    name = "flash habs"
+    description = "Flashes new firmware onto Habsolute."
+    help = habs_help()
+    hidden = False
+
+    arguments = [
+        argument("port", "Port the device is on, e.g., `COM3`."),
+        argument("currentMnFw", "Manage's current firmware, e.g., `7.2.0`."),
+        argument("to", "Version to flash, e.g., `9.1.0`, or path to file to use."),
+    ]
+
     # -----
     # constructor
     # -----
     def __init__(self) -> None:
         super().__init__()
-
-        self.name = "flash habs"
-        self.description = "Flashes new firmware onto Habsolute."
-        self.help = self._help()
-
-        self.hidden = False
-
-    # -----
-    # _parse_options
-    # -----
-    def _parse_options(self) -> None:
-        super()._parse_options()
 
         self._target = "habs"
 
@@ -87,9 +88,3 @@ class FlashHabsCommand(FlashMcuCommand):
         sleep(6)
         call_flash_tool(self._flashCmd)
         sleep(20)
-
-    # -----
-    # _help
-    # -----
-    def _help(self) -> str:
-        return "Flashes new firmware onto Habsolute."

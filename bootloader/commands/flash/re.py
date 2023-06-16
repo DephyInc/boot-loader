@@ -5,36 +5,35 @@ from semantic_version import Version
 
 from bootloader.utilities.system_utils import call_flash_tool
 from bootloader.utilities.system_utils import get_fw_file
+from bootloader.utilities.help import re_help
 from bootloader.utilities.system_utils import psoc_flash_command
 
-from .mcu import FlashMcuCommand
+from .base_flash import BaseFlashCommand
 
 
 # ============================================
 #              FlashReCommand
 # ============================================
-class FlashReCommand(FlashMcuCommand):
+class FlashReCommand(BaseFlashCommand):
+    name = "flash re"
+    description = "Flashes new firmware onto Regulate."
+    help = re_help()
+    hidden = False
+
+    arguments = [
+        argument("port", "Port the device is on, e.g., `COM3`."),
+        argument("currentMnFw", "Manage's current firmware, e.g., `7.2.0`."),
+        argument("to", "Version to flash, e.g., `9.1.0`, or path to file to use."),
+        argument("rigidVersion", "PCB hardware version, e.g., `4.1B`."),
+        argument("led", "Either 'mono', 'multi', or 'stealth'"),
+    ]
+
     # -----
     # constructor
     # -----
     def __init__(self) -> None:
         super().__init__()
 
-        self.name = "flash re"
-        self.description = "Flashes new firmware onto Regulate."
-        self.help = self._help()
-        self.hidden = False
-
-        self.arguments.append(argument("led", "Either 'mono', 'multi', or 'stealth'"))
-
-        self._led: str = ""
-
-    # -----
-    # _parse_options
-    # -----
-    def _parse_options(self) -> None:
-        super()._parse_options()
-        self._led = self.argument("led")
         self._target = "re"
 
     # -----
@@ -59,17 +58,3 @@ class FlashReCommand(FlashMcuCommand):
         sleep(3)
         self._device.close()
         call_flash_tool(self._flashCmd)
-
-    # -----
-    # _confirm
-    # -----
-    def _confirm(self) -> None:
-        self.line("<info>Summary</>:")
-        self.line(f"\t* LED pattern being used: {self._led}")
-        super()._confirm()
-
-    # -----
-    # _help
-    # -----
-    def _help(self) -> str:
-        return "Flashes new firmware onto Regulate."

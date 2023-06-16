@@ -3,51 +3,38 @@ from time import sleep
 from cleo.helpers import argument
 from semantic_version import Version
 
+from bootloader.utilities.help import ex_help
 from bootloader.utilities.system_utils import call_flash_tool
 from bootloader.utilities.system_utils import get_fw_file
 from bootloader.utilities.system_utils import psoc_flash_command
 
-from .mcu import FlashMcuCommand
+from .base_flash import BaseFlashCommand
 
 
 # ============================================
 #              FlashExCommand
 # ============================================
-class FlashExCommand(FlashMcuCommand):
+class FlashExCommand(BaseFlashCommand):
+    name = "flash ex"
+    description = "Flashes new firmware onto Execute."
+    help = ex_help()
+    hidden = False
+
+    arguments = [
+        argument("port", "Port the device is on, e.g., `COM3`."),
+        argument("currentMnFw", "Manage's current firmware, e.g., `7.2.0`."),
+        argument("to", "Version to flash, e.g., `9.1.0`, or path to file to use."),
+        argument("rigidVersion", "PCB hardware version, e.g., `4.1B`."),
+        argument("motorType", "Either 'actpack', 'exo', or '6:1-9:1'"),
+        argument("i2t", "i2t preset letter. Default is B before 10 and D after."),
+    ]
+
     # -----
     # constructor
     # -----
     def __init__(self) -> None:
         super().__init__()
 
-        self.name = "flash ex"
-        self.description = "Flashes new firmware onto Execute."
-        self.help = self._help()
-        self.hidden = False
-
-        self.arguments.append(
-            argument("motorType", "Either 'actpack', 'exo', or '6:1-9:1'")
-        )
-        self.arguments.append(
-            argument("i2t", "i2t preset letter. Default is B before 10 and D after.")
-        )
-
-        self._motorType: str = ""
-        self._i2t: str = ""
-
-    # -----
-    # _parse_options
-    # -----
-    def _parse_options(self) -> None:
-        super()._parse_options()
-        self._motorType = self.argument("motorType")
-
-        if self._motorType == "exo":
-            self._motorType = "dephy"
-        elif self._motorType == "6:1-9:1":
-            self._motorType = "6191"
-
-        self._i2t = self.argument("i2t").upper()
         self._target = "ex"
 
     # -----
@@ -75,18 +62,3 @@ class FlashExCommand(FlashMcuCommand):
         sleep(2)
         call_flash_tool(self._flashCmd)
         sleep(20)
-
-    # -----
-    # _confirm
-    # -----
-    def _confirm(self) -> None:
-        self.line("<info>Summary</>:")
-        self.line(f"\t* Motor being flashed: {self._motorType}")
-        self.line(f"\t* i2t preset being flashed: {self._i2t}")
-        super()._confirm()
-
-    # -----
-    # _help
-    # -----
-    def _help(self) -> str:
-        return "Flashes new firmware onto Execute."

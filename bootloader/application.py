@@ -1,7 +1,9 @@
+from contextlib import suppress
 from importlib import import_module
 import sys
 
 from cleo.application import Application as BaseApplication
+from cleo.exceptions import CleoError
 from cleo.formatters.style import Style
 from cleo.helpers import option
 from cleo.io.io import IO
@@ -25,9 +27,6 @@ class Application(BaseApplication):
         super().__init__("bootloader", __version__)
 
         self._os = get_os()
-
-        if self._os not in bc.supportedOS:
-            raise bex.UnsupportedOSError(self._os)
 
         if sys.stdout.encoding.lower().startswith("utf"):  # pylint: disable=no-member
             self._SUCCESS = "<success>✓</success>"
@@ -70,8 +69,10 @@ class Application(BaseApplication):
         individually.
         """
         definition = super()._default_definition
-        opt = option("--theme", "-t", "Sets theme.", flag=False)
-        definition.add_option(opt)
+        themeOpt = option("--theme", "-t", "Sets theme.", flag=False)
+        debugOpt = option("--debug", None, "Enables tracebacks.", flag=True)
+        definition.add_option(themeOpt)
+        definition.add_option(debugOpt)
         return definition
 
     # -----
@@ -84,9 +85,12 @@ class Application(BaseApplication):
         `configure_io` to be able to configure the theme of each
         command.
         """
-        # This actually parses the command-line to give each option a
-        # value
-        io.input.bind(self.definition)
+        # This is for multi-word commands, e.g., flash mn, because at this
+        # point that hasn't been configured
+        with suppress(CleoError):
+            # This actually parses the command-line to give each option a
+            # value
+            io.input.bind(self.definition)
 
         theme = io.input.option("theme")
         try:
@@ -105,4 +109,16 @@ class Application(BaseApplication):
         if not io.is_interactive() and not io.input.option("no-interaction"):
             io.interactive(True)
 
+        if not io.input.option("debug"):
+            sys.tracebacklimit = 0
+
         super()._configure_io(io)
+
+    # -----
+    # _run
+    # -----
+    def _run(self, io: IO) -> int:
+        # if self._os not in bc.supportedOS:
+        #     raise bex.UnsupportedOSError(self._os)
+
+        return super()._run(io)

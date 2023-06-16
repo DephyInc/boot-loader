@@ -5,47 +5,44 @@ from cleo.helpers import argument
 from semantic_version import Version
 
 import bootloader.utilities.constants as bc
+from bootloader.utilities.help import mn_help
 from bootloader.utilities.system_utils import call_flash_tool
 from bootloader.utilities.system_utils import get_fw_file
 
-from .mcu import FlashMcuCommand
+from .base_flash import BaseFlashCommand
 
 
 # ============================================
 #              FlashMnCommand
 # ============================================
-class FlashMnCommand(FlashMcuCommand):
+class FlashMnCommand(BaseFlashCommand):
+    name = "flash mn"
+    description = "Flashes new firmware onto Manage."
+    help = mn_help()
+    hidden = False
+
+    arguments = [
+        argument("port", "Port the device is on, e.g., `COM3`."),
+        argument("currentMnFw", "Manage's current firmware, e.g., `7.2.0`."),
+        argument("to", "Version to flash, e.g., `9.1.0`, or path to file to use."),
+        argument("rigidVersion", "PCB hardware version, e.g., `4.1B`."),
+        argument("device", "Name of the device, e.g., actpack."),
+        argument("side", "left, right, or none."),
+    ]
+
     # -----
     # constructor
     # -----
     def __init__(self) -> None:
         super().__init__()
 
-        self.name = "flash mn"
-        self.description = "Flashes new firmware onto Manage."
-        self.help = self._help()
-        self.hidden = False
-
-        self.arguments.append(argument("device", "Name of the device, e.g., actpack."))
-        self.arguments.append(argument("side", "left, right, or none."))
-
-        self._deviceName: str = ""
-        self._side: str = ""
-
-    # -----
-    # _parse_options
-    # -----
-    def _parse_options(self) -> None:
-        super()._parse_options()
-        self._deviceName = self.argument("device")
-        self._side = self.argument("side")
         self._target = "mn"
 
     # -----
     # _handle_firmware_version
     # -----
-    def _handle_firmware_version(self, desiredFirmwareVersion: Version) -> None:
-        fName = f"{self._target}_version-{desiredFirmwareVersion}_"
+    def _handle_firmware_version(self, version: Version) -> None:
+        fName = f"{self._target}_version-{version}_"
         fName += f"device-{self._deviceName}_rigid-{self._rigidVersion}_"
         fName += f"side-{self._side}.dfu"
 
@@ -72,18 +69,3 @@ class FlashMnCommand(FlashMcuCommand):
         sleep(3)
         sleep(10)
         call_flash_tool(self._flashCmd)
-
-    # -----
-    # _confirm
-    # -----
-    def _confirm(self) -> None:
-        self.line("<info>Summary</>:")
-        self.line(f"\t* Device being flashed: {self._deviceName}")
-        self.line(f"\t* Side being flashed: {self._side}")
-        super()._confirm()
-
-    # -----
-    # _help
-    # -----
-    def _help(self) -> str:
-        return "Flashes new firmware onto Manage."

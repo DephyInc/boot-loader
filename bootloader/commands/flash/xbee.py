@@ -1,42 +1,36 @@
-import os
+from time import sleep
 
 from cleo.helpers import argument
-from bootloader.commands.flash.radio import FlashRadioCommand
 
 import bootloader.utilities.constants as bc
+from bootloader.utilities.help import xbee_help
+from bootloader.utilities.system_utils import call_flash_tool
 
-from .radio import FlashRadioCommand
+from .base_flash import BaseFlashCommand
 
 
 # ============================================
 #              FlashXbeeCommand
 # ============================================
-class FlashXbeeCommand(FlashRadioCommand):
+class FlashXbeeCommand(BaseFlashCommand):
+    name = "flash xbee"
+    description = "Flashes new firmware onto Xbee."
+    help = xbee_help()
+    hidden = False
+
+    arguments = [
+        argument("port", "Port the device is on, e.g., `COM3`."),
+        argument("currentMnFw", "Manage's current firmware, e.g., `7.2.0`."),
+        argument("address", "Bluetooth address."),
+        argument("buddyAddress", "Bluetooth address of device's buddy."),
+    ]
+
     # -----
     # constructor
     # -----
     def __init__(self) -> None:
         super().__init__()
 
-        self.name = "flash xbee"
-        self.description = "Flashes new firmware onto xbee."
-        self.help = self._help()
-
-        self.arguments.append(
-            argument("buddyAddress", "Bluetooth address of device's pair.")
-        )
-
-        self._buddyAddress: str = ""
-
-        self.hidden = False
-
-    # -----
-    # _parse_options
-    # -----
-    def _parse_options(self) -> None:
-        super()._parse_options()
-
-        self._buddyAddress = self.argument("buddyAddress")
         self._target = "xbee"
 
     # -----
@@ -44,10 +38,8 @@ class FlashXbeeCommand(FlashRadioCommand):
     # -----
     def _get_firmware_file(self) -> None:
         """
-        Uses the bluetooth tools repo to create a bluetooth image file
-        with the correct address.
+        Xbee doesn't need a firmware file.
         """
-        # A firmware file isn't required for xbee
 
     # -----
     # _get_flash_command
@@ -70,15 +62,10 @@ class FlashXbeeCommand(FlashRadioCommand):
         ]
 
     # -----
-    # _confirm
+    # _flash_target
     # -----
-    def _confirm(self) -> None:
-        self.line("<info>Summary</>:")
-        self.line(f"\t* Setting buddy bluetooth address as: {self._buddyAddress}")
-        super()._confirm()
-
-    # -----
-    # _help
-    # -----
-    def _help(self) -> str:
-        return "Flashes new firmware onto xbee."
+    def _flash_target(self) -> None:
+        self._device.close()
+        sleep(3)
+        call_flash_tool(self._flashCmd)
+        sleep(20)
