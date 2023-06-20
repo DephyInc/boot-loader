@@ -74,6 +74,12 @@ class FlashAllCommand(BaseCommand):
         if not self.confirm("Flash xbee?"):
             return
         args = self._get_arg_list(["address", "buddyAddress"])
+        # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+        # is used from an existing command. Basically, it skips the first word
+        # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+        # by cleo as trying to call the command `download tools arg2`, which is
+        # wrong. The PLACEHOLDER should be removed when this is fixed
+        # https://github.com/python-poetry/cleo/issues/130
         self.call("flash xbee", f"{args} {self._optList}")
 
     # -----
@@ -83,6 +89,12 @@ class FlashAllCommand(BaseCommand):
         if not self.confirm("Flash bt121?"):
             return
         args = self._get_arg_list(["address", "level"])
+        # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+        # is used from an existing command. Basically, it skips the first word
+        # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+        # by cleo as trying to call the command `download tools arg2`, which is
+        # wrong. The PLACEHOLDER should be removed when this is fixed
+        # https://github.com/python-poetry/cleo/issues/130
         self.call("flash bt121", f"{args} {self._optList}")
 
     # -----
@@ -100,6 +112,12 @@ class FlashAllCommand(BaseCommand):
             self.line("Error: Mn must be at 7.2")
             return
         args = self._get_arg_list(["to"])
+        # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+        # is used from an existing command. Basically, it skips the first word
+        # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+        # by cleo as trying to call the command `download tools arg2`, which is
+        # wrong. The PLACEHOLDER should be removed when this is fixed
+        # https://github.com/python-poetry/cleo/issues/130
         self.call("flash habs", f"{args} {self._optList}")
 
     # -----
@@ -107,6 +125,12 @@ class FlashAllCommand(BaseCommand):
     # -----
     def _flash_ex(self) -> None:
         args = self._get_arg_list(["to", "rigidVersion", "motorType", "i2t"])
+        # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+        # is used from an existing command. Basically, it skips the first word
+        # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+        # by cleo as trying to call the command `download tools arg2`, which is
+        # wrong. The PLACEHOLDER should be removed when this is fixed
+        # https://github.com/python-poetry/cleo/issues/130
         self.call("flash ex", f"{args} {self._optList}")
 
     # -----
@@ -114,6 +138,12 @@ class FlashAllCommand(BaseCommand):
     # -----
     def _flash_re(self) -> None:
         args = self._get_arg_list(["to", "rigidVersion", "led"])
+        # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+        # is used from an existing command. Basically, it skips the first word
+        # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+        # by cleo as trying to call the command `download tools arg2`, which is
+        # wrong. The PLACEHOLDER should be removed when this is fixed
+        # https://github.com/python-poetry/cleo/issues/130
         self.call("flash re", f"{args} {self._optList}")
 
     # -----
@@ -121,6 +151,12 @@ class FlashAllCommand(BaseCommand):
     # -----
     def _flash_mn(self) -> None:
         args = self._get_arg_list(["to", "rigidVersion", "device", "side"])
+        # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+        # is used from an existing command. Basically, it skips the first word
+        # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+        # by cleo as trying to call the command `download tools arg2`, which is
+        # wrong. The PLACEHOLDER should be removed when this is fixed
+        # https://github.com/python-poetry/cleo/issues/130
         self.call("flash mn", f"{args} {self._optList}")
 
     # -----
