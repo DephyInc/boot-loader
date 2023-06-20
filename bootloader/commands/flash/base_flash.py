@@ -78,10 +78,10 @@ class BaseFlashCommand(BaseCommand):
     def _parse_options(self) -> None:
         for arg in self.arguments:
             if hasattr(self, f"_{arg.name}"):
-                setattr(self, f"_{arg.name}", arg)
+                setattr(self, f"_{arg.name}", self.argument(arg.name))
         for opt in self.options:
             if hasattr(self, f"_{opt.name}"):
-                setattr(self, f"_{opt.name}", opt)
+                setattr(self, f"_{opt.name}", self.option(opt.name))
 
     # -----
     # _get_device
