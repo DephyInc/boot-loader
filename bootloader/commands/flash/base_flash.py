@@ -37,7 +37,6 @@ class BaseFlashCommand(BaseCommand):
         self._deviceName: str = ""
         self._flashCmd: List[str] | None = None
         self._fwFile: Path | str | None = None
-        self._i2t: str = ""
         self._led: str = ""
         self._level: str = ""
         self._libFile: str = ""
@@ -82,6 +81,21 @@ class BaseFlashCommand(BaseCommand):
         for opt in self.options:
             if hasattr(self, f"_{opt.name}"):
                 setattr(self, f"_{opt.name}", self.option(opt.name))
+
+        if self._target in ["mn", "ex"]:
+            # The mn and ex filenames don't have B in them for rigid 4.1B, since
+            # they're the same file for rigid 4.1 and 4.1B. In order to avoid having
+            # duplicate files with different names on S3, we just handle it here
+            if self._rigidVersion.endswith("B") or self._rigidVersion.endswith("b"):
+                self._rigidVersion = self.rigidVersion.lower()
+                self._rigidVersion = self._rigidVersion.rstrip("b")
+
+        if self._target == "ex":
+            # Additionally, ex filenames don't differentiate between 4.1 and 4.0,
+            # so for the same reasons as above, there is only a 4.0 file, so we
+            # convert it here
+            if self._rigidVersion == "4.1":
+                self._rigidVersion = "4.0"
 
     # -----
     # _get_device

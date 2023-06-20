@@ -27,8 +27,7 @@ class FlashAllCommand(BaseCommand):
         option("rigidVersion", "PCB hardware version, e.g., `4.1B`."),
         option("device", "Name of the device, e.g., actpack."),
         option("side", "left, right, or none."),
-        option("motorType", "Either 'actpack', 'exo', or '6:1-9:1'"),
-        option("i2t", "i2t preset letter. Default is B before 10 and D after."),
+        option("motorType", "Either 'actpack', 'exo', or '61or91'"),
         option("led", "Either 'mono', 'multi', or 'stealth'"),
         option("address", "Bluetooth address."),
         option("level", "Gatt level to use."),
@@ -124,7 +123,7 @@ class FlashAllCommand(BaseCommand):
     # _flash_ex
     # -----
     def _flash_ex(self) -> None:
-        args = self._get_arg_list(["to", "rigidVersion", "motorType", "i2t"])
+        args = self._get_arg_list(["to", "rigidVersion", "motorType"])
         # NOTE: There's a bug in cleo about how arguments are parsed when `call`
         # is used from an existing command. Basically, it skips the first word
         # given as an arg, so call('download tools', 'arg1 arg2') is interpreted

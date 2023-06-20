@@ -36,13 +36,6 @@ class FlashMnCommand(BaseFlashCommand):
     def __init__(self) -> None:
         super().__init__()
 
-        # The mn and ex filenames don't have B in them for rigid 4.1B, since
-        # they're the same file for rigid 4.1 and 4.1B. In order to avoid having
-        # duplicate files with different names on S3, we just handle it here
-        if self._rigidVersion.endswith("B") or self._rigidVersion.endswith("b"):
-            self._rigidVersion = self.rigidVersion.lower()
-            self._rigidVersion = self._rigidVersion.rstrip("b")
-
         self._target = "mn"
 
     # -----
