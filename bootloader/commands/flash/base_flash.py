@@ -109,7 +109,7 @@ class BaseFlashCommand(BaseCommand):
         self._device = Device(
             self._currentMnFw,
             self._port,
-            baudRate=self._baudRate,
+            baudRate=int(self._baudRate),
             libFile=self._libFile,
             interactive=not self.option("no-interaction"),
         )
