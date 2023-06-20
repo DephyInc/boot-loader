@@ -38,6 +38,7 @@ class DownloadToolsCommand(BaseCommand):
             if not dest.exists():
                 self.line(f"\n\t<info>{tool}</info> <warning>not found.</warning>")
                 self.write("\tDownloading...")
+                dest.parent.mkdir(parents=True, exist_ok=True)
 
                 toolObj = str(Path(bc.toolsDir).joinpath(opSys, tool).as_posix())
                 s3_download(toolObj, fxc.dephyPublicFilesBucket, str(dest))
