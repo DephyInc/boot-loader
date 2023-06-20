@@ -79,7 +79,7 @@ class FlashAllCommand(BaseCommand):
         # by cleo as trying to call the command `download tools arg2`, which is
         # wrong. The PLACEHOLDER should be removed when this is fixed
         # https://github.com/python-poetry/cleo/issues/130
-        self.call("flash xbee", f"{args} {self._optList}")
+        self.call("flash xbee", f"PLACEHOLDER {args} {self._optList}")
 
     # -----
     # _flash_bt121
@@ -94,7 +94,7 @@ class FlashAllCommand(BaseCommand):
         # by cleo as trying to call the command `download tools arg2`, which is
         # wrong. The PLACEHOLDER should be removed when this is fixed
         # https://github.com/python-poetry/cleo/issues/130
-        self.call("flash bt121", f"{args} {self._optList}")
+        self.call("flash bt121", f"PLACEHOLDER {args} {self._optList}")
 
     # -----
     # _flash_habs
@@ -117,7 +117,7 @@ class FlashAllCommand(BaseCommand):
         # by cleo as trying to call the command `download tools arg2`, which is
         # wrong. The PLACEHOLDER should be removed when this is fixed
         # https://github.com/python-poetry/cleo/issues/130
-        self.call("flash habs", f"{args} {self._optList}")
+        self.call("flash habs", f"PLACEHOLDER {args} {self._optList}")
 
     # -----
     # _flash_ex
@@ -130,7 +130,7 @@ class FlashAllCommand(BaseCommand):
         # by cleo as trying to call the command `download tools arg2`, which is
         # wrong. The PLACEHOLDER should be removed when this is fixed
         # https://github.com/python-poetry/cleo/issues/130
-        self.call("flash ex", f"{args} {self._optList}")
+        self.call("flash ex", f"PLACEHOLDER {args} {self._optList}")
 
     # -----
     # _flash_re
@@ -143,7 +143,7 @@ class FlashAllCommand(BaseCommand):
         # by cleo as trying to call the command `download tools arg2`, which is
         # wrong. The PLACEHOLDER should be removed when this is fixed
         # https://github.com/python-poetry/cleo/issues/130
-        self.call("flash re", f"{args} {self._optList}")
+        self.call("flash re", f"PLACEHOLDER {args} {self._optList}")
 
     # -----
     # _flash_mn
@@ -156,7 +156,7 @@ class FlashAllCommand(BaseCommand):
         # by cleo as trying to call the command `download tools arg2`, which is
         # wrong. The PLACEHOLDER should be removed when this is fixed
         # https://github.com/python-poetry/cleo/issues/130
-        self.call("flash mn", f"{args} {self._optList}")
+        self.call("flash mn", f"PLACEHOLDER {args} {self._optList}")
 
     # -----
     # _get_arg_list
