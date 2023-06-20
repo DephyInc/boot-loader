@@ -45,3 +45,10 @@ def xbee_help() -> str:
 # ============================================
 def all_help() -> str:
     return "Flashes new firmware onto xbee, bt121, habs, ex, re, and mn."
+
+
+# ============================================
+#                  tools_help
+# ============================================
+def tools_help() -> str:
+    return "Downloads tools for bootloading."

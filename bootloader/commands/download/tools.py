@@ -8,6 +8,7 @@ from flexsea.utilities.aws import s3_download
 import flexsea.utilities.constants as fxc
 
 import bootloader.utilities.constants as bc
+from bootloader.utilities.help import tools_help
 
 
 # ============================================
@@ -55,10 +56,3 @@ class DownloadToolsCommand(BaseCommand):
                 self.overwrite(msg)
 
         return 0
-
-
-# ============================================
-#                  tools_help
-# ============================================
-def tools_help() -> str:
-    return "Downloads tools for bootloading."
