@@ -30,7 +30,7 @@ class DownloadToolsCommand(BaseCommand):
     def handle(self) -> int:
         opSys = self.application._os
 
-        for tool in bc.bootloaderTools[opSys]:
+        for tool in bc.bootloaderTools[opSys][self.argument("target")]:
             self.write(f"Searching for: <info>{tool}</info>...")
 
             dest = bc.toolsPath.joinpath(opSys, tool)
