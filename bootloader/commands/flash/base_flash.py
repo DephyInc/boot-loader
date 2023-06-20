@@ -87,7 +87,7 @@ class BaseFlashCommand(BaseCommand):
             # they're the same file for rigid 4.1 and 4.1B. In order to avoid having
             # duplicate files with different names on S3, we just handle it here
             if self._rigidVersion.endswith("B") or self._rigidVersion.endswith("b"):
-                self._rigidVersion = self.rigidVersion.lower()
+                self._rigidVersion = self._rigidVersion.lower()
                 self._rigidVersion = self._rigidVersion.rstrip("b")
 
         if self._target == "ex":
