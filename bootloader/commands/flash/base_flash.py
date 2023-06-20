@@ -56,7 +56,13 @@ class BaseFlashCommand(BaseCommand):
         Entry point for the command.
         """
         self._parse_options()
-        self.call("download tools", f"{self._target}")
+        # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+        # is used from an existing command. Basically, it skips the first word
+        # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+        # by cleo as trying to call the command `download tools arg2`, which is
+        # wrong. The PLACEHOLDER should be removed when this is fixed
+        # https://github.com/python-poetry/cleo/issues/130
+        self.call("download tools", f"PLACEHOLDER {self._target}")
         self._get_device()
         self._get_firmware_file()
         self._get_flash_command()
