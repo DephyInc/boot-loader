@@ -26,7 +26,7 @@ class FlashMnCommand(BaseFlashCommand):
         argument("currentMnFw", "Manage's current firmware, e.g., `7.2.0`."),
         argument("to", "Version to flash, e.g., `9.1.0`, or path to file to use."),
         argument("rigidVersion", "PCB hardware version, e.g., `4.1B`."),
-        argument("device", "Name of the device, e.g., actpack."),
+        argument("deviceName", "Name of the device, e.g., actpack."),
         argument("side", "left, right, or none."),
     ]
 
