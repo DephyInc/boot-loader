@@ -57,9 +57,9 @@ def get_fw_file(fName: str) -> Path:
 # ============================================
 #             psoc_flash_command
 # ============================================
-def psoc_flash_command(port: str, fwFile: str) -> List[str]:
+def psoc_flash_command(port: str, fwFile: str, opSys: str) -> List[str]:
     flashCmd = [
-        f"{Path.joinpath(bc.toolsPath, 'psocbootloaderhost.exe')}",
+        f"{Path.joinpath(bc.toolsPath, opSys, 'psocbootloaderhost.exe')}",
         f"{port}",
         f"{fwFile}",
     ]

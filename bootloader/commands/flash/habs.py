@@ -49,6 +49,7 @@ class FlashHabsCommand(BaseFlashCommand):
     def _get_flash_command(self) -> None:
         cmd = Path.joinpath(
             bc.toolsPath,
+            self.application._os,
             "stm32_flash_loader",
             "stm32_flash_loader",
             "STMFlashLoader.exe",

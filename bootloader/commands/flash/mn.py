@@ -53,7 +53,7 @@ class FlashMnCommand(BaseFlashCommand):
     # -----
     def _get_flash_command(self) -> None:
         self._flashCmd = [
-            f"{Path(bc.toolsPath).joinpath('DfuSeCommand.exe')}",
+            f"{Path(bc.toolsPath).joinpath(self.application._os, 'DfuSeCommand.exe')}",
             "-c",
             "-d",
             "--fn",

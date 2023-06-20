@@ -49,7 +49,9 @@ class FlashExCommand(BaseFlashCommand):
     # _get_flash_command
     # -----
     def _get_flash_command(self) -> None:
-        self._flashCmd = psoc_flash_command(self._port, self._fwFile)
+        self._flashCmd = psoc_flash_command(
+            self._port, self._fwFile, self.application._os
+        )
 
     # -----
     # _flash_target
