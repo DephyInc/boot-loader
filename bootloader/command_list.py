@@ -1,7 +1,7 @@
 COMMANDS = [
     # "config create",
     # "download hex",
-    # "download tools",
+    "download tools",
     "flash all",
     "flash bt121",
     "flash ex",

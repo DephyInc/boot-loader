@@ -1,0 +1,52 @@
+************* Module bootloader.utilities.constants
+bootloader/utilities/constants.py:1:0: R0801: Similar lines in 2 files
+==bootloader.commands.flash.bt121:[114:130]
+==bootloader.commands.flash.xbee:[63:79]
+        ]
+
+    # -----
+    # _flash_target
+    # -----
+    def _flash_target(self) -> None:
+        self._device.close()
+        sleep(3)
+        call_flash_tool(self._flashCmd)
+        sleep(20)
+
+    # -----
+    # _handle_firmware_version
+    # -----
+    def _handle_firmware_version(self, version: Version) -> None:
+        raise NotImplementedError (duplicate-code)
+bootloader/utilities/constants.py:1:0: R0801: Similar lines in 2 files
+==bootloader.commands.flash.ex:[20:27]
+==bootloader.commands.flash.re:[20:27]
+    hidden = False
+
+    arguments = [
+        argument("port", "Port the device is on, e.g., `COM3`."),
+        argument("currentMnFw", "Manage's current firmware, e.g., `7.2.0`."),
+        argument("to", "Version to flash, e.g., `9.1.0`, or path to file to use."),
+        argument("rigidVersion", "PCB hardware version, e.g., `4.1B`."), (duplicate-code)
+bootloader/utilities/constants.py:1:0: R0801: Similar lines in 2 files
+==bootloader.commands.flash.bt121:[23:29]
+==bootloader.commands.flash.xbee:[20:26]
+    hidden = False
+
+    arguments = [
+        argument("port", "Port the device is on, e.g., `COM3`."),
+        argument("currentMnFw", "Manage's current firmware, e.g., `7.2.0`."),
+        argument("address", "Bluetooth address."), (duplicate-code)
+bootloader/utilities/constants.py:1:0: R0801: Similar lines in 2 files
+==bootloader.commands.flash.ex:[20:26]
+==bootloader.commands.flash.habs:[22:28]
+    hidden = False
+
+    arguments = [
+        argument("port", "Port the device is on, e.g., `COM3`."),
+        argument("currentMnFw", "Manage's current firmware, e.g., `7.2.0`."),
+        argument("to", "Version to flash, e.g., `9.1.0`, or path to file to use."), (duplicate-code)
+
+------------------------------------------------------------------
+Your code has been rated at 9.84/10 (previous run: 9.92/10, -0.09)
+

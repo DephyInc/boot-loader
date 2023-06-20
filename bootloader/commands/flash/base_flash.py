@@ -56,7 +56,7 @@ class BaseFlashCommand(BaseCommand):
         Entry point for the command.
         """
         self._parse_options()
-        self.call("download tools", f"{self._target} {self.application._os}")
+        self.call("download tools", f"{self._target}")
         self._get_device()
         self._get_firmware_file()
         self._get_flash_command()
