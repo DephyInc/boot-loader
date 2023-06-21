@@ -61,6 +61,10 @@ class FlashAllCommand(BaseCommand):
         self._flash_bt121()
         self._flash_habs()
 
+        exArgs = self._get_arg_list(["to", "rigidVersion", "motorType"])
+        reArgs = self._get_arg_list(["to", "rigidVersion", "led"])
+        mnArgs = self._get_arg_list(["to", "rigidVersion", "device", "side"])
+
         # There's a bug in cleo where, when calling one command from another, if
         # the command being called uses `confirm`, then _stream isn't set, which
         # causes a no attribute error: https://github.com/python-poetry/cleo/issues/333
@@ -70,9 +74,9 @@ class FlashAllCommand(BaseCommand):
         if not self.option("no-interaction"):
             self.io.input.set_option("no-interaction", True)
 
-        self._flash_ex()
-        self._flash_re()
-        self._flash_mn()
+        self._flash_ex(exArgs)
+        self._flash_re(reArgs)
+        self._flash_mn(mnArgs)
 
         return 0
 
@@ -132,8 +136,7 @@ class FlashAllCommand(BaseCommand):
     # -----
     # _flash_ex
     # -----
-    def _flash_ex(self) -> None:
-        args = self._get_arg_list(["to", "rigidVersion", "motorType"])
+    def _flash_ex(self, args: str) -> None:
         # NOTE: There's a bug in cleo about how arguments are parsed when `call`
         # is used from an existing command. Basically, it skips the first word
         # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
@@ -145,8 +148,7 @@ class FlashAllCommand(BaseCommand):
     # -----
     # _flash_re
     # -----
-    def _flash_re(self) -> None:
-        args = self._get_arg_list(["to", "rigidVersion", "led"])
+    def _flash_re(self, args: str) -> None:
         # NOTE: There's a bug in cleo about how arguments are parsed when `call`
         # is used from an existing command. Basically, it skips the first word
         # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
@@ -158,8 +160,7 @@ class FlashAllCommand(BaseCommand):
     # -----
     # _flash_mn
     # -----
-    def _flash_mn(self) -> None:
-        args = self._get_arg_list(["to", "rigidVersion", "device", "side"])
+    def _flash_mn(self, args: str) -> None:
         # NOTE: There's a bug in cleo about how arguments are parsed when `call`
         # is used from an existing command. Basically, it skips the first word
         # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
