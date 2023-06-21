@@ -60,23 +60,9 @@ class FlashAllCommand(BaseCommand):
         self._flash_xbee()
         self._flash_bt121()
         self._flash_habs()
-
-        exArgs = self._get_arg_list(["to", "rigidVersion", "motorType"])
-        reArgs = self._get_arg_list(["to", "rigidVersion", "led"])
-        mnArgs = self._get_arg_list(["to", "rigidVersion", "device", "side"])
-
-        # There's a bug in cleo where, when calling one command from another, if
-        # the command being called uses `confirm`, then _stream isn't set, which
-        # causes a no attribute error: https://github.com/python-poetry/cleo/issues/333
-        # As a workaround, we make it not interactive
-        if self.io.is_interactive():
-            self.io.interactive(False)
-        if not self.option("no-interaction"):
-            self.io.input.set_option("no-interaction", True)
-
-        self._flash_ex(exArgs)
-        self._flash_re(reArgs)
-        self._flash_mn(mnArgs)
+        self._flash_ex()
+        self._flash_re()
+        self._flash_mn()
 
         return 0
 
@@ -136,38 +122,41 @@ class FlashAllCommand(BaseCommand):
     # -----
     # _flash_ex
     # -----
-    def _flash_ex(self, args: str) -> None:
+    def _flash_ex(self) -> None:
+        args = self._get_arg_list(["to", "rigidVersion", "motorType"])
         # NOTE: There's a bug in cleo about how arguments are parsed when `call`
         # is used from an existing command. Basically, it skips the first word
         # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
         # by cleo as trying to call the command `download tools arg2`, which is
         # wrong. The PLACEHOLDER should be removed when this is fixed
         # https://github.com/python-poetry/cleo/issues/130
-        self.call("flash ex", f"PLACEHOLDER {args} {self._optList}")
+        self.call("flash ex", f"PLACEHOLDER {args} {self._optList} --no-interaction")
 
     # -----
     # _flash_re
     # -----
-    def _flash_re(self, args: str) -> None:
+    def _flash_re(self) -> None:
+        args = self._get_arg_list(["to", "rigidVersion", "led"])
         # NOTE: There's a bug in cleo about how arguments are parsed when `call`
         # is used from an existing command. Basically, it skips the first word
         # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
         # by cleo as trying to call the command `download tools arg2`, which is
         # wrong. The PLACEHOLDER should be removed when this is fixed
         # https://github.com/python-poetry/cleo/issues/130
-        self.call("flash re", f"PLACEHOLDER {args} {self._optList}")
+        self.call("flash re", f"PLACEHOLDER {args} {self._optList} --no-interaction")
 
     # -----
     # _flash_mn
     # -----
-    def _flash_mn(self, args: str) -> None:
+    def _flash_mn(self) -> None:
+        args = self._get_arg_list(["to", "rigidVersion", "device", "side"])
         # NOTE: There's a bug in cleo about how arguments are parsed when `call`
         # is used from an existing command. Basically, it skips the first word
         # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
         # by cleo as trying to call the command `download tools arg2`, which is
         # wrong. The PLACEHOLDER should be removed when this is fixed
         # https://github.com/python-poetry/cleo/issues/130
-        self.call("flash mn", f"PLACEHOLDER {args} {self._optList}")
+        self.call("flash mn", f"PLACEHOLDER {args} {self._optList} --no-interaction")
 
     # -----
     # _get_arg_list
