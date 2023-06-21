@@ -60,6 +60,16 @@ class FlashAllCommand(BaseCommand):
         self._flash_xbee()
         self._flash_bt121()
         self._flash_habs()
+
+        # There's a bug in cleo where, when calling one command from another, if
+        # the command being called uses `confirm`, then _stream isn't set, which
+        # causes a no attribute error: https://github.com/python-poetry/cleo/issues/333
+        # As a workaround, we make it not interactive
+        if self.io.is_interactive():
+            self.io.interactive(False)
+        if not self.option("no-interaction"):
+            self.io.input.set_option("no-interaction", True)
+
         self._flash_ex()
         self._flash_re()
         self._flash_mn()
