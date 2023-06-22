@@ -52,3 +52,10 @@ def all_help() -> str:
 # ============================================
 def tools_help() -> str:
     return "Downloads tools for bootloading."
+
+
+# ============================================
+#                  tools_help
+# ============================================
+def config_create_help() -> str:
+    return "Creates a collection of files that can be flashed via `flash config`"

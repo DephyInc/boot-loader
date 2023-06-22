@@ -56,4 +56,6 @@ class DownloadToolsCommand(BaseCommand):
                 msg += f"{self.application._SUCCESS}\n"
                 self.overwrite(msg)
 
+        self.line("")
+
         return 0
