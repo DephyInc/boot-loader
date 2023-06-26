@@ -55,7 +55,14 @@ class FlashBt121Command(BaseFlashCommand):
         # first
         cwd = os.getcwd()
         # The way the zip is decompressed creates this nested structure
-        os.chdir(os.path.join(bc.toolsPath, "bt121_image_tools", "bt121_image_tools"))
+        os.chdir(
+            os.path.join(
+                bc.toolsPath,
+                self.application._os,
+                "bt121_image_tools",
+                "bt121_image_tools",
+            )
+        )
 
         gattTemplate = os.path.join("gatt_files", f"LVL{self._level}.xml")
         gattFile = os.path.join("dephy_gatt_broadcast_bt121", "gatt.xml")
