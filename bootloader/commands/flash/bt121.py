@@ -36,7 +36,7 @@ class FlashBt121Command(BaseFlashCommand):
     def __init__(self) -> None:
         super().__init__()
 
-        self._target = "habs"
+        self._target = "bt121"
 
     # -----
     # _get_firmware_file
@@ -106,7 +106,7 @@ class FlashBt121Command(BaseFlashCommand):
     # -----
     def _get_flash_command(self) -> None:
         self._flashCmd = [
-            os.path.join(bc.toolsPath, "stm32flash"),
+            str(bc.toolsPath.joinpath(self.application._os, "stm32flash")),
             "-w",
             f"{self._fwFile}",
             "-b",
