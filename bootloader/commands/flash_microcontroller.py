@@ -113,7 +113,16 @@ class FlashMicrocontrollerCommand(InitCommand):
         self._target = self.argument("target")
 
         if not sem.validate(fw):
+            # Check file extension to prevent wrong file type from being passed, as 
+            # this can cause weird, silent failures from the bootload tool
+            try:
+                assert fw.endswith(cfg.firmwareExtensions[self._target])
+            except AssertionError as err:
+                msg = f"Error: incorrect file type for {self._target}. "
+                msg += f"Expected {cfg.firmwareExtensions[self._target]}"
+                raise RuntimeError(msg) from err
             if not Path(fw).exists():
+                self.line(f"Downloading {fw} from S3...")
                 get_remote_file(fw, cfg.firmwareBucket)
             self._fwFile = fw
             return
@@ -173,13 +182,19 @@ class FlashMicrocontrollerCommand(InitCommand):
     # _call_flash_tool
     # -----
     def _call_flash_tool(self: Self) -> None:
-        for _ in range(self._nRetries):
+        for i in range(self._nRetries):
             try:
                 proc = sub.run(
                     self._flashCmd, capture_output=False, check=True, timeout=360
                 )
             except sub.CalledProcessError:
-                continue
+                if i != self._nRetries - 1:
+                    self.line(f"Flash command failed. Retrying {i+1}/{self._nRetries}")
+                    sleep(1)
+                    continue
+                else:
+                    self.line("Flashing failed.")
+                    sys.exit(1)
             except sub.TimeoutExpired:
                 self.line("Timeout.")
                 sys.exit(1)
