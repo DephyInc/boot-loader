@@ -46,6 +46,7 @@ class FlashBt121Command(BaseFlashCommand):
         Uses the bluetooth tools repo to create a bluetooth image file
         with the correct address.
         """
+        self.line("")
         self.line("Building bluetooth image...")
 
         address = self._address if self._address else self._device.id

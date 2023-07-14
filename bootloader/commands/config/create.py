@@ -3,8 +3,6 @@ import sys
 import tempfile
 from zipfile import ZipFile
 
-import boto3
-import botocore.exceptions as bce
 from cleo.commands.command import Command as BaseCommand
 from cleo.helpers import argument
 from cleo.helpers import option
@@ -53,10 +51,10 @@ class ConfigCreateCommand(BaseCommand):
     # handle
     # -----
     def handle(self) -> int:
-        self._configName = self.argument("configName") + f"{pendulum.today()}"
+        self._configName = self.argument("configName")
         archiveName = self._get_archive_name()
         files = self._get_files()
-        files["infoFile"] = self._get_info_file()
+        files["infoFile"] = self._get_info_file(files)
 
         with ZipFile(archiveName, "w") as archive:
             for file in files.values():
@@ -64,7 +62,7 @@ class ConfigCreateCommand(BaseCommand):
 
         self._print_summary(files)
 
-        self._upload_config(archiveName)
+        self.call("config upload", archiveName)
 
         return 0
 
@@ -149,15 +147,17 @@ class ConfigCreateCommand(BaseCommand):
     # -----
     # _get_info_file
     # -----
-    def _get_info_file(self) -> str:
+    def _get_info_file(self, files: dict) -> str:
         """
         Writes meta-data about the configuration (such as firmware version)
         to a file that gets included in the archive.
         """
-        # TODO: Make sure an info file doesn't already exist
-        fwVer = self._get_firmware_version()
+        info = {}
+        info["date"] = pendulum.today()
+        info["firmware_version"] = self._get_firmware_version()
+        info.update(files)
         with open(bc.configInfoFile, "w", encoding="utf8") as fd:
-            yaml.safe_dump({"firmware_version": fwVer}, fd)
+            yaml.safe_dump(info, fd)
 
         return bc.configInfoFile
 
@@ -173,28 +173,3 @@ class ConfigCreateCommand(BaseCommand):
         if not self.confirm("Proceed?", False):
             self.line("Aborting.")
             sys.exit(1)
-
-    # -----
-    # _upload_config
-    # -----
-    def _upload_config(self, archive: str) -> None:
-        self.write("Uploading...")
-
-        try:
-            client = boto3.Session(profile_name=bc.dephyAwsProfile).client("s3")
-        except bce.ProfileNotFound as err:
-            msg = "Error: could not find valid 'dephy' profile in '~/.aws/credentials'."
-            msg += f" Could not upload configuration {self._configName}."
-            raise RuntimeError(msg) from err
-
-        try:
-            client.upload_file(archive, bc.dephyFirmwareBucket, archive)
-        except (bce.PartialCredentialsError, bce.NoCredentialsError) as err:
-            msg = "Error: invalid credentials. Please check your access keys stored "
-            msg += "in '~/.aws/credentials'."
-            raise RuntimeError(msg) from err
-        except bce.ClientError as err:
-            msg = "Error: could not connect to S3. Upload failed."
-            raise RuntimeError(msg) from err
-
-        self.overwrite(f"Uploading... {self.application._SUCCESS}")

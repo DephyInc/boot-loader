@@ -1,5 +1,6 @@
 from cleo.commands.command import Command as BaseCommand
 from cleo.helpers import argument
+import yaml
 
 import bootloader.utilities.constants as bc
 from bootloader.utilities.help import flash_config_help
@@ -38,10 +39,12 @@ class FlashConfigCommand(BaseCommand):
         self._configName = self.argument("configName")
 
         # Download and extract config
-        self.call("download config", self._configName)
+        self.call("config download", self._configName)
         # Read info file
         with open(
-            bc.configsPath.joinpath(self._configName, bc.configInfoFile), "r"
+            bc.configsPath.joinpath(self._configName, bc.configInfoFile),
+            "r",
+            encoding="utf8",
         ) as fd:
             info = yaml.safe_load(fd)
         # For each target in the info file, flash with the corresponding file
@@ -50,8 +53,8 @@ class FlashConfigCommand(BaseCommand):
                 "flash habs", f"{self._port} {self._currentMnFw} {info['habs-file']}"
             )
         # For re, ex, and mn, the flash commands take arguments other than port,
-        # current, and to. However, because to is a file, the values of the other
-        # arguments does not matter
+        # current, and to. However, because "to" is a file, the values of the other
+        # arguments do not matter
         if "re-file" in info:
             self.call(
                 "flash re",

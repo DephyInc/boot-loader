@@ -1,5 +1,6 @@
 from pathlib import Path
 import subprocess as sub
+from time import sleep
 from typing import List
 
 from flexsea.utilities.aws import s3_download
@@ -33,6 +34,7 @@ def call_flash_tool(cmd: List[str]) -> None:
         try:
             proc = sub.run(cmd, capture_output=False, check=True, timeout=360)
         except sub.CalledProcessError:
+            sleep(1)
             continue
         except sub.TimeoutExpired as err:
             raise sub.TimeoutExpired(cmd, 360) from err

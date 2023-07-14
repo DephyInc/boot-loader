@@ -15,6 +15,11 @@ toolsPath = dephyPath.joinpath(toolsDir)
 firmwareDir = "firmware"
 firmwarePath = dephyPath.joinpath(firmwareDir)
 
+# configsDir is the name of the directory (mirrored on S3), whereas
+# configsPath is the full path to that directory on the local file system
+configsDir = "configs"
+configsPath = dephyPath.joinpath(configsDir)
+
 
 # ============================================
 #              S3 Configuration
@@ -25,6 +30,9 @@ dephyFirmwareBucket = "dephy-firmware-files"
 
 # Credentials profile name
 dephyAwsProfile = "dephy"
+
+# Private bucket where firmware configurations are stored
+dephyConfigsBucket = "dephy-configs"
 
 
 # ============================================
