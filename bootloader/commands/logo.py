@@ -5,6 +5,9 @@ from cleo.commands.command import Command as BaseCommand
 #                 LogoCommand
 # ============================================
 class LogoCommand(BaseCommand):
+    name = "logo"
+    description = "Shows Dephy logo."
+    help = "Shows Dephy logo."
 
     # -----
     # handle
