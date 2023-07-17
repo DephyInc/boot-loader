@@ -1,7 +1,6 @@
-import boto3
 from botocore.exceptions import ProfileNotFound
 from cleo.commands.command import Command as BaseCommand
-from flexsea.utilities.aws import get_s3_objects
+from cloudpathlib import S3Client
 
 import bootloader.utilities.constants as bc
 from bootloader.utilities.help import show_configs_help
@@ -20,19 +19,26 @@ class ShowConfigsCommand(BaseCommand):
     # -----
     def handle(self) -> int:
         try:
-            client = boto3.Session(profile_name=bc.dephyAwsProfile).client("s3")
+            client = S3Client(profile_name=bc.dephyAwsProfile)
         except ProfileNotFound as err:
             msg = "Error: could not find dephy profile in '~/.aws/credentials'. "
             msg += "Could not list available configs."
             raise RuntimeError(msg) from err
 
-        configs = get_s3_objects(bc.dephyConfigsBucket, client)
+        # We use cloudpathlib here instead of flexsea's get_s3_objects
+        # because it's a.) better, b.) separate from flexsea, and c.)
+        # because get_s3_objects doesn't work when the objects you're
+        # looking for are at the top level of the bucket and not in a
+        # sub-folder. In general, I would like to switch to
+        # cloudpathlib for all of the S3 operations in both flexsea and
+        # the bootloader in the future
+        configsPath = client.CloudPath(f"s3://{bc.dephyConfigsBucket}/")
 
         self.line("Available Configurations")
         self.line("------------------------")
 
-        for config in configs:
-            self.line(f"* {config}")
+        for config in configsPath.iterdir():
+            self.line(f"* {config.name}")
 
         self.line("\nPlease use `bootloader flash config <config name>`")
 
