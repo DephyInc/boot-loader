@@ -38,7 +38,7 @@ class ShowConfigsCommand(BaseCommand):
         self.line("------------------------")
 
         for config in configsPath.iterdir():
-            self.line(f"* {config.name}")
+            self.line(f"* {config.name.split('.zip')[0]}")
 
         self.line("\nPlease use `bootloader flash config <config name>`")
 
