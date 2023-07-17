@@ -57,8 +57,8 @@ class ConfigCreateCommand(BaseCommand):
         files["infoFile"] = self._get_info_file(files)
 
         with ZipFile(archiveName, "w") as archive:
-            for file in files.values():
-                archive.write(file)
+            for key in files:
+                archive.write(files[key]["path"], arcname=files[key]["arcname"])
 
         self._print_summary(files)
 
@@ -110,6 +110,7 @@ class ConfigCreateCommand(BaseCommand):
     # -----
     def _get_files(self) -> dict:
         files = {}
+        nFiles = 0
 
         for target in ["mn", "ex", "re", "habs"]:
             if self.option(f"{target}-file"):
@@ -125,11 +126,14 @@ class ConfigCreateCommand(BaseCommand):
                 assert fPath.is_file()
             except AssertionError as err:
                 raise FileNotFoundError(f"Error: could not find {fPath}") from err
-            files[target] = str(fPath)
+            # We use a str for path because yaml can't write a Path
+            # We use arcname so that the zip structure is flat
+            files[target] = {"path": str(fPath), "arcname": fPath.name}
+            nFiles += 1
 
         # Make sure the user didn't skip everything
         try:
-            assert len(files) > 0
+            assert nFiles > 0
         except AssertionError as err:
             raise RuntimeError(
                 "Error: need at least one file to create a configuration"
@@ -153,19 +157,18 @@ class ConfigCreateCommand(BaseCommand):
     # -----
     # _get_info_file
     # -----
-    def _get_info_file(self, files: dict) -> str:
+    def _get_info_file(self, files: dict) -> dict:
         """
         Writes meta-data about the configuration (such as firmware version)
         to a file that gets included in the archive.
         """
-        info = {}
+        info = {k: files[k]["arcname"] for k in files}
         info["date"] = str(pendulum.today())
         info["firmware_version"] = self._get_firmware_version()
-        info.update(files)
         with open(bc.configInfoFile, "w", encoding="utf8") as fd:
             yaml.safe_dump(info, fd)
 
-        return bc.configInfoFile
+        return {"path": bc.configInfoFile, "arcname": bc.configInfoFile}
 
     # -----
     # _print_summary
@@ -174,8 +177,8 @@ class ConfigCreateCommand(BaseCommand):
         self.line("Configuration Summary")
         self.line("---------------------")
         self.line(f"* Configuration name: {self._configName}")
-        for target, fileName in files.items():
-            self.line(f"* {target} file: {fileName}")
+        for target in files:
+            self.line(f"* {target} file: {files[target]['path']}")
         if not self.confirm("Proceed?", False):
             self.line("Aborting.")
             sys.exit(1)
