@@ -56,7 +56,7 @@ class FlashConfigCommand(BaseCommand):
         ) as fd:
             info = yaml.safe_load(fd)
         # For each target in the info file, flash with the corresponding file
-        if "habs-file" in info:
+        if "habs" in info:
             fwFile = str(bc.configsPath.joinpath(self._configName, info["habs-file"]))
             self.call("flash habs", f"{self._port} {self._currentMnFw} {fwFile}")
             if not self.confirm("Proceed?"):
@@ -64,7 +64,7 @@ class FlashConfigCommand(BaseCommand):
         # For re, ex, and mn, the flash commands take arguments other than port,
         # current, and to. However, because "to" is a file, the values of the other
         # arguments do not matter
-        if "re-file" in info:
+        if "re" in info:
             fwFile = str(bc.configsPath.joinpath(self._configName, info["re-file"]))
             self.call(
                 "flash re",
@@ -72,7 +72,7 @@ class FlashConfigCommand(BaseCommand):
             )
             if not self.confirm("Proceed?"):
                 sys.exit(1)
-        if "ex-file" in info:
+        if "ex" in info:
             fwFile = str(bc.configsPath.joinpath(self._configName, info["ex-file"]))
             self.call(
                 "flash ex",
@@ -80,7 +80,7 @@ class FlashConfigCommand(BaseCommand):
             )
             if not self.confirm("Proceed?"):
                 sys.exit(1)
-        if "mn-file" in info:
+        if "mn" in info:
             fwFile = str(bc.configsPath.joinpath(self._configName, info["mn-file"]))
             self.call(
                 "flash mn",
