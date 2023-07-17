@@ -44,3 +44,4 @@ repos:
         - pendulum
         - cleo
         - flexsea
+        - cloudpathlib

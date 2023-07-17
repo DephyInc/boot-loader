@@ -8,7 +8,6 @@ from cleo.helpers import argument
 from cleo.helpers import option
 from flexsea.utilities.firmware import validate_given_firmware_version
 import pendulum
-from semantic_version import Version
 import yaml
 
 import bootloader.utilities.constants as bc
@@ -57,8 +56,8 @@ class ConfigCreateCommand(BaseCommand):
         files["infoFile"] = self._get_info_file(files)
 
         with ZipFile(archiveName, "w") as archive:
-            for key in files:
-                archive.write(files[key]["path"], arcname=files[key]["arcname"])
+            for value in files.values():
+                archive.write(value["path"], arcname=value["arcname"])
 
         self._print_summary(files)
 
