@@ -32,10 +32,10 @@ class ConfigUploadCommand(BaseCommand):
             msg += " Could not upload configuration."
             raise RuntimeError(msg) from err
 
-        archive = self.argument("archive")
+        archive = self.argument("archiveName")
 
         try:
-            client.upload_file(archive, bc.dephyFirmwareBucket, archive)
+            client.upload_file(archive, bc.dephyConfigsBucket, archive)
         except (bce.PartialCredentialsError, bce.NoCredentialsError) as err:
             msg = "Error: invalid credentials. Please check your access keys stored "
             msg += "in '~/.aws/credentials'."
@@ -45,3 +45,5 @@ class ConfigUploadCommand(BaseCommand):
             raise RuntimeError(msg) from err
 
         self.overwrite(f"Uploading... {self.application._SUCCESS}")
+
+        return 0

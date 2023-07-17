@@ -62,7 +62,13 @@ class ConfigCreateCommand(BaseCommand):
 
         self._print_summary(files)
 
-        self.call("config upload", archiveName)
+        # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+        # is used from an existing command. Basically, it skips the first word
+        # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+        # by cleo as trying to call the command `download tools arg2`, which is
+        # wrong. The PLACEHOLDER should be removed when this is fixed
+        # https://github.com/python-poetry/cleo/issues/130
+        self.call("config upload", f"PLACEHOLDER {archiveName}")
 
         return 0
 
@@ -134,7 +140,7 @@ class ConfigCreateCommand(BaseCommand):
     # -----
     # _get_firmware_version
     # -----
-    def _get_firmware_version(self) -> Version:
+    def _get_firmware_version(self) -> str:
         if self.option("firmware-version"):
             fwVer = self.option("firmware-version")
         else:
@@ -142,7 +148,7 @@ class ConfigCreateCommand(BaseCommand):
                 "Which firmware version is this configuration associated with: ", None
             )
 
-        return validate_given_firmware_version(fwVer, True)
+        return str(validate_given_firmware_version(fwVer, True))
 
     # -----
     # _get_info_file
@@ -153,7 +159,7 @@ class ConfigCreateCommand(BaseCommand):
         to a file that gets included in the archive.
         """
         info = {}
-        info["date"] = pendulum.today()
+        info["date"] = str(pendulum.today())
         info["firmware_version"] = self._get_firmware_version()
         info.update(files)
         with open(bc.configInfoFile, "w", encoding="utf8") as fd:
