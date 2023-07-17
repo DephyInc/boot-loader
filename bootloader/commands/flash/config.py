@@ -57,7 +57,7 @@ class FlashConfigCommand(BaseCommand):
             info = yaml.safe_load(fd)
         # For each target in the info file, flash with the corresponding file
         if "habs" in info:
-            fwFile = str(bc.configsPath.joinpath(self._configName, info["habs-file"]))
+            fwFile = str(bc.configsPath.joinpath(self._configName, info["habs"]))
             self.call("flash habs", f"{self._port} {self._currentMnFw} {fwFile}")
             if not self.confirm("Proceed?"):
                 sys.exit(1)
@@ -65,7 +65,7 @@ class FlashConfigCommand(BaseCommand):
         # current, and to. However, because "to" is a file, the values of the other
         # arguments do not matter
         if "re" in info:
-            fwFile = str(bc.configsPath.joinpath(self._configName, info["re-file"]))
+            fwFile = str(bc.configsPath.joinpath(self._configName, info["re"]))
             self.call(
                 "flash re",
                 f"{self._port} {self._currentMnFw} {fwFile} HARDWARE LED",
@@ -73,7 +73,7 @@ class FlashConfigCommand(BaseCommand):
             if not self.confirm("Proceed?"):
                 sys.exit(1)
         if "ex" in info:
-            fwFile = str(bc.configsPath.joinpath(self._configName, info["ex-file"]))
+            fwFile = str(bc.configsPath.joinpath(self._configName, info["ex"]))
             self.call(
                 "flash ex",
                 f"{self._port} {self._currentMnFw} {fwFile} HARDWARE MOTOR",
@@ -81,7 +81,7 @@ class FlashConfigCommand(BaseCommand):
             if not self.confirm("Proceed?"):
                 sys.exit(1)
         if "mn" in info:
-            fwFile = str(bc.configsPath.joinpath(self._configName, info["mn-file"]))
+            fwFile = str(bc.configsPath.joinpath(self._configName, info["mn"]))
             self.call(
                 "flash mn",
                 f"{self._port} {self._currentMnFw} {fwFile} HARDWARE DEV SIDE",
