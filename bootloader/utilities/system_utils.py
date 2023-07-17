@@ -15,6 +15,7 @@ import bootloader.utilities.constants as bc
 def setup_cache() -> None:
     bc.firmwarePath.mkdir(parents=True, exist_ok=True)
     bc.toolsPath.mkdir(parents=True, exist_ok=True)
+    bc.configsPath.mkdir(parents=True, exist_ok=True)
 
 
 # ============================================
