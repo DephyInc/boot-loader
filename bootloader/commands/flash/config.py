@@ -39,7 +39,13 @@ class FlashConfigCommand(BaseCommand):
         self._configName = self.argument("configName")
 
         # Download and extract config
-        self.call("config download", self._configName)
+        # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+        # is used from an existing command. Basically, it skips the first word
+        # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+        # by cleo as trying to call the command `download tools arg2`, which is
+        # wrong. The PLACEHOLDER should be removed when this is fixed
+        # https://github.com/python-poetry/cleo/issues/130
+        self.call("config download", f"PLACEHOLDER {self._configName}")
         # Read info file
         with open(
             bc.configsPath.joinpath(self._configName, bc.configInfoFile),
