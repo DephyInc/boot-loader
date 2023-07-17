@@ -70,6 +70,8 @@ class FlashConfigCommand(BaseCommand):
                 "flash habs",
                 cmd,
             )
+            self.line("")
+            self.line("Please power cycle the device.")
             if not self.confirm("Proceed?"):
                 sys.exit(1)
         # For re, ex, and mn, the flash commands take arguments other than port,
@@ -89,6 +91,8 @@ class FlashConfigCommand(BaseCommand):
                 "flash re",
                 cmd,
             )
+            self.line("")
+            self.line("Please power cycle the device.")
             if not self.confirm("Proceed?"):
                 sys.exit(1)
         if "ex" in info:
@@ -105,6 +109,8 @@ class FlashConfigCommand(BaseCommand):
                 "flash ex",
                 cmd,
             )
+            self.line("")
+            self.line("Please power cycle the device.")
             if not self.confirm("Proceed?"):
                 sys.exit(1)
         if "mn" in info:
@@ -121,6 +127,8 @@ class FlashConfigCommand(BaseCommand):
                 "flash mn",
                 cmd,
             )
+            self.line("")
+            self.line("Please power cycle the device.")
             if not self.confirm("Proceed?"):
                 sys.exit(1)
 
