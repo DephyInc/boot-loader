@@ -57,34 +57,58 @@ class FlashConfigCommand(BaseCommand):
             info = yaml.safe_load(fd)
         # For each target in the info file, flash with the corresponding file
         if "habs" in info:
+            # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+            # is used from an existing command. Basically, it skips the first word
+            # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+            # by cleo as trying to call the command `download tools arg2`, which is
+            # wrong. The PLACEHOLDER should be removed when this is fixed
+            # https://github.com/python-poetry/cleo/issues/130
             fwFile = str(bc.configsPath.joinpath(self._configName, info["habs"]))
-            self.call("flash habs", f"{self._port} {self._currentMnFw} {fwFile}")
+            self.call("flash habs", f"TEMP {self._port} {self._currentMnFw} {fwFile}")
             if not self.confirm("Proceed?"):
                 sys.exit(1)
         # For re, ex, and mn, the flash commands take arguments other than port,
         # current, and to. However, because "to" is a file, the values of the other
         # arguments do not matter
         if "re" in info:
+            # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+            # is used from an existing command. Basically, it skips the first word
+            # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+            # by cleo as trying to call the command `download tools arg2`, which is
+            # wrong. The PLACEHOLDER should be removed when this is fixed
+            # https://github.com/python-poetry/cleo/issues/130
             fwFile = str(bc.configsPath.joinpath(self._configName, info["re"]))
             self.call(
                 "flash re",
-                f"{self._port} {self._currentMnFw} {fwFile} HARDWARE LED",
+                f"TEMP {self._port} {self._currentMnFw} {fwFile} HARDWARE LED",
             )
             if not self.confirm("Proceed?"):
                 sys.exit(1)
         if "ex" in info:
+            # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+            # is used from an existing command. Basically, it skips the first word
+            # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+            # by cleo as trying to call the command `download tools arg2`, which is
+            # wrong. The PLACEHOLDER should be removed when this is fixed
+            # https://github.com/python-poetry/cleo/issues/130
             fwFile = str(bc.configsPath.joinpath(self._configName, info["ex"]))
             self.call(
                 "flash ex",
-                f"{self._port} {self._currentMnFw} {fwFile} HARDWARE MOTOR",
+                f"TEMP {self._port} {self._currentMnFw} {fwFile} HARDWARE MOTOR",
             )
             if not self.confirm("Proceed?"):
                 sys.exit(1)
         if "mn" in info:
+            # NOTE: There's a bug in cleo about how arguments are parsed when `call`
+            # is used from an existing command. Basically, it skips the first word
+            # given as an arg, so call('download tools', 'arg1 arg2') is interpreted
+            # by cleo as trying to call the command `download tools arg2`, which is
+            # wrong. The PLACEHOLDER should be removed when this is fixed
+            # https://github.com/python-poetry/cleo/issues/130
             fwFile = str(bc.configsPath.joinpath(self._configName, info["mn"]))
             self.call(
                 "flash mn",
-                f"{self._port} {self._currentMnFw} {fwFile} HARDWARE DEV SIDE",
+                f"TEMP {self._port} {self._currentMnFw} {fwFile} HARDWARE DEV SIDE",
             )
             if not self.confirm("Proceed?"):
                 sys.exit(1)
