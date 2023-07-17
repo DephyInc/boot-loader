@@ -64,7 +64,12 @@ class FlashConfigCommand(BaseCommand):
             # wrong. The PLACEHOLDER should be removed when this is fixed
             # https://github.com/python-poetry/cleo/issues/130
             fwFile = str(bc.configsPath.joinpath(self._configName, info["habs"]))
-            self.call("flash habs", f"TEMP {self._port} {self._currentMnFw} {fwFile}")
+            cmd = f"PLACEHOLDER {self._port} {self._currentMnFw} {fwFile} "
+            cmd += "--no-interaction"
+            self.call(
+                "flash habs",
+                cmd,
+            )
             if not self.confirm("Proceed?"):
                 sys.exit(1)
         # For re, ex, and mn, the flash commands take arguments other than port,
@@ -78,9 +83,11 @@ class FlashConfigCommand(BaseCommand):
             # wrong. The PLACEHOLDER should be removed when this is fixed
             # https://github.com/python-poetry/cleo/issues/130
             fwFile = str(bc.configsPath.joinpath(self._configName, info["re"]))
+            cmd = f"PLACEHOLDER {self._port} {self._currentMnFw} {fwFile} HARDWARE LED "
+            cmd += "--no-interaction"
             self.call(
                 "flash re",
-                f"TEMP {self._port} {self._currentMnFw} {fwFile} HARDWARE LED",
+                cmd,
             )
             if not self.confirm("Proceed?"):
                 sys.exit(1)
@@ -92,9 +99,11 @@ class FlashConfigCommand(BaseCommand):
             # wrong. The PLACEHOLDER should be removed when this is fixed
             # https://github.com/python-poetry/cleo/issues/130
             fwFile = str(bc.configsPath.joinpath(self._configName, info["ex"]))
+            cmd = f"PLACEHOLDER {self._port} {self._currentMnFw} {fwFile} HARDWARE "
+            cmd += "MOTOR --no-interaction"
             self.call(
                 "flash ex",
-                f"TEMP {self._port} {self._currentMnFw} {fwFile} HARDWARE MOTOR",
+                cmd,
             )
             if not self.confirm("Proceed?"):
                 sys.exit(1)
@@ -106,9 +115,11 @@ class FlashConfigCommand(BaseCommand):
             # wrong. The PLACEHOLDER should be removed when this is fixed
             # https://github.com/python-poetry/cleo/issues/130
             fwFile = str(bc.configsPath.joinpath(self._configName, info["mn"]))
+            cmd = f"PLACEHOLDER {self._port} {self._currentMnFw} {fwFile} HARDWARE DEV "
+            cmd += "SIDE --no-interaction"
             self.call(
                 "flash mn",
-                f"TEMP {self._port} {self._currentMnFw} {fwFile} HARDWARE DEV SIDE",
+                cmd,
             )
             if not self.confirm("Proceed?"):
                 sys.exit(1)
