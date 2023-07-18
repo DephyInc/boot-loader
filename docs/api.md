@@ -1,11 +1,11 @@
 # Commands
 
 The commands below are presented in alphabetical order.
-    
+
 
 ## Config
 
-These commands are related to creating and using bundles of firmware files that are 
+These commands are related to creating and using bundles of firmware files that are
 commonly used together. Please note that these commands are for internal Dephy use only
 and will not work without the proper credentials.
 
@@ -19,7 +19,7 @@ Creates a bundle of firmware files with the name `configName`.
 * `--ex-file=` : Option to specify the firmware file for Execute. If not given, the command will prompt you for a file to use
 * `--re-file=` : Option to specify the firmware file for Regulate. If not given, the command will prompt you for a file to use
 * `--habs-file=` : Option to specify the firmware file for Habsolute. If not given, the command will prompt you for a file to use
-* `--firmware-version=` : In order to interact with a device, we need to know which version of the API the firmware uses. That version is specified with this option. If not given, the command will prompt you for the version 
+* `--firmware-version=` : In order to interact with a device, we need to know which version of the API the firmware uses. That version is specified with this option. If not given, the command will prompt you for the version
 
 ## Flash
 
@@ -33,7 +33,7 @@ bootloader flash all <port> <currentMnFirmware> [--to=] [--rigidVersion=] [--dev
 ```
 
 Flashes each target with a **local** firmware file (i.e., not cached on S3).
-* `port` : The COM port the device is connected to 
+* `port` : The COM port the device is connected to
 * `currentMnFirmware` : Semantic version string for the firmware currently on Manage. Needed for communication with the device
 * `--to` : Option specifying the semantic version string of the firmware you'd like to flash. This is only for ex, mn, re, and habs. If not given, the command will prompt you
 * `--rigidVersion` : Option specifying the hardware version of the device, e.g., 4.1B. If not given, the command will prompt you
@@ -53,7 +53,7 @@ bootloader flash bt121 <port> <currentMnFirmware> <address> <level> [--baudRate=
 ```
 
 Flashes new firmware onto the bluetooth radio.
-* `port` : The COM port the device is connected to 
+* `port` : The COM port the device is connected to
 * `currentMnFirmware` : Semantic version string for the firmware currently on Manage. Needed for communication with the device
 * `address` : Bluetooth address
 * `level` : Gatt level to use
@@ -66,7 +66,7 @@ bootloader flash ex <port> <currentMnFirmware> <to> <rigidVersion> <motorType> [
 ```
 
 Flashes new firmware onto Execute.
-* `port` : The COM port the device is connected to 
+* `port` : The COM port the device is connected to
 * `currentMnFirmware` : Semantic version string for the firmware currently on Manage. Needed for communication with the device
 * `to` : **Either** the semantic version string of the firmware you'd like to flash (e.g., 7.2.0) **OR** the path to a local firmware file you'd like to use
 * `rigidVersion` : Hardware version of the device, e.g., 4.1B
@@ -80,7 +80,7 @@ bootloader flash habs <port> <currentMnFirmware> <to> [--baudRate=230400] [--lib
 ```
 
 Flashes new firmware onto Habsolute.
-* `port` : The COM port the device is connected to 
+* `port` : The COM port the device is connected to
 * `currentMnFirmware` : Semantic version string for the firmware currently on Manage. Needed for communication with the device
 * `to` : **Either** the semantic version string of the firmware you'd like to flash (e.g., 7.2.0) **OR** the path to a local firmware file you'd like to use
 * `--baudRate` : Option specifying the baud rate. If not given, the default value of 230400 will be used
@@ -92,7 +92,7 @@ bootloader flash mn <port> <currentMnFirmware> <to> <rigidVersion> <deviceName> 
 ```
 
 Flashes new firmware onto Manage.
-* `port` : The COM port the device is connected to 
+* `port` : The COM port the device is connected to
 * `currentMnFirmware` : Semantic version string for the firmware currently on Manage. Needed for communication with the device
 * `to` : **Either** the semantic version string of the firmware you'd like to flash (e.g., 7.2.0) **OR** the path to a local firmware file you'd like to use
 * `rigidVersion` : Hardware version of the device, e.g., 4.1B
@@ -107,7 +107,7 @@ bootloader flash re <port> <currentMnFirmware> <to> <rigidVersion> <led> [--baud
 ```
 
 Flashes new firmware onto Regulate.
-* `port` : The COM port the device is connected to 
+* `port` : The COM port the device is connected to
 * `currentMnFirmware` : Semantic version string for the firmware currently on Manage. Needed for communication with the device
 * `to` : **Either** the semantic version string of the firmware you'd like to flash (e.g., 7.2.0) **OR** the path to a local firmware file you'd like to use
 * `rigidVersion` : Hardware version of the device, e.g., 4.1B
@@ -121,7 +121,7 @@ bootloader flash xbee <port> <currentMnFirmware> <address> <buddyAddress> [--bau
 ```
 
 Flashes new firmware onto Xbee.
-* `port` : The COM port the device is connected to 
+* `port` : The COM port the device is connected to
 * `currentMnFirmware` : Semantic version string for the firmware currently on Manage. Needed for communication with the device
 * `address` : Bluetooth address
 * `buddyAddress` : Bluetooth address of device's buddy
@@ -134,9 +134,9 @@ bootloader flash config <port> <currentMnFirmware> <configName> [--baudRate=2304
 ```
 
 Flashes new firmware onto Xbee.
-* `port` : The COM port the device is connected to 
+* `port` : The COM port the device is connected to
 * `currentMnFirmware` : Semantic version string for the firmware currently on Manage. Needed for communication with the device
-* `configName` : Name of the configuration to use 
+* `configName` : Name of the configuration to use
 * `--baudRate` : Option specifying the baud rate. If not given, the default value of 230400 will be used
 * `--libFile` : Option specifying the C library for interacting with Manage
 
