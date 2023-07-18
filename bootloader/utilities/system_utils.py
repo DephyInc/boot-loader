@@ -1,71 +1,70 @@
-import glob
-import os
 from pathlib import Path
-import shutil
 import subprocess as sub
+from time import sleep
+from typing import List
 
-from bootloader.exceptions import exceptions
-from bootloader.utilities import config as cfg
+from flexsea.utilities.aws import s3_download
+import flexsea.utilities.constants as fxc
+
+import bootloader.utilities.constants as bc
 
 
 # ============================================
-#              build_bt_image_file
+#                setup_cache
 # ============================================
-def build_bt_image_file(level: int, address: str) -> Path:
+def setup_cache() -> None:
+    bc.firmwarePath.mkdir(parents=True, exist_ok=True)
+    bc.toolsPath.mkdir(parents=True, exist_ok=True)
+    bc.configsPath.mkdir(parents=True, exist_ok=True)
+
+
+# ============================================
+#             call_flash_tool
+# ============================================
+def call_flash_tool(cmd: List[str]) -> None:
     """
-    Uses the bluetooth tools repo (downloaded as a part of `init`)
-    to create a bluetooth image file with the correct address.
-
-    Raises
-    ------
-    NoBluetoothImageError
-        If the required gatt file isn't found.
-
-    FlashFailedError
-        If a subprocess returns a code of 1.
+    Attempts to call the flash command `cmd`. If the call fails, we
+    try again until the max attempts have been reached.
     """
-    # Everything within the bt121 directory is self-contained and
-    # self-referencing, so it's easiest to switch to that directory
-    # first
-    cwd = Path.cwd()
-    # When unzipping, the zipped folder gets put into a folder with the same name as
-    # the archive, creating a "nesting" effect
-    os.chdir(Path.joinpath(cfg.toolsDir, "bt121_image_tools", "bt121_image_tools"))
+    # This is done to prevent unboundlocalerror, which happens if
+    # a calledprocesserror is raised if the process never successfully
+    # completes
+    proc = None
 
-    gattTemplate = Path("gatt_files").joinpath(f"{level}.xml")
-    gattFile = Path("dephy_gatt_broadcast_bt121").joinpath("gatt.xml")
+    for _ in range(5):
+        try:
+            proc = sub.run(cmd, capture_output=False, check=True, timeout=360)
+        except sub.CalledProcessError:
+            sleep(1)
+            continue
+        except sub.TimeoutExpired as err:
+            raise sub.TimeoutExpired(cmd, 360) from err
+        if proc.returncode == 0:
+            break
+    if proc is None or proc.returncode != 0:
+        raise RuntimeError("Error: flash command failed.")
 
-    if not Path.exists(gattTemplate):
-        raise exceptions.NoBluetoothImageError(gattTemplate)
 
-    shutil.copyfile(gattTemplate, gattFile)
+# ============================================
+#               get_fw_file
+# ============================================
+def get_fw_file(fName: str) -> Path:
+    fwFile = fxc.dephyPath.joinpath(bc.firmwareDir, fName)
 
-    cmd = ["python3", "bt121_gatt_broadcast_img.py", f"{address}"]
-    with sub.Popen(cmd) as proc:
-        pass
+    if not fwFile.is_file():
+        s3_download(str(fName), bc.dephyFirmwareBucket, str(fwFile), bc.dephyAwsProfile)
 
-    if proc.returncode == 1:
-        raise exceptions.FlashFailedError("bt121_gatt_broadcast_img.py")
+    return fwFile
 
-    bgExe = Path.joinpath("smart-ready-1.7.0-217", "bin", "bgbuild.exe")
-    xmlFile = Path.joinpath("dephy_gatt_broadcast_bt121", "project.xml")
-    with sub.Popen([bgExe, xmlFile]) as proc:
-        pass
 
-    if proc.returncode == 1:
-        raise exceptions.FlashFailedError("bgbuild.exe")
+# ============================================
+#             psoc_flash_command
+# ============================================
+def psoc_flash_command(port: str, fwFile: str, opSys: str) -> List[str]:
+    flashCmd = [
+        f"{Path.joinpath(bc.toolsPath, opSys, 'psocbootloaderhost.exe')}",
+        f"{port}",
+        f"{fwFile}",
+    ]
 
-    if Path("output").exists():
-        files = glob.glob(os.path.join("output", "*.bin"))
-        for file in files:
-            os.remove(file)
-    else:
-        os.mkdir("output")
-
-    btImageFileBase = f"dephy_gatt_broadcast_bt121_Exo-{address}.bin"
-    shutil.move(Path.joinpath("dephy_gatt_broadcast_bt121", btImageFileBase), "output")
-    btImageFile = Path.cwd().joinpath("bt121_image_tools", "output", btImageFileBase)
-
-    os.chdir(cwd)
-
-    return btImageFile
+    return flashCmd
