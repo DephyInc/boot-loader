@@ -60,6 +60,27 @@ bootloaderTools = {
             "XB24C.zip",
         ],
     },
+    "windows_32bit": {
+        "bt121": [
+            "bt121_image_tools.zip",
+            "stm32flash.exe",
+        ],
+        "ex": [
+            "psocbootloaderhost.exe",
+        ],
+        "habs": [
+            "stm32_flash_loader.zip",
+        ],
+        "mn": [
+            "DfuSeCommand.exe",
+        ],
+        "re": [
+            "psocbootloaderhost.exe",
+        ],
+        "xbee": [
+            "XB24C.zip",
+        ],
+    },
 }
 
 
@@ -70,6 +91,7 @@ firmwareExtensions = {"habs": "hex", "ex": "cyacd", "re": "cyacd", "mn": "dfu"}
 targets = ["habs", "ex", "re", "bt121", "xbee", "mn"]
 supportedOS = [
     "windows_64bit",
+    "windows_32bit",
 ]
 
 
