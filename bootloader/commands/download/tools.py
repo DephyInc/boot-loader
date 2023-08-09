@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+import subprocess as sub
+import sys
 import zipfile
 
 from cleo.commands.command import Command as BaseCommand
@@ -9,6 +11,7 @@ import flexsea.utilities.constants as fxc
 
 import bootloader.utilities.constants as bc
 from bootloader.utilities.help import tools_help
+from bootloader.utilities.system_utils import run_command
 
 
 # ============================================
@@ -56,6 +59,42 @@ class DownloadToolsCommand(BaseCommand):
                 msg += f"{self.application._SUCCESS}\n"
                 self.overwrite(msg)
 
+        if self.argument("target") == "setup":
+            dfusePath = str(
+                bc.toolsPath.joinpath(opSys, "dfuse_command", "dfuse_v3.0.6", "Bin")
+            )
+            mingwPath = str(
+                bc.toolsPath.joinpath(
+                    opSys,
+                    "mingw",
+                    "mingw-w64",
+                    "mingw-w64",
+                    "i68608.1.0-posix-dwarf-rt_v6-rev0",
+                    "mingw32",
+                    "bin",
+                )
+            )
+            os.environ["PATH"] += dfusePath
+            os.environ["PATH"] += mingwPath
+            if not bc.firstSetup.is_file():
+                msg = "We're about to install ST Link. At the end of the installation "
+                msg += "process, a window will pop up asking you to install the STM "
+                msg += "drivers. <warning>You MUST install these or bootloading will "
+                msg += "not work.</warning>"
+                self.line(msg)
+                if not self.confirm("Proceed?"):
+                    self.line(
+                        "Acknowledgment of need to install drivers not given. Aborting."
+                    )
+                    sys.exit(1)
+                cmd = [
+                    str(bc.toolsPath.joinpath(opSys, "stlink_setup.exe")),
+                ]
+                try:
+                    run_command(cmd)
+                except (RuntimeError, sub.TimeoutExpired):
+                    self.line("Error: could not install STM drivers.")
+                    sys.exit(1)
         self.line("")
 
         return 0
