@@ -423,14 +423,14 @@ testing = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "diff-cover (>=7.5)", "p
 
 [[package]]
 name = "flexsea"
-version = "11.0.6"
+version = "11.0.7"
 description = ""
 category = "main"
 optional = false
 python-versions = ">=3.11,<4.0"
 files = [
-    {file = "flexsea-11.0.6-py3-none-any.whl", hash = "sha256:3b077ab828c32549c2e9886a382b8f202b674a2e85fb28dfa684da337d467a48"},
-    {file = "flexsea-11.0.6.tar.gz", hash = "sha256:8707965923d17c3af8992d77223e99fbed1b94e35133d5063ead74fff16da2cc"},
+    {file = "flexsea-11.0.7-py3-none-any.whl", hash = "sha256:422b56e8f9ec18a001f6c670456876229ece812cd348801464fabfc018ff0352"},
+    {file = "flexsea-11.0.7.tar.gz", hash = "sha256:a485c3ab65024f57d57e2a4b9c306d73c9801795199aaad92fcc5c1373f2225c"},
 ]
 
 [package.dependencies]
