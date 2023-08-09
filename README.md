@@ -15,7 +15,7 @@ For more, see the documentation [here](./docs/api.md).
 
 ## INTERNAL NOTES
 
-If you need to find the correct stusb.sys driver: 
+If you need to find the correct stusb.sys driver:
 
 C: / Program Files (x86) > STMicroelectronics > Software > DfuSE v3.0.6 > Driver > Win 10
 Driver folder might be under Bin
@@ -24,15 +24,19 @@ Driver folder might be under Bin
 For purging bootloader drivers (installed with the cube link):
 
 https://www.winhelponline.com/blog/driver-uninstall-completely-windows/
-dism /online /get-drivers /format:table 
+dism /online /get-drivers /format:table
 pnputil /delete-driver <Published Name> /uninstall /force
 
+The driver SHOULD SAY: "STM Device in DFU Mode"
 
-There's some dll needed by DfUSE. I had it because I had previously installed it and 
-added the directory to my path. Users will not necesarily have done that, so we just 
+
+There's some dll needed by DfUSE. I had it because I had previously installed it and
+added the directory to my path. Users will not necesarily have done that, so we just
 download the whole thing and locally export PATH to have this dir:
 
 *https://drive.google.com/file/d/10n0WdbGc9thBqayA13df-fIe_pN1Te3D/view?usp=sharing (dfuse setup for mn) (need whole Dfuse directory)
+
+~/.dephy/STMicroelectronics/Software/DfuSe_v3.0.6/Bin
 
 * Remove link to stm32 cube for drivers. Use st link utility drivers
 
@@ -42,6 +46,8 @@ The actual name of the driver is something like ST Device in DfUSE Mode
 
 
 We need a VERY specific version of mingw for psocbootloaderhost to work.
+
+~/.dephy/mingw-w64/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/bin
 
 This is the zip: https://drive.google.com/file/d/1G5SRalr-VXXg49JD8wQofabTC5Qcbnd8/view?usp=drive_link
 

@@ -11,7 +11,7 @@ Prerequisites
 * Install `Python 3.11 <https://www.python.org/downloads/windows/>`_
 * AWS access keys (optional)
     * Only needed if you intend to download firmware files. If you already have a local file to flash, you do not need access keys
-    * These keys must be stored in ``~/.aws/credentials`` as described `here <https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#shared-credentials-file>`_ 
+    * These keys must be stored in ``~/.aws/credentials`` as described `here <https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#shared-credentials-file>`_
 
 .. note::
 
