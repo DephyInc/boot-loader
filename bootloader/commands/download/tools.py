@@ -95,6 +95,7 @@ class DownloadToolsCommand(BaseCommand):
                 except (RuntimeError, sub.TimeoutExpired):
                     self.line("Error: could not install STM drivers.")
                     sys.exit(1)
+                bc.firstSetup.touch()
         self.line("")
 
         return 0
