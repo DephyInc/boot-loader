@@ -20,6 +20,10 @@ firmwarePath = dephyPath.joinpath(firmwareDir)
 configsDir = "configs"
 configsPath = dephyPath.joinpath(configsDir)
 
+# firstSetup is an empty file indicating first time setup has been run
+# (installing mingw, dfuse folder, run st link for drivers)
+firstSetup = dephyPath.joinpath(".first")
+
 
 # ============================================
 #              S3 Configuration
@@ -59,6 +63,11 @@ bootloaderTools = {
         "xbee": [
             "XB24C.zip",
         ],
+        "setup": [
+            "dfuse_command.zip",
+            "mingw.zip",
+            "stlink_setup.exe",
+        ],
     },
     "windows_32bit": {
         "bt121": [
@@ -79,6 +88,11 @@ bootloaderTools = {
         ],
         "xbee": [
             "XB24C.zip",
+        ],
+        "setup": [
+            "dfuse_command.zip",
+            "mingw.zip",
+            "stlink_setup.exe",
         ],
     },
 }
