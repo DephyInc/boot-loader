@@ -87,6 +87,7 @@ class BaseFlashCommand(BaseCommand):
         # by cleo as trying to call the command `download tools arg2`, which is
         # wrong. The PLACEHOLDER should be removed when this is fixed
         # https://github.com/python-poetry/cleo/issues/130
+        self.call("download tools", "PLACEHOLDER setup")
         self.call("download tools", f"PLACEHOLDER {self._target}")
         self._get_firmware_file()
         self._get_device()

@@ -4,7 +4,7 @@ from cleo.helpers import argument
 from semantic_version import Version
 
 from bootloader.utilities.help import ex_help
-from bootloader.utilities.system_utils import call_flash_tool
+from bootloader.utilities.system_utils import run_command
 from bootloader.utilities.system_utils import get_fw_file
 from bootloader.utilities.system_utils import psoc_flash_command
 
@@ -60,5 +60,5 @@ class FlashExCommand(BaseFlashCommand):
         sleep(2)
         self._device.close()
         sleep(2)
-        call_flash_tool(self._flashCmd)
+        run_command(self._flashCmd)
         sleep(20)

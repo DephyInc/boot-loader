@@ -6,7 +6,7 @@ from semantic_version import Version
 
 import bootloader.utilities.constants as bc
 from bootloader.utilities.help import xbee_help
-from bootloader.utilities.system_utils import call_flash_tool
+from bootloader.utilities.system_utils import run_command
 
 from .base_flash import BaseFlashCommand
 
@@ -69,7 +69,7 @@ class FlashXbeeCommand(BaseFlashCommand):
     def _flash_target(self) -> None:
         self._device.close()
         sleep(3)
-        call_flash_tool(self._flashCmd)
+        run_command(self._flashCmd)
         sleep(20)
 
     # -----

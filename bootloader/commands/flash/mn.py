@@ -6,7 +6,7 @@ from semantic_version import Version
 
 import bootloader.utilities.constants as bc
 from bootloader.utilities.help import mn_help
-from bootloader.utilities.system_utils import call_flash_tool
+from bootloader.utilities.system_utils import run_command
 from bootloader.utilities.system_utils import get_fw_file
 
 from .base_flash import BaseFlashCommand
@@ -68,4 +68,4 @@ class FlashMnCommand(BaseFlashCommand):
         del self._device
         sleep(3)
         sleep(10)
-        call_flash_tool(self._flashCmd)
+        run_command(self._flashCmd)

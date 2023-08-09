@@ -8,6 +8,7 @@ class LogoCommand(BaseCommand):
     name = "logo"
     description = "Shows Dephy logo."
     help = "Shows Dephy logo."
+    hidden = True
 
     # -----
     # handle
