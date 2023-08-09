@@ -9,7 +9,7 @@
 import bootloader
 
 project = "bootloader"
-copyright = "2023, Dephy, Inc."
+copyright = "2023, Dephy, Inc."  # pylint: disable=redefined-builtin
 author = "Dephy, Inc."
 release = bootloader.__version__
 
