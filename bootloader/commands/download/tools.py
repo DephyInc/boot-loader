@@ -1,3 +1,4 @@
+from contextlib import suppress
 import os
 from pathlib import Path
 import platform
@@ -119,7 +120,12 @@ class DownloadToolsCommand(BaseCommand):
         msg += "drivers. <warning>You MUST install these or bootloading will "
         msg += "not work.</warning>"
         self.line(msg)
-        if not self.confirm("Proceed?"):
+        # There's a bug in cleo where, when calling one command from another, if
+        # the command being called uses `confirm`, then _stream isn't set, which
+        # causes a no attribute error: https://github.com/python-poetry/cleo/issues/333
+        # As a workaround, we make it not interactive or don't use confirm
+        proceed = input("Proceed? [y/n]")
+        if proceed.lower() != "y":
             self.line("Acknowledgment to install drivers not given. Aborting.")
             sys.exit(1)
         cmd = [
@@ -135,8 +141,12 @@ class DownloadToolsCommand(BaseCommand):
     # _install_dfuse_drivers
     # -----
     def _install_dfuse_drivers(self, opSys: str) -> None:
-        msg = "We're about to install the DfuSe drivers. Proceed?"
-        if not self.confirm(msg):
+        # There's a bug in cleo where, when calling one command from another, if
+        # the command being called uses `confirm`, then _stream isn't set, which
+        # causes a no attribute error: https://github.com/python-poetry/cleo/issues/333
+        # As a workaround, we make it not interactive or don't use confirm
+        proceed = input("We're about to install the DfuSe drivers. Proceed? [y/n]")
+        if proceed.lower() != "y":
             self.line("Acknowledgment to install drivers not given. Aborting.")
             sys.exit(1)
         winRelease = platform.release()
@@ -159,6 +169,7 @@ class DownloadToolsCommand(BaseCommand):
             str(
                 bc.toolsPath.joinpath(
                     opSys,
+                    "dfuse_command",
                     "dfuse_v3.0.6",
                     "Bin",
                     "Driver",
@@ -167,9 +178,9 @@ class DownloadToolsCommand(BaseCommand):
                 )
             ),
         ]
-        try:
-            run_command(cmd)
-        except (RuntimeError, sub.TimeoutExpired):
-            self.line("Error: could not install DfuSe drivers.")
-            sys.exit(1)
+        # For some reason, the dpinst executable returns a non-zero exit
+        # code even when the drivers install successfully. This causes
+        # run_command to error out, so we call the executable directly
+        with suppress(sub.CalledProcessError):
+            _ = sub.run(cmd, capture_output=False, check=True, timeout=360)
         bc.firstSetup.touch()
