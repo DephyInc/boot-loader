@@ -1,10 +1,10 @@
 .. _bootloader_quickstart:
 
-Quickstart 
+Quickstart
 ==========
 
 .. note::
-   **TL;DR** Use ``bootloader list`` to view all of the available commands. You can then 
+   **TL;DR** Use ``bootloader list`` to view all of the available commands. You can then
    use ``booloader <command> --help`` to view the documentation for that command.
 
 After installing ``bootloader`` as described `here <bootloader_docs_installing>`_, you
@@ -17,7 +17,7 @@ should have access to a command-line utility called ``bootloader``. You can chec
 If this command prints a version, you're good to go.
 
 The primary function of the bootloader is to load new firmware onto Dephy's devices.
-Each device has the following three microcontrollers on it: 
+Each device has the following three microcontrollers on it:
 
 * Mange (mn)
 * Execute (ex)
@@ -25,7 +25,7 @@ Each device has the following three microcontrollers on it:
 
 In addition to these three, each device has a bluetooth (bt121) module.
 
-If your device is an exo (**not** an actpack), then it will have two additional 
+If your device is an exo (**not** an actpack), then it will have two additional
 modules:
 
 * Habsolute (habs; this is a Hall Effect sensor)
@@ -33,7 +33,7 @@ modules:
 
 ``bootloader`` provides commands for flashing each of these.
 
-Flashing Regulate 
+Flashing Regulate
 -----------------
 
 .. code-block:: bash
@@ -61,7 +61,7 @@ Options:
   * -v|vv|vvv, --verbose     Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug.
 
 If your device is an actpack then you will probably want ``led`` to be ``multi``
-(indicating multiple colors will be used on the device's LED). If you are flashing an 
+(indicating multiple colors will be used on the device's LED). If you are flashing an
 exo, you will probably want ``led`` to be ``mono`` (indicating that the device's LED
 will only use a single color).
 
@@ -72,7 +72,7 @@ will only use a single color).
 .. note::
    The value of ``to`` can be either a semantic version string or a path to a file.
    If you are trying to use a semantic version string, e.g., 10.7.0, you will need
-   AWS access keys in order to download the firmware. If these were not provided to 
+   AWS access keys in order to download the firmware. If these were not provided to
    you with your purchase, please reach out to Dephy at ``support@dephy.com``.
 
 Example
@@ -86,7 +86,7 @@ of the firmware. If we have AWS access keys:
 
    bootloader flash re COM3 7.2.0 10.7.0 4.1B multi
 
-If you do not have AWS access keys but do have a local 10.7.0 firmware file located at 
+If you do not have AWS access keys but do have a local 10.7.0 firmware file located at
 ``~/firmware/fw.cyacd``:
 
 .. code-block:: bash
@@ -94,13 +94,13 @@ If you do not have AWS access keys but do have a local 10.7.0 firmware file loca
    bootloader flash re COM3 7.2.0 ~/firmware/fw.cyacd 4.1B multi
 
 .. note::
-   Only use firmware files given to you directly by Dephy or downloaded directly from 
+   Only use firmware files given to you directly by Dephy or downloaded directly from
    the Dephy AWS firmware bucket.
 
 Flashing Execute
 ----------------
 
-.. code-block:: bash 
+.. code-block:: bash
 
    bootloader flash ex [options] <port> <current mn firmware> <to> <rigid version> <motor type>
 
@@ -133,7 +133,7 @@ If your device is a geared actpack, you will want ``motor type`` to be ``61or91`
 .. note::
    The value of ``to`` can be either a semantic version string or a path to a file.
    If you are trying to use a semantic version string, e.g., 10.7.0, you will need
-   AWS access keys in order to download the firmware. If these were not provided to 
+   AWS access keys in order to download the firmware. If these were not provided to
    you with your purchase, please reach out to Dephy at ``support@dephy.com``.
 
 Example
@@ -147,7 +147,7 @@ of the firmware. If we have AWS access keys:
 
    bootloader flash ex COM3 7.2.0 10.7.0 4.1B actpack
 
-If you do not have AWS access keys but do have a local 10.7.0 firmware file located at 
+If you do not have AWS access keys but do have a local 10.7.0 firmware file located at
 ``~/firmware/fw.cyacd``:
 
 .. code-block:: bash
@@ -155,7 +155,7 @@ If you do not have AWS access keys but do have a local 10.7.0 firmware file loca
    bootloader flash ex COM3 7.2.0 ~/firmware/fw.cyacd 4.1B actpack
 
 .. note::
-   Only use firmware files given to you directly by Dephy or downloaded directly from 
+   Only use firmware files given to you directly by Dephy or downloaded directly from
    the Dephy AWS firmware bucket.
 
 Flashing Manage

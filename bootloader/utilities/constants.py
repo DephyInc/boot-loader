@@ -109,6 +109,13 @@ supportedOS = [
     "windows_64bit",
     "windows_32bit",
 ]
+supportedWindowsVersions = [
+    "7",
+    "8",
+    "8.1",
+    "10",
+    "11",
+]
 
 
 # ============================================
