@@ -9,6 +9,8 @@ Prerequisites
 
 * Install `Git for Windows <https://git-scm.com/download/win>`_. Make sure you download the version (either 32-bit or 64-bit) that matches your system (most likely 64 bit)
 * Install `Python 3.11 <https://www.python.org/downloads/windows/>`_
+    * Make sure you install the version (either 32-bit or 64-bit) that matches your system (most likely 64-bit)
+    * In the install wizard, make sure you check the box that adds Python to your PATH
 * AWS access keys (optional)
     * Only needed if you intend to download firmware files. If you already have a local file to flash, you do not need access keys
     * These keys must be stored in ``~/.aws/credentials`` as described `here <https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#shared-credentials-file>`_
@@ -54,7 +56,7 @@ If you intend to contribute or modify the code, however, it may be helpful to in
 Developing
 ----------
 
-To develop ``flexsea``, we strongly recommend installing `Poetry <https://python-poetry.org/docs/>`_.
+To develop ``bootloader``, we strongly recommend installing `Poetry <https://python-poetry.org/docs/>`_.
 
 To do so, start Windows Powershell as Administrator. By default, Powershell will not
 start in the same directory as Git Bash. This means in order to activate your virtual
@@ -71,8 +73,8 @@ environment from Powershell, we have to first navigate to that directory. Here w
 
    Once installed, `poetry` should be available from your Git Bash terminal.
 
-Activate the development environment and install the dependencies for ``flexsea`` by
-running the following commands from your Git Bash terminal and the ``flexsea`` repository:
+Activate the development environment and install the dependencies for ``bootloader`` by
+running the following commands from your Git Bash terminal and the ``bootloader`` repository:
 
 .. code-block:: bash
 

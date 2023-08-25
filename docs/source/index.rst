@@ -8,3 +8,6 @@ Bootloader Documentation
     :caption: Contents:
 
     Installing <installing/index>
+    Quickstart <quickstart>
+    Troubleshooting <troubleshooting>
+    API <api/index>
