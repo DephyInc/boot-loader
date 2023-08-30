@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import subprocess as sub
 from time import sleep
@@ -33,7 +34,7 @@ def run_command(cmd: List[str]) -> None:
 
     for _ in range(5):
         try:
-            proc = sub.run(cmd, capture_output=False, check=True, timeout=360)
+            proc = sub.run(cmd, capture_output=False, check=True, timeout=360, shell=True, env=os.environ)
         except sub.CalledProcessError:
             sleep(1)
             continue

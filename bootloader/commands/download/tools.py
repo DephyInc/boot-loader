@@ -95,13 +95,13 @@ class DownloadToolsCommand(BaseCommand):
                 "mingw",
                 "mingw-w64",
                 "mingw-w64",
-                "i68608.1.0-posix-dwarf-rt_v6-rev0",
+                "i686-8.1.0-posix-dwarf-rt_v6-rev0",
                 "mingw32",
                 "bin",
             )
         )
-        os.environ["PATH"] += dfusePath
-        os.environ["PATH"] += mingwPath
+        os.environ["PATH"] += os.pathsep + dfusePath
+        os.environ["PATH"] += os.pathsep + mingwPath
 
     # -----
     # _first_setup
