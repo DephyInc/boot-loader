@@ -100,8 +100,16 @@ class DownloadToolsCommand(BaseCommand):
                 "bin",
             )
         )
+        stmFlashLoaderPath = str(
+            bc.toolsPath.joinpath(
+                opSys,
+                "stm32_flash_loader",
+                "stm32_flash_loader",
+            )
+        )
         os.environ["PATH"] += os.pathsep + dfusePath
         os.environ["PATH"] += os.pathsep + mingwPath
+        os.environ["PATH"] += os.pathsep + stmFlashLoaderPath
 
     # -----
     # _first_setup
