@@ -41,7 +41,8 @@ class FlashExCommand(BaseFlashCommand):
     # -----
     def _handle_firmware_version(self, version: Version) -> None:
         fName = f"{self._target}_version-{version}_"
-        fName += f"rigid-{self._rigidVersion}_motor-{self._motorType}.cyacd"
+        fName += f"rigid-{self._rigidVersion.lower()}_"
+        fName += f"motor-{self._motorType.lower()}.cyacd"
 
         self._fwFile = get_fw_file(fName)
 
