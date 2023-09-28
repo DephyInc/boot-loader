@@ -30,7 +30,7 @@ class ShowDevicesCommand(BaseShowCommand):
         self.line("Available Devices")
         self.line("-----------------")
 
-        for device in list(devices).sort():
+        for device in sorted(list(devices)):
             self.line(f"* {device}")
 
         self.line("")

@@ -30,7 +30,7 @@ class ShowRigidsCommand(BaseShowCommand):
         self.line("Available Rigid Versions")
         self.line("------------------------")
 
-        for version in list(rigids).sort():
+        for version in sorted(list(rigids)):
             self.line(f"* {version}")
 
         self.line("")

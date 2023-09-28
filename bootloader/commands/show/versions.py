@@ -30,7 +30,7 @@ class ShowVersionsCommand(BaseShowCommand):
         self.line("Available Firmware Versions")
         self.line("---------------------------")
 
-        for version in list(versions).sort():
+        for version in sorted(list(versions)):
             self.line(f"* {version}")
 
         self.line("")
