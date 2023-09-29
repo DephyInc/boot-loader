@@ -56,7 +56,7 @@ class FlashXbeeCommand(BaseFlashCommand):
 
         self._flashCmd = [
             pythonCmd,
-            os.path.join(bc.toolsPath, "xb24c.py"),
+            os.path.join(bc.toolsPath, self.application._os, "XB24C", "XB24C", "xb24c.py"),
             self._port,
             str(address),
             self._buddyAddress,
