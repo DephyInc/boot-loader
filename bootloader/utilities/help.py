@@ -87,3 +87,24 @@ def config_download_help() -> str:
 # ============================================
 def config_upload_help() -> str:
     return "Uploads the given configuration to S3."
+
+
+# ============================================
+#            show_devices_help
+# ============================================
+def show_devices_help() -> str:
+    return "Lists all devices for which there is firmware."
+
+
+# ============================================
+#            show_rigids_help
+# ============================================
+def show_rigids_help() -> str:
+    return "Lists all rigid versions for which there is firmware."
+
+
+# ============================================
+#            show_versions_help
+# ============================================
+def show_versions_help() -> str:
+    return "Lists all available firmware versions."

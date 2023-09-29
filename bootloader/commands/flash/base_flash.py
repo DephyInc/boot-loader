@@ -157,7 +157,7 @@ class BaseFlashCommand(BaseCommand):
             interactive=not self.option("no-interaction"),
         )
 
-        self._device.open()
+        self._device.open(bootloading=True)
 
         self.overwrite(f"Connecting to device... {self.application._SUCCESS}")
 

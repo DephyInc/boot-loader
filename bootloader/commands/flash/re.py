@@ -41,9 +41,8 @@ class FlashReCommand(BaseFlashCommand):
     # -----
     def _handle_firmware_version(self, version: Version) -> None:
         fName = f"{self._target}_version-{version}_"
-        fName += (
-            f"rigid-{self._rigidVersion.lower()}_led-{self._led.lower()}color.cyacd"
-        )
+        fName += f"rigid-{self._rigidVersion.lower()}_"
+        fName += f"led-{self._led.lower()}color.cyacd"
 
         self._fwFile = get_fw_file(fName)
 
