@@ -160,6 +160,7 @@ class BaseFlashCommand(BaseCommand):
         self._device.open(bootloading=True)
 
         self.overwrite(f"Connecting to device... {self.application._SUCCESS}")
+        self.line("")
 
     # -----
     # _set_tunnel_mode
@@ -189,6 +190,7 @@ class BaseFlashCommand(BaseCommand):
 
         msg = f"Setting tunnel mode for {self._target}... {self.application._SUCCESS}"
         self.overwrite(msg)
+        self.line("")
 
     # -----
     # _flash
@@ -202,11 +204,21 @@ class BaseFlashCommand(BaseCommand):
 
         self._flash_target()
 
-        if not (self.option("no-interaction") or self.option("quiet")):
-            if not self.confirm("Please power cycle device.", False):
-                sys.exit(1)
-
         self.overwrite(f"Flashing {self._target}... {self.application._SUCCESS}")
+        self.line("")
+
+        # There's a bug in cleo where, when calling one command from another, if
+        # the command being called uses `confirm`, then _stream isn't set, which
+        # causes a no attribute error: https://github.com/python-poetry/cleo/issues/333
+        # As a workaround, we make it not interactive or don't use confirm
+        # Here, though, we always want to prompt so that the user knows to power-cycle
+        userInput = input(
+            "Please power cycle the device. Press 'c' when done to continue."
+        )
+        if userInput.lower() != "c":
+            sys.exit(1)
+
+        self.line("")
 
     # -----
     # _confirm
@@ -227,6 +239,8 @@ class BaseFlashCommand(BaseCommand):
             if not self.confirm("Proceed?"):
                 self.line("<error>Aborting.</>")
                 sys.exit(1)
+
+        self.line("")
 
     # -----
     # _get_firmware_file

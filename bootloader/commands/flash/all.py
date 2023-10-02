@@ -70,6 +70,8 @@ class FlashAllCommand(BaseCommand):
     # _flash_xbee
     # -----
     def _flash_xbee(self) -> None:
+        self.line("")
+
         if not self.confirm("Flash xbee?"):
             return
         args = self._get_arg_list(["address", "buddyAddress"])
@@ -81,10 +83,14 @@ class FlashAllCommand(BaseCommand):
         # https://github.com/python-poetry/cleo/issues/130
         self.call("flash xbee", f"PLACEHOLDER {args} {self._optList} --no-interaction")
 
+        self.line("")
+
     # -----
     # _flash_bt121
     # -----
     def _flash_bt121(self) -> None:
+        self.line("")
+
         if not self.confirm("Flash bt121?"):
             return
         args = self._get_arg_list(["address", "level"])
@@ -96,19 +102,15 @@ class FlashAllCommand(BaseCommand):
         # https://github.com/python-poetry/cleo/issues/130
         self.call("flash bt121", f"PLACEHOLDER {args} {self._optList} --no-interaction")
 
+        self.line("")
+
     # -----
     # _flash_habs
     # -----
     def _flash_habs(self) -> None:
+        self.line("")
+
         if not self.confirm("Flash habs?"):
-            return
-        try:
-            v = Version.coerce(self.argument("currentMnFw"))
-        except ValueError:
-            self.line("Error: Mn must be at 7.2")
-            return
-        if v != Version("7.2.0"):
-            self.line("Error: Mn must be at 7.2")
             return
         args = self._get_arg_list(["to"])
         # NOTE: There's a bug in cleo about how arguments are parsed when `call`
@@ -119,10 +121,15 @@ class FlashAllCommand(BaseCommand):
         # https://github.com/python-poetry/cleo/issues/130
         self.call("flash habs", f"PLACEHOLDER {args} {self._optList} --no-interaction")
 
+        self.line("")
+
     # -----
     # _flash_ex
     # -----
     def _flash_ex(self) -> None:
+        self.line("")
+
+        self.line("Flashing Execute")
         args = self._get_arg_list(["to", "rigidVersion", "motorType"])
         # NOTE: There's a bug in cleo about how arguments are parsed when `call`
         # is used from an existing command. Basically, it skips the first word
@@ -132,10 +139,15 @@ class FlashAllCommand(BaseCommand):
         # https://github.com/python-poetry/cleo/issues/130
         self.call("flash ex", f"PLACEHOLDER {args} {self._optList} --no-interaction")
 
+        self.line("")
+
     # -----
     # _flash_re
     # -----
     def _flash_re(self) -> None:
+        self.line("")
+
+        self.line("Flashing Regulate")
         args = self._get_arg_list(["to", "rigidVersion", "led"])
         # NOTE: There's a bug in cleo about how arguments are parsed when `call`
         # is used from an existing command. Basically, it skips the first word
@@ -145,10 +157,15 @@ class FlashAllCommand(BaseCommand):
         # https://github.com/python-poetry/cleo/issues/130
         self.call("flash re", f"PLACEHOLDER {args} {self._optList} --no-interaction")
 
+        self.line("")
+
     # -----
     # _flash_mn
     # -----
     def _flash_mn(self) -> None:
+        self.line("")
+
+        self.line("Flashing Manage")
         args = self._get_arg_list(["to", "rigidVersion", "device", "side"])
         # NOTE: There's a bug in cleo about how arguments are parsed when `call`
         # is used from an existing command. Basically, it skips the first word
@@ -157,6 +174,8 @@ class FlashAllCommand(BaseCommand):
         # wrong. The PLACEHOLDER should be removed when this is fixed
         # https://github.com/python-poetry/cleo/issues/130
         self.call("flash mn", f"PLACEHOLDER {args} {self._optList} --no-interaction")
+
+        self.line("")
 
     # -----
     # _get_arg_list
@@ -168,7 +187,9 @@ class FlashAllCommand(BaseCommand):
             if self.option(arg):
                 args += f"{self.option(arg)} "
             else:
-                arg = self.ask(f"Please enter device's {arg}: ", None)
+                msg = f"Please enter device's {arg} "
+                msg += "(use `bootloader show --help` to see available options): "
+                arg = self.ask(msg, None)
                 if arg is None:
                     raise ValueError(f"Error: must enter a value for {arg}")
                 args += f"{arg} "
