@@ -3,7 +3,7 @@ from time import sleep
 from cleo.helpers import argument
 from semantic_version import Version
 
-from bootloader.utilities.system_utils import call_flash_tool
+from bootloader.utilities.system_utils import run_command
 from bootloader.utilities.system_utils import get_fw_file
 from bootloader.utilities.help import re_help
 from bootloader.utilities.system_utils import psoc_flash_command
@@ -41,9 +41,8 @@ class FlashReCommand(BaseFlashCommand):
     # -----
     def _handle_firmware_version(self, version: Version) -> None:
         fName = f"{self._target}_version-{version}_"
-        fName += (
-            f"rigid-{self._rigidVersion.lower()}_led-{self._led.lower()}color.cyacd"
-        )
+        fName += f"rigid-{self._rigidVersion.lower()}_"
+        fName += f"led-{self._led.lower()}color.cyacd"
 
         self._fwFile = get_fw_file(fName)
 
@@ -61,4 +60,4 @@ class FlashReCommand(BaseFlashCommand):
     def _flash_target(self) -> None:
         sleep(3)
         self._device.close()
-        call_flash_tool(self._flashCmd)
+        run_command(self._flashCmd)

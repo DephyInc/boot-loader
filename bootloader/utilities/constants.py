@@ -20,6 +20,10 @@ firmwarePath = dephyPath.joinpath(firmwareDir)
 configsDir = "configs"
 configsPath = dephyPath.joinpath(configsDir)
 
+# firstSetup is an empty file indicating first time setup has been run
+# (installing mingw, dfuse folder, run st link for drivers)
+firstSetup = dephyPath.joinpath(".first")
+
 
 # ============================================
 #              S3 Configuration
@@ -59,6 +63,12 @@ bootloaderTools = {
         "xbee": [
             "XB24C.zip",
         ],
+        "setup": [
+            "dfuse_command.zip",
+            "mingw.zip",
+            "stlink_setup.exe",
+            "DfuSe_Demo_V3.0.6_Setup.exe",
+        ],
     },
     "windows_32bit": {
         "bt121": [
@@ -80,6 +90,12 @@ bootloaderTools = {
         "xbee": [
             "XB24C.zip",
         ],
+        "setup": [
+            "dfuse_command.zip",
+            "mingw.zip",
+            "stlink_setup.exe",
+            "DfuSe_Demo_V3.0.6_Setup.exe",
+        ],
     },
 }
 
@@ -92,6 +108,13 @@ targets = ["habs", "ex", "re", "bt121", "xbee", "mn"]
 supportedOS = [
     "windows_64bit",
     "windows_32bit",
+]
+supportedWindowsVersions = [
+    "7",
+    "8",
+    "8.1",
+    "10",
+    "11",
 ]
 
 

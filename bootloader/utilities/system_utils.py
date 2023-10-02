@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import subprocess as sub
 from time import sleep
@@ -19,11 +20,11 @@ def setup_cache() -> None:
 
 
 # ============================================
-#             call_flash_tool
+#             run_command
 # ============================================
-def call_flash_tool(cmd: List[str]) -> None:
+def run_command(cmd: List[str]) -> None:
     """
-    Attempts to call the flash command `cmd`. If the call fails, we
+    Attempts to call the command `cmd`. If the call fails, we
     try again until the max attempts have been reached.
     """
     # This is done to prevent unboundlocalerror, which happens if
@@ -33,7 +34,14 @@ def call_flash_tool(cmd: List[str]) -> None:
 
     for _ in range(5):
         try:
-            proc = sub.run(cmd, capture_output=False, check=True, timeout=360)
+            proc = sub.run(
+                cmd,
+                capture_output=False,
+                check=True,
+                timeout=360,
+                shell=True,
+                env=os.environ,
+            )
         except sub.CalledProcessError:
             sleep(1)
             continue
@@ -42,7 +50,7 @@ def call_flash_tool(cmd: List[str]) -> None:
         if proc.returncode == 0:
             break
     if proc is None or proc.returncode != 0:
-        raise RuntimeError("Error: flash command failed.")
+        raise RuntimeError(f"Error: command: `{cmd}` failed.")
 
 
 # ============================================

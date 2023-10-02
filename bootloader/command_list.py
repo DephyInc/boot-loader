@@ -12,10 +12,8 @@ COMMANDS = [
     "flash xbee",
     "flash config",
     "logo",
-    # "show all",
     "show configs",
-    # "show devices",
-    # "show rigids",
-    # "show themes",
-    # "show versions",
+    "show devices",
+    "show rigids",
+    "show versions",
 ]

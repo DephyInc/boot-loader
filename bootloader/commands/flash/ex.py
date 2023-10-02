@@ -4,7 +4,7 @@ from cleo.helpers import argument
 from semantic_version import Version
 
 from bootloader.utilities.help import ex_help
-from bootloader.utilities.system_utils import call_flash_tool
+from bootloader.utilities.system_utils import run_command
 from bootloader.utilities.system_utils import get_fw_file
 from bootloader.utilities.system_utils import psoc_flash_command
 
@@ -41,7 +41,8 @@ class FlashExCommand(BaseFlashCommand):
     # -----
     def _handle_firmware_version(self, version: Version) -> None:
         fName = f"{self._target}_version-{version}_"
-        fName += f"rigid-{self._rigidVersion}_motor-{self._motorType}.cyacd"
+        fName += f"rigid-{self._rigidVersion.lower()}_"
+        fName += f"motor-{self._motorType.lower()}.cyacd"
 
         self._fwFile = get_fw_file(fName)
 
@@ -60,5 +61,5 @@ class FlashExCommand(BaseFlashCommand):
         sleep(2)
         self._device.close()
         sleep(2)
-        call_flash_tool(self._flashCmd)
+        run_command(self._flashCmd)
         sleep(20)
