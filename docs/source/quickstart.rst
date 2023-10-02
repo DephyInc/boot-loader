@@ -33,6 +33,21 @@ modules:
 
 ``bootloader`` provides commands for flashing each of these.
 
+
+Displaying Available Information
+--------------------------------
+``bootloader`` can require a lot of information. To help you navigate the available 
+options for certain fields, such as device name and rigid version, ``bootloader`` provides
+the ``show`` command.
+
+* ``bootloader show versions`` - Lists all available firmware versions
+* ``bootloader show devices`` - Lists all devices for which there is firmware
+* ``bootloader show rigids`` - Lists all rigid versions for which there is firmware
+* ``bootloader show configs`` - Displays the available pre-made configurations for flashing
+
+.. note::
+   Not all combinations of device name, rigid version, and firmware version are supported
+
 Flashing Regulate
 -----------------
 
@@ -160,3 +175,92 @@ If you do not have AWS access keys but do have a local 10.7.0 firmware file loca
 
 Flashing Manage
 ---------------
+.. code-block:: bash 
+
+    flash mn [options] [--] <port> <currentMnFw> <to> <rigidVersion> <deviceName> <side>
+
+Arguments:
+  * port                     Port the device is on, e.g., `COM3`.
+  * currentMnFw              Manage's current firmware, e.g., `7.2.0`.
+  * to                       Version to flash, e.g., `9.1.0`, or path to file to use.
+  * rigidVersion             PCB hardware version, e.g., `4.1B`.
+  * deviceName               Name of the device, e.g., actpack.
+  * side                     left, right, or none.
+
+Options:
+  * -b, --baudRate=BAUDRATE  Device baud rate. [default: 230400]
+  * -l, --libFile=LIBFILE    C lib for interacting with Manage.
+  * -h, --help               Display help for the given command. When no command is given display help for the list command.
+  * -q, --quiet              Do not output any message.
+  * -V, --version            Display this application version.
+  *     --ansi               Force ANSI output.
+  *     --no-ansi            Disable ANSI output.
+  * -n, --no-interaction     Do not ask any interactive question.
+  * -t, --theme=THEME        Sets theme.
+  *     --debug              Enables tracebacks.
+  * -v|vv|vvv, --verbose     Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug.
+
+Example
++++++++
+
+Let's we have an actpack currently running version 7.2.0 of the firmware, is connected
+to port ``COM3``, and has a PCB version of ``4.1B`` and we want to flash version 10.7.0
+of the firmware. If we have AWS access keys:
+
+.. code-block:: bash
+
+   bootloader flash mn COM3 7.2.0 10.7.0 4.1B actpack none
+
+If you do not have AWS access keys but do have a local 10.7.0 firmware file located at
+``~/firmware/fw.cyacd``:
+
+.. code-block:: bash
+
+   bootloader flash ex COM3 7.2.0 ~/firmware/fw.cyacd 4.1B actpack
+
+.. note::
+   Only use firmware files given to you directly by Dephy or downloaded directly from
+   the Dephy AWS firmware bucket.
+
+
+Configurations
+--------------
+
+.. note::
+   These commands are for internal-use by Dephy. However, they could be adapted to use your cloud storage
+
+Configurations are sets of firmware files that go together, such as firmware version 7.2.0 for Mn, Ex, and Re 
+on an actpack. They can also refer to sets of files used in a particular experiment or at a 
+particular event. Rather than have to track these files indivudally, ``bootloader`` provides 
+a way to package these files together and upload them to the cloud for later use.
+
+A configuration can be created via 
+
+.. code-block:: bash
+
+   bootloader config create <configName>
+
+You will then be prompted to enter the path to each firmware file you want to include in the configuration. 
+These files will be zipped together into an archive.
+
+You can then upload the newly created archive with 
+
+.. code-block:: bash
+
+   bootloader config upload <archiveName>
+
+Download one with
+.. code-block:: bash
+
+   bootloader config download <archiveName>
+
+and flashed with 
+
+.. code-block:: bash
+
+   bootloader flash config [options] <port> <currentMnFw> <configName>
+
+Arguments:
+* port: Port the device is on, e.g., ``COM3``
+* currentMnFw: Manage's current firmware, e.g., 7.2.0
+* configName: Name of the configuration to use

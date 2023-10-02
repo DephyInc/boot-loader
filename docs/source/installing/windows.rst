@@ -36,21 +36,11 @@ You will need to run the above ``source`` command each time you open a new termi
 
 Installing
 ----------
-
-The easiest way to install ``bootloader`` is via ``pip``:
+``bootloader`` is installed via ``pip``:
 
 .. code-block:: bash
 
     python -m pip install bootloader
-
-If you intend to contribute or modify the code, however, it may be helpful to install from source:
-
-.. code-block:: bash
-
-   git clone https://github.com/DephyInc/boot-loader.git
-   cd boot-loader/
-   git checkout v2.1.0
-   python -m pip install .
 
 
 Developing

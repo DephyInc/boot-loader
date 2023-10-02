@@ -10,4 +10,3 @@ Bootloader Documentation
     Installing <installing/index>
     Quickstart <quickstart>
     Troubleshooting <troubleshooting>
-    API <api/index>
