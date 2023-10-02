@@ -157,6 +157,9 @@ class BaseFlashCommand(BaseCommand):
             interactive=not self.option("no-interaction"),
         )
 
+        # No idea why pylint complains about the bootloading keyword here. bootloader
+        # requires >=v11.0.9 for flexsea, which has the keyword in open
+        # pylint: disable-next=unexpected-keyword-arg
         self._device.open(bootloading=True)
 
         self.overwrite(f"Connecting to device... {self.application._SUCCESS}")

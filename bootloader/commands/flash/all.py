@@ -3,7 +3,6 @@ from typing import List
 from cleo.commands.command import Command as BaseCommand
 from cleo.helpers import argument
 from cleo.helpers import option
-from semantic_version import Version
 
 from bootloader.utilities.help import all_help
 

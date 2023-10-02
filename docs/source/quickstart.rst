@@ -36,7 +36,7 @@ modules:
 
 Displaying Available Information
 --------------------------------
-``bootloader`` can require a lot of information. To help you navigate the available 
+``bootloader`` can require a lot of information. To help you navigate the available
 options for certain fields, such as device name and rigid version, ``bootloader`` provides
 the ``show`` command.
 
@@ -175,7 +175,7 @@ If you do not have AWS access keys but do have a local 10.7.0 firmware file loca
 
 Flashing Manage
 ---------------
-.. code-block:: bash 
+.. code-block:: bash
 
     flash mn [options] [--] <port> <currentMnFw> <to> <rigidVersion> <deviceName> <side>
 
@@ -229,21 +229,21 @@ Configurations
 .. note::
    These commands are for internal-use by Dephy. However, they could be adapted to use your cloud storage
 
-Configurations are sets of firmware files that go together, such as firmware version 7.2.0 for Mn, Ex, and Re 
-on an actpack. They can also refer to sets of files used in a particular experiment or at a 
-particular event. Rather than have to track these files indivudally, ``bootloader`` provides 
+Configurations are sets of firmware files that go together, such as firmware version 7.2.0 for Mn, Ex, and Re
+on an actpack. They can also refer to sets of files used in a particular experiment or at a
+particular event. Rather than have to track these files indivudally, ``bootloader`` provides
 a way to package these files together and upload them to the cloud for later use.
 
-A configuration can be created via 
+A configuration can be created via
 
 .. code-block:: bash
 
    bootloader config create <configName>
 
-You will then be prompted to enter the path to each firmware file you want to include in the configuration. 
+You will then be prompted to enter the path to each firmware file you want to include in the configuration.
 These files will be zipped together into an archive.
 
-You can then upload the newly created archive with 
+You can then upload the newly created archive with
 
 .. code-block:: bash
 
@@ -254,7 +254,7 @@ Download one with
 
    bootloader config download <archiveName>
 
-and flashed with 
+and flashed with
 
 .. code-block:: bash
 
