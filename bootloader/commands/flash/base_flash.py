@@ -240,7 +240,9 @@ class BaseFlashCommand(BaseCommand):
 
         if not self.option("no-interaction"):
             if not self.confirm("Proceed?"):
-                self.line("<error>Aborting.</>")
+                msg = "<error>Aborting.</> If you did not manually abort the process, "
+                msg += "try rerunning the command with the `--no-interaction` option."
+                self.line(msg)
                 sys.exit(1)
 
         self.line("")
