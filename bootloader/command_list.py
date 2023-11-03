@@ -1,4 +1,5 @@
 COMMANDS = [
+    "clean",
     "config create",
     "config download",
     "config upload",
