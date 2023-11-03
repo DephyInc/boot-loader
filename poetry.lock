@@ -426,13 +426,18 @@ name = "flexsea"
 version = "12.0.1"
 description = ""
 optional = false
-python-versions = "*"
-files = []
-develop = false
+python-versions = ">=3.11,<4.0"
+files = [
+    {file = "flexsea-12.0.1-py3-none-any.whl", hash = "sha256:0606da0b35087ce6ca05d0b24a00cd0845ec38465b51ddc3bdbc3da5fd969e9a"},
+    {file = "flexsea-12.0.1.tar.gz", hash = "sha256:e00db6db84d690e03a5e27dcf36547252ed5433c829a15709b18f56485ef58bc"},
+]
 
-[package.source]
-type = "directory"
-url = "../FlexSEA/Actuator-Package"
+[package.dependencies]
+boto3 = ">=1.26.110,<2.0.0"
+pendulum = ">=2.1.2,<3.0.0"
+pyudev = {version = ">=0.24.1,<0.25.0", markers = "sys_platform == \"linux\""}
+pyyaml = ">=6.0,<7.0"
+semantic-version = ">=2.10.0,<3.0.0"
 
 [[package]]
 name = "identify"
@@ -861,6 +866,17 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 files = [
     {file = "pytzdata-2020.1-py2.py3-none-any.whl", hash = "sha256:e1e14750bcf95016381e4d472bad004eef710f2d6417240904070b3d6654485f"},
     {file = "pytzdata-2020.1.tar.gz", hash = "sha256:3efa13b335a00a8de1d345ae41ec78dd11c9f8807f522d39850f2dd828681540"},
+]
+
+[[package]]
+name = "pyudev"
+version = "0.24.1"
+description = "A libudev binding"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pyudev-0.24.1-py3-none-any.whl", hash = "sha256:da7e977be15fb5eccf8797b8e2176cd5b4f39288707cdcb39d1cabe7c8793e2b"},
+    {file = "pyudev-0.24.1.tar.gz", hash = "sha256:75e54d37218f5ac45b0da1f0fd9cc5e526a3cac3ef1cfad410cf7ab338b01471"},
 ]
 
 [[package]]
