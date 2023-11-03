@@ -5,7 +5,7 @@ from cleo.commands.command import Command as BaseCommand
 from cleo.helpers import argument
 
 import bootloader.utilities.constants as bc
-from bootloader.utilities.help import get_clean_help
+from bootloader.utilities.help import clean_help
 
 
 # ============================================
@@ -14,7 +14,7 @@ from bootloader.utilities.help import get_clean_help
 class CleanCommand(BaseCommand):
     name = "clean"
     description = "Removes cached files."
-    help = get_clean_help()
+    help = clean_help()
 
     arguments = [
         argument(

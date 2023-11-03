@@ -108,3 +108,28 @@ def show_rigids_help() -> str:
 # ============================================
 def show_versions_help() -> str:
     return "Lists all available firmware versions."
+
+
+# ============================================
+#                 clean_help
+# ============================================
+def clean_help() -> str:
+    msg = "Removes the `target` directory. `target` can be: `all`, `libs`, `tools`\n"
+    msg += "or `firmware`.\n\nIf `target` is `libs`, all of the cached pre-compiled\n"
+    msg += "C libraries will be removed.\n\nIf `target` is `tools`, then all of the\n"
+    msg += "cached tools necessary for bootloading will be removed. This will force\n"
+    msg += "them to be re-downloaded.\n\nIf `target` is firmware, the all of the\n"
+    msg += "cached firmware files will be removed.\n\nIf `target` is `all`, then all\n"
+    msg += "of the above operations will be performed."
+
+    return msg
+
+
+# ============================================
+#                 erase_help
+# ============================================
+def erase_help() -> str:
+    msg = "Performs a full chip erase on Mn using the st-flash utility provided by\n"
+    msg += "the stlink tools repository: https://github.com/stlink-org/stlink"
+
+    return msg
