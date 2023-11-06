@@ -107,9 +107,29 @@ class DownloadToolsCommand(BaseCommand):
                 "stm32_flash_loader",
             )
         )
+        # Used for chip erase
+        if "32bit" in opSys:
+            stToolsPath = str(
+                bc.toolsPath.joinpath(
+                    opSys,
+                    "stlink-1",
+                    "stlink-1.7.0-i686-w64-mingw32",
+                    "bin",
+                )
+            )
+        else:
+            stToolsPath = str(
+                bc.toolsPath.joinpath(
+                    opSys,
+                    "stlink-1",
+                    "stlink-1.7.0-x86_64-w64-mingw32",
+                    "bin",
+                )
+            )
         os.environ["PATH"] += os.pathsep + dfusePath
         os.environ["PATH"] += os.pathsep + mingwPath
         os.environ["PATH"] += os.pathsep + stmFlashLoaderPath
+        os.environ["PATH"] += os.pathsep + stToolsPath
 
     # -----
     # _first_setup
