@@ -124,7 +124,7 @@ Arguments:
   * currentMnFw              Manage's current firmware, e.g., `7.2.0`.
   * to                       Version to flash, e.g., `9.1.0`, or path to file to use.
   * rigidVersion             PCB hardware version, e.g., `4.1B`.
-  * motorType                Either 'actpack', 'exo', or '61or91'
+  * motorType                Either 'actpack', 'dephy', or '61or91'
 
 Options:
   * -b, --baudRate=BAUDRATE  Device baud rate. [default: 230400]

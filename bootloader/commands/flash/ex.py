@@ -25,7 +25,7 @@ class FlashExCommand(BaseFlashCommand):
         argument("currentMnFw", "Manage's current firmware, e.g., `7.2.0`."),
         argument("to", "Version to flash, e.g., `9.1.0`, or path to file to use."),
         argument("rigidVersion", "PCB hardware version, e.g., `4.1B`."),
-        argument("motorType", "Either 'actpack', 'exo', or '61or91'"),
+        argument("motorType", "Either 'actpack', 'dephy', or '61or91'"),
     ]
 
     # -----

@@ -216,7 +216,7 @@ class BaseFlashCommand(BaseCommand):
         # As a workaround, we make it not interactive or don't use confirm
         # Here, though, we always want to prompt so that the user knows to power-cycle
         userInput = input(
-            "Please power cycle the device. Press 'c' when done to continue."
+            "Please power cycle the device. Press 'c' then 'Enter' to continue."
         )
         if userInput.lower() != "c":
             sys.exit(1)
@@ -240,7 +240,9 @@ class BaseFlashCommand(BaseCommand):
 
         if not self.option("no-interaction"):
             if not self.confirm("Proceed?"):
-                self.line("<error>Aborting.</>")
+                msg = "<error>Aborting.</> If you did not manually abort the process, "
+                msg += "try rerunning the command with the `--no-interaction` option."
+                self.line(msg)
                 sys.exit(1)
 
         self.line("")
