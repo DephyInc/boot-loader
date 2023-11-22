@@ -17,6 +17,21 @@ class EraseCommand(BaseCommand):
     # handle
     # -----
     def handle(self) -> int:
+        self.line(erase_help())
+        self.line("")
+
+        if not self.option("no-interaction"):
+            self.line("")
+            self.line("")
+
+            if not self.confirm("Proceed?"):
+                msg = "Aborting chip erase. If this abort happened without your input, "
+                msg += "and you are sure you want to proceed with this operation, try "
+                msg += "re-running with the `--no-interaction` option."
+                self.line(msg)
+
+                return 1
+
         dirName = (
             "stlink-1.7.0-i686-w64-mingw32"
             if "32bit" in self.application._os
