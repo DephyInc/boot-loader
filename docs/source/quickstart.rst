@@ -264,3 +264,87 @@ Arguments:
 * port: Port the device is on, e.g., ``COM3``
 * currentMnFw: Manage's current firmware, e.g., 7.2.0
 * configName: Name of the configuration to use
+
+
+Cleaning
+--------
+.. code-block:: bash
+
+    clean [options] [--] <target>
+
+Arguments:
+  target                Targets to clean. Can be: ``all``, ``libs``, ``tools``, or ``firmware``.
+
+Options:
+  * -h, --help            Display help for the given command. When no command is given display help for the list command.
+  * -q, --quiet           Do not output any message.
+  * -V, --version         Display this application version.
+  *     --ansi            Force ANSI output.
+  *     --no-ansi         Disable ANSI output.
+  * -n, --no-interaction  Do not ask any interactive question.
+  * -t, --theme=THEME     Sets theme.
+  *     --debug           Enables tracebacks.
+  * -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug.
+
+Removes the ``target`` directory from the bootloader's cache. ``target`` can be: ``all``, ``libs``, ``tools``
+or ``firmware``.
+
+If ``target`` is ``libs``, all of the cached pre-compiled
+C libraries will be removed.
+
+If ``target`` is ``tools``, then all of the
+cached tools necessary for bootloading will be removed. This will force
+them to be re-downloaded.
+
+If ``target`` is firmware, the all of the
+cached firmware files will be removed.
+
+If ``target`` is ``all``, then all
+of the above operations will be performed.
+
+Example
++++++++
+.. code-block:: bash
+
+    # Clear the cache of firmware files (this will require that they be re-downloaded)
+    bootloader clean firmware
+
+    # Clear the whole cache (everything will need to be re-downloaded)
+    bootloader clean all
+
+
+Performing a Full Chip Erase for Manage
+---------------------------------------
+.. code-block:: bash
+
+    erase [options]
+
+Options:
+  * -h, --help            Display help for the given command. When no command is given display help for the list command.
+  * -q, --quiet           Do not output any message.
+  * -V, --version         Display this application version.
+  *     --ansi            Force ANSI output.
+  *     --no-ansi         Disable ANSI output.
+  * -n, --no-interaction  Do not ask any interactive question.
+  * -t, --theme=THEME     Sets theme.
+  *     --debug           Enables tracebacks.
+  * -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug.
+
+Performs a full chip erase on Manage using the ``st-flash`` utility provided by
+the `stlink tools repository <https://github.com/stlink-org/stlink>`_.
+  
+.. caution::
+    
+    This command requires the use of a ST Link hardware programmer connected directly to 
+    the Manage MCU. This command will NOT work via just a USB connection.
+    Additionally, after performing the erase operation, you will need to reset the device ID and find poles.
+    Additionally, if your device is an exo, you will need to perform a belt calibration and calibrate the IMU. 
+    These functions are best performed using Dephy's GUI, which you should have received 
+    access to with your purchase.
+  
+.. caution::
+
+    If your device is an exo, you will need to flash Actpack firmware onto the device **BEFORE**
+    finding poles. Once pole finding is complete, you can then flash your desired firmware onto 
+    your device.
+
