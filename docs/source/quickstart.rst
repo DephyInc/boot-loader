@@ -332,19 +332,18 @@ Options:
 
 Performs a full chip erase on Manage using the ``st-flash`` utility provided by
 the `stlink tools repository <https://github.com/stlink-org/stlink>`_.
-  
+
 .. caution::
-    
-    This command requires the use of a ST Link hardware programmer connected directly to 
+
+    This command requires the use of a ST Link hardware programmer connected directly to
     the Manage MCU. This command will NOT work via just a USB connection.
     Additionally, after performing the erase operation, you will need to reset the device ID and find poles.
-    Additionally, if your device is an exo, you will need to perform a belt calibration and calibrate the IMU. 
-    These functions are best performed using Dephy's GUI, which you should have received 
+    Additionally, if your device is an exo, you will need to perform a belt calibration and calibrate the IMU.
+    These functions are best performed using Dephy's GUI, which you should have received
     access to with your purchase.
-  
+
 .. caution::
 
     If your device is an exo, you will need to flash Actpack firmware onto the device **BEFORE**
-    finding poles. Once pole finding is complete, you can then flash your desired firmware onto 
+    finding poles. Once pole finding is complete, you can then flash your desired firmware onto
     your device.
-
