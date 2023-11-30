@@ -1,8 +1,10 @@
 COMMANDS = [
+    "clean",
     "config create",
     "config download",
     "config upload",
     "download tools",
+    "erase",
     "flash all",
     "flash bt121",
     "flash ex",

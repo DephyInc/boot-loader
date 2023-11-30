@@ -68,6 +68,7 @@ bootloaderTools = {
             "mingw.zip",
             "stlink_setup.exe",
             "DfuSe_Demo_V3.0.6_Setup.exe",
+            "stlink-1.7.0-x86_64-w64-mingw32.zip",
         ],
     },
     "windows_32bit": {
@@ -95,6 +96,7 @@ bootloaderTools = {
             "mingw.zip",
             "stlink_setup.exe",
             "DfuSe_Demo_V3.0.6_Setup.exe",
+            "stlink-1.7.0-i686-w64-mingw32.zip",
         ],
     },
 }

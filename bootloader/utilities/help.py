@@ -108,3 +108,39 @@ def show_rigids_help() -> str:
 # ============================================
 def show_versions_help() -> str:
     return "Lists all available firmware versions."
+
+
+# ============================================
+#                 clean_help
+# ============================================
+def clean_help() -> str:
+    msg = "Removes the `target` directory. `target` can be: `all`, `libs`, `tools`\n"
+    msg += "or `firmware`.\n\nIf `target` is `libs`, all of the cached pre-compiled\n"
+    msg += "C libraries will be removed.\n\nIf `target` is `tools`, then all of the\n"
+    msg += "cached tools necessary for bootloading will be removed. This will force\n"
+    msg += "them to be re-downloaded.\n\nIf `target` is firmware, the all of the\n"
+    msg += "cached firmware files will be removed.\n\nIf `target` is `all`, then all\n"
+    msg += "of the above operations will be performed."
+
+    return msg
+
+
+# ============================================
+#                 erase_help
+# ============================================
+def erase_help() -> str:
+    msg = "Performs a full chip erase on Mn using the st-flash utility provided by\n"
+    msg += "the stlink tools repository: https://github.com/stlink-org/stlink.\n\n"
+    msg += "<warning>NOTE</warning>: this command requires the use of a ST Link "
+    msg += "hardware programmer connected directly to the Manage MCU. This command "
+    msg += "will NOT work via just a USB connection.\nAdditionally, after performing "
+    msg += "the erase operation, you will need to reset the device ID and find poles.\n"
+    msg += "Additionally, if your device is an exo, you will need to perform a belt "
+    msg += "calibration and calibrate the IMU. These functions are best performed "
+    msg += "using Dephy's GUI, which you should have received access to with your "
+    msg += "purchase.\n\n"
+    msg += "<warning>NOTE</warning>: if your device is an exo, you will need to flash "
+    msg += "Actpack firmware onto the device BEFORE finding poles. Once pole finding "
+    msg += "is complete, you can then flash your desired firmware onto your device."
+
+    return msg

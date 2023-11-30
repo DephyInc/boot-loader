@@ -82,7 +82,9 @@ class ConfigCreateCommand(BaseCommand):
             if not self.confirm(
                 f"Archive {archiveName} already exists. Overwrite?", False
             ):
-                self.line("Aborting.")
+                msg = "Aborting. If you did not manually abort the command, try "
+                msg += "re-running with the `--no-interaction` option."
+                self.line(msg)
                 sys.exit(1)
 
         # Make sure no archive with this name exists on S3
