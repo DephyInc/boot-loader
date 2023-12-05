@@ -163,17 +163,26 @@ class DownloadToolsCommand(BaseCommand):
             run_command(cmd)
         except (RuntimeError, sub.TimeoutExpired):
             self.line("Error: could not install STM drivers.")
+            self.line("For the installation to work, you must run with Administrator")
+            self.line("or root privileges. On Windows, this means running your")
+            self.line("terminal as Administrator.")
             sys.exit(1)
 
     # -----
     # _install_dfuse_drivers
     # -----
     def _install_dfuse_drivers(self, opSys: str) -> None:
+        self.line("We're about to install the DfuSe drivers.")
+        self.line("For the installation to work, you must run with Administrator")
+        self.line("or root privileges. On Windows, this means running your")
+        self.line("terminal as Administrator.")
+
         # There's a bug in cleo where, when calling one command from another, if
         # the command being called uses `confirm`, then _stream isn't set, which
         # causes a no attribute error: https://github.com/python-poetry/cleo/issues/333
         # As a workaround, we make it not interactive or don't use confirm
-        proceed = input("We're about to install the DfuSe drivers. Proceed? [y/n]")
+        proceed = input("Proceed? [y/N]")
+
         if proceed.lower() != "y":
             self.line("Acknowledgment to install drivers not given. Aborting.")
             sys.exit(1)
