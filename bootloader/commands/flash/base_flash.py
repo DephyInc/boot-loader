@@ -27,6 +27,7 @@ class BaseFlashCommand(BaseCommand):
     options = [
         option("baudRate", "-b", "Device baud rate.", flag=False, default=230400),
         option("libFile", "-l", "C lib for interacting with Manage.", flag=False),
+        option("limitedSpec", None, "Use limited spec firmware file.", flag=True),
     ]
 
     # -----
