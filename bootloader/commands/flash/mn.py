@@ -43,8 +43,15 @@ class FlashMnCommand(BaseFlashCommand):
     # -----
     def _handle_firmware_version(self, version: Version) -> None:
         fName = f"{self._target}_version-{version}_"
-        fName += f"device-{self._deviceName.lower()}_"
-        fName += f"rigid-{self._rigidVersion.lower()}_"
+        fName += f"device-{self._deviceName.lower()}"
+
+        if version == Version("12.0.0"):
+            if self.option("limitedSpec"):
+                fName += "LtdSpec"
+            else:
+                fName += "FullSpec"
+
+        fName += f"_rigid-{self._rigidVersion.lower()}_"
         fName += f"side-{self._side.lower()}.dfu"
 
         self._fwFile = get_fw_file(fName)
