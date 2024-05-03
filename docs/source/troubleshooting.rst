@@ -41,10 +41,10 @@ You'll want to follow the instructions given `here <https://www.winhelponline.co
 DfuSe Command Fails
 -------------------
 
-Under the hood, ``bootloader`` employs several third-party tools in order to 
-communicate with the microcontrollers on the device. One of these tools is called 
-``DfuSeCommand.exe`` and is provided by ST. One reason that the tool may fail is 
-because it cannot find one or more required libraries. While these libraries should 
-all be provided by the version of ``DfuSeCommand`` bundled with ``bootloader``, if 
-they are missing or cannot be found for any reason, the simplest approach is to 
+Under the hood, ``bootloader`` employs several third-party tools in order to
+communicate with the microcontrollers on the device. One of these tools is called
+``DfuSeCommand.exe`` and is provided by ST. One reason that the tool may fail is
+because it cannot find one or more required libraries. While these libraries should
+all be provided by the version of ``DfuSeCommand`` bundled with ``bootloader``, if
+they are missing or cannot be found for any reason, the simplest approach is to
 run the official installer provided by ST, which can be found [here](https://www.st.com/en/development-tools/stsw-stm32080.html).
