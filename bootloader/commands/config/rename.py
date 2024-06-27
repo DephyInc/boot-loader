@@ -3,10 +3,11 @@ from cleo.helpers import argument
 from cloudpathlib import S3Client
 
 import bootloader.utilities.constants as bc
+from bootloader.utilities.help import config_rename_help
 
 
 # ============================================
-#            ConfigRenameCommand 
+#            ConfigRenameCommand
 # ============================================
 class ConfigRenameCommand(BaseCommand):
     name = "config rename"
