@@ -62,6 +62,13 @@ def config_create_help() -> str:
 
 
 # ============================================
+#             config_rename_help
+# ============================================
+def config_rename_help() -> str:
+    return "Renames an existing configuration."
+
+
+# ============================================
 #             show_configs_help
 # ============================================
 def show_configs_help() -> str:

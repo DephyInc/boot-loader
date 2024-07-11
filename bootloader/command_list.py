@@ -2,6 +2,7 @@ COMMANDS = [
     "clean",
     "config create",
     "config download",
+    "config rename",
     "config upload",
     "download tools",
     "erase",
