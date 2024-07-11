@@ -28,13 +28,17 @@ class ConfigRenameCommand(BaseCommand):
 
         client = S3Client(profile_name=bc.dephyAwsProfile)
 
-        originalPath = client.CloudPath(f"s3://{bc.dephyConfigsBucket}/{originalName}")
-        newPath = client.CloudPath(f"s3://{bc.dephyConfigsBucket}/{newName}")
+        originalPath = client.CloudPath(
+            f"s3://{bc.dephyConfigsBucket}/{originalName}.zip"
+        )
+        newPath = client.CloudPath(f"s3://{bc.dephyConfigsBucket}/{newName}.zip")
 
         if not originalPath.exists():
             self.line(f"Could not rename: {originalName}")
             return 1
 
         originalPath.rename(newPath)
+
+        self.line(f"Renaming: {self.application._SUCCESS}")
 
         return 0
