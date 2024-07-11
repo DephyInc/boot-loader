@@ -34,7 +34,7 @@ class ConfigRenameCommand(BaseCommand):
         newPath = client.CloudPath(f"s3://{bc.dephyConfigsBucket}/{newName}.zip")
 
         if not originalPath.exists():
-            self.line(f"Could not rename: {originalName}")
+            self.line(f"Could not rename: {originalName} does not exist.")
             return 1
 
         originalPath.rename(newPath)
