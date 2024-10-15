@@ -40,6 +40,10 @@ class FlashReCommand(BaseFlashCommand):
     # _handle_firmware_version
     # -----
     def _handle_firmware_version(self, version: Version) -> None:
+        # Starting in v13, re files are no longer specific to a
+        # particular led style
+        if version >= Version("13.0.0"):
+            self._led = "general"
         fName = f"{self._target}_version-{version}_"
         fName += f"rigid-{self._rigidVersion.lower()}_"
         fName += f"led-{self._led.lower()}color.cyacd"
